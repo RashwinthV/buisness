@@ -1,11 +1,10 @@
-
 import "../Styles/Sidebar.css";
 
 import SwitchBusinessModal from "./SwitchBusiness";
 
 import { useEffect } from "react";
 import { useState } from "react";
-import { Link } from "react-router-dom";;
+import { Link } from "react-router-dom";
 const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
   const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth >= 768);
   const [showSwitchBusiness, setShowSwitchBusiness] = useState(false);
@@ -28,11 +27,10 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
   if (!isLargeScreen) {
     return (
       <aside className="sidebar bottom-sidebar bg-dark d-flex d-md-none justify-content-around text-white py-2 fixed-bottom">
-        
         <Link to="/home" className="text-white text-center">
           <i className="bi bi-house-door fs-4"></i>
         </Link>
-        
+
         <Link to="/businessdashboard" className="text-white text-center">
           <i className="bi bi-speedometer2 fs-4"></i>
         </Link>
@@ -65,23 +63,27 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
         }`}
       >
         <ul className="nav flex-column  p-1 pt-4">
-<li className="nav-item mb-3">
-  <button
-    className="nav-link text-white d-flex align-items-center justify-content-center bg-transparent border-0"
-    onClick={() => setIsCollapsed(!isCollapsed)}
-    style={{ height: "40px" }}
-  >
-    <i
-      className={`bi ${
-        isCollapsed ? "bi-chevron-double-right" : "bi-chevron-double-left"
-      } fs-5`}
-    ></i>
-   
-  </button>
-</li>
-
           <li className="nav-item mb-3">
-            <Link to="/home" className="nav-link text-white d-flex align-items-center">
+            <button
+              className="nav-link text-white d-flex align-items-center justify-content-center bg-transparent border-0"
+              onClick={() => setIsCollapsed(!isCollapsed)}
+              style={{ height: "40px" }}
+            >
+              <i
+                className={`bi ${
+                  isCollapsed
+                    ? "bi-chevron-double-right"
+                    : "bi-chevron-double-left"
+                } fs-5`}
+              ></i>
+            </button>
+          </li>
+
+          <li className="nav-item mb-1">
+            <Link
+              to="/home"
+              className="nav-link text-white d-flex align-items-center"
+            >
               <i className="bi bi-house-door me-2 fs-5"></i>
               {!isCollapsed && <span>Home</span>}
             </Link>
@@ -89,14 +91,20 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
 
           <hr></hr>
           <li className="nav-item mb-3">
-            <Link to="/businessdashboard" className="nav-link text-white d-flex align-items-center">
+            <Link
+              to="/businessdashboard"
+              className="nav-link text-white d-flex align-items-center"
+            >
               <i className="bi bi-speedometer2 me-2 fs-5"></i>
               {!isCollapsed && <span>Dashboard</span>}
             </Link>
           </li>
 
           <li className="nav-item mb-3">
-            <Link to="/settings" className="nav-link text-white d-flex align-items-center">
+            <Link
+              to="/settings"
+              className="nav-link text-white d-flex align-items-center"
+            >
               <i className="bi bi-gear me-2 fs-5"></i>
               {!isCollapsed && <span>Settings</span>}
             </Link>
