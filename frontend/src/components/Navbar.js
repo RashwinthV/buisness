@@ -53,16 +53,6 @@ function NavbarComponent() {
         </button>
 
         <div className="collapse navbar-collapse" id="navbarNav">
-          <ul className="navbar-nav me-auto">
-            {isLoggedIn && (
-              <li className="nav-item">
-                <a className="nav-link" href="#plans">
-                  Plans
-                </a>
-              </li>
-            )}
-          </ul>
-
           <ul className="navbar-nav ms-auto align-items-center">
             {isLoggedIn ? (
               <>
@@ -139,6 +129,11 @@ function NavbarComponent() {
                     <li>
                       <Link to={"/settings"} className="dropdown-item">
                         Settings
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to={"/plans"} className="dropdown-item">
+                        Plans
                       </Link>
                     </li>
                     <li>
