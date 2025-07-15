@@ -1,4 +1,5 @@
 import { Modal, Button } from "react-bootstrap";
+import { useNavigate } from "react-router-dom"; // ✅ import
 
 const SwitchBusiness = ({
   show,
@@ -8,6 +9,8 @@ const SwitchBusiness = ({
   onSwitch,
   onAddBusiness,
 }) => {
+  const navigate = useNavigate(); // ✅ define inside the component
+
   return (
     <Modal show={show} onHide={onClose} centered>
       <Modal.Header closeButton>
@@ -41,7 +44,13 @@ const SwitchBusiness = ({
         )}
 
         <div className="d-grid">
-          <Button variant="outline-primary" onClick={onAddBusiness}>
+          <Button
+            variant="outline-primary"
+            onClick={() => {
+              onClose();
+              navigate("/businessregister");
+            }}
+          >
             <i className="bi bi-plus-lg me-1"></i> Add Another Business
           </Button>
         </div>

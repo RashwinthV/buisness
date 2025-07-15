@@ -38,7 +38,7 @@ ChartJS.register(
 const Home = () => {
   // Sample site-wide stats
   const { user } = useContext(UserContext);
-  const users = 1200;
+  const users = 1200000;
   const businesses = [
     {
       id: 1,

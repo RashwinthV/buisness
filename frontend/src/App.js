@@ -10,11 +10,12 @@ import Developers from "./Pages/Developers.js";
 import { ToastContainer } from "react-toastify";
 import Plans from "./Pages/Plans.js";
 import Settings from "./Pages/Settings.js";
+import BusinessRegister from "./Pages/Business/BusinessRegister.js";
 
 function App() {
   return (
     <UserProvider>
-      <ToastContainer/>
+      <ToastContainer />
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
@@ -22,10 +23,9 @@ function App() {
           <Route path="/login" element={<LoginForm />} />
           <Route path="/register" element={<RegisterForm />} />
           <Route path="/developers" element={<Developers />} />
-                    <Route path="/plans" element={<Plans />} />
-
+          <Route path="/plans" element={<Plans />} />
           <Route path="/settings" element={<Settings />} />
-
+          <Route path="/businessregister" element={<BusinessRegister />} />
         </Route>
       </Routes>
     </UserProvider>
