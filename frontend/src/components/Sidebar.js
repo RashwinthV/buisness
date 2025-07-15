@@ -28,8 +28,13 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
   if (!isLargeScreen) {
     return (
       <aside className="sidebar bottom-sidebar bg-dark d-flex d-md-none justify-content-around text-white py-2 fixed-bottom">
-        <Link to="/" className="text-white text-center">
+        
+        <Link to="/home" className="text-white text-center">
           <i className="bi bi-house-door fs-4"></i>
+        </Link>
+        
+        <Link to="/businessdashboard" className="text-white text-center">
+          <i className="bi bi-speedometer2 fs-4"></i>
         </Link>
         <Link to="/settings" className="text-white text-center">
           <i className="bi bi-gear fs-4"></i>
@@ -75,11 +80,18 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
   </button>
 </li>
 
-
           <li className="nav-item mb-3">
-            <Link to="/" className="nav-link text-white d-flex align-items-center">
+            <Link to="/home" className="nav-link text-white d-flex align-items-center">
               <i className="bi bi-house-door me-2 fs-5"></i>
               {!isCollapsed && <span>Home</span>}
+            </Link>
+          </li>
+
+          <hr></hr>
+          <li className="nav-item mb-3">
+            <Link to="/businessdashboard" className="nav-link text-white d-flex align-items-center">
+              <i className="bi bi-speedometer2 me-2 fs-5"></i>
+              {!isCollapsed && <span>Dashboard</span>}
             </Link>
           </li>
 
