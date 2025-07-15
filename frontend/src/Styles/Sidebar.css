@@ -10,13 +10,18 @@
   z-index: 1020;
 }
 
-.sidebar.vertical-sidebar.collapsed {
-  width: 60px;
-}
-
-.sidebar.vertical-sidebar.expanded {
+.vertical-sidebar.expanded {
   width: 220px;
 }
+
+.vertical-sidebar.collapsed {
+  width: 70px;
+}
+
+main {
+  transition: margin-left 0.3s ease;
+}
+
 
 .sidebar.vertical-sidebar .toggle-btn {
   position: absolute;
