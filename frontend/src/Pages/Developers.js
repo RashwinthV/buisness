@@ -34,10 +34,10 @@ const developers = [
     dob: "2002-12-15",
     education: "MCA",
     profilePic: Rashwinth_pic,
-    linkedIn: "https://www.linkedin.com/in/janedoe/",
+    linkedIn: "https://www.linkedin.com/in/rashwinth-v-153a26245/",
     instagram:
       "https://www.instagram.com/rashwinth_2002_?igsh=MWVma2swbjZ6Yzd3Yw==",
-    github: "",
+    github: "https://github.com/RashwinthV",
   },
   // Add more developers here...
 ];

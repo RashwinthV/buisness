@@ -1,38 +1,3 @@
-// const Home = () => {
-//   return (
-//     <div className="container-fluid">
-//       <h1 className="mb-4 mt-4">Dashboard</h1>
-
-//       <div className="row">
-//         <div className="col-lg-6 mb-4">
-//           <div className="card shadow-sm h-100">
-//             <div className="card-body">
-//               <h5 className="card-title">Welcome</h5>
-//               <p className="card-text">
-//                 This is your home dashboard. You can add widgets, stats, or shortcuts here.
-//               </p>
-//             </div>
-//           </div>
-//         </div>
-
-//         <div className="col-lg-6 mb-4">
-//           <div className="card shadow-sm h-100">
-//             <div className="card-body">
-//               <h5 className="card-title">Quick Stats</h5>
-//               <ul className="list-group list-group-flush">
-//                 <li className="list-group-item">Users: 120</li>
-//                 <li className="list-group-item">Projects: 8</li>
-//                 <li className="list-group-item">Tasks Completed: 42</li>
-//               </ul>
-//             </div>
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default Home;
 import React, { useState, useEffect, useRef } from "react";
 import { Container, Row, Col, Card } from "react-bootstrap";
 import { Line, Bar } from "react-chartjs-2";
@@ -42,10 +7,22 @@ import {
   CategoryScale,
   LinearScale,
   Tooltip,
+  Filler,
   Legend,
   PointElement,
   LineElement,
 } from "chart.js";
+import { useContext } from "react";
+import { UserContext } from "../context/userContext";
+ChartJS.register(
+  LineElement,
+  PointElement,
+  LinearScale,
+  CategoryScale,
+  Filler,
+  Tooltip,
+  Legend
+);
 
 ChartJS.register(
   BarElement,
@@ -59,6 +36,7 @@ ChartJS.register(
 
 const Home = () => {
   // Sample site-wide stats
+  const { user } = useContext(UserContext);
   const users = 1200;
   const businesses = [
     {
@@ -109,8 +87,8 @@ const Home = () => {
       {
         label: "Users",
         data: [100, 150, 200, 250, 300, 350, 400],
-       borderColor: "#20c997", // Teal
-backgroundColor: "rgba(32, 201, 151, 0.2)",
+        borderColor: "#20c997", // Teal
+        backgroundColor: "rgba(32, 201, 151, 0.2)",
         tension: 0.4,
         fill: true,
       },
@@ -118,8 +96,8 @@ backgroundColor: "rgba(32, 201, 151, 0.2)",
       {
         label: "Businesses",
         data: [20, 40, 60, 80, 90, 110, 120],
-       borderColor: "#fd7e14", // Coral
-backgroundColor: "rgba(253, 126, 20, 0.2)",
+        borderColor: "#fd7e14", // Coral
+        backgroundColor: "rgba(253, 126, 20, 0.2)",
         tension: 0.4,
         fill: true,
       },
@@ -141,6 +119,10 @@ backgroundColor: "rgba(253, 126, 20, 0.2)",
 
   return (
     <Container fluid className="px-2 px-sm-3 px-md-4 pt-4">
+      <h4 className="mb-4 text-center text-md-start">
+        Welcome {user?.firstName}
+      </h4>
+
       <h4 className="mb-4 text-center text-md-start">Platform Analytics</h4>
 
       {/* Summary Cards */}

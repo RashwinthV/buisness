@@ -7,10 +7,12 @@ import LoginForm from "./Pages/Login&register/Login";
 import RegisterForm from "./Pages/Login&register/Register";
 import { UserProvider } from "./context/userContext.js";
 import Developers from "./Pages/Developers.js";
+import { ToastContainer } from "react-toastify";
 
 function App() {
   return (
     <UserProvider>
+      <ToastContainer/>
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />

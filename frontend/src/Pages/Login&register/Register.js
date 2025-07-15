@@ -141,6 +141,7 @@
 
 // export default RegisterForm;
 import { useState } from "react";
+import {toast}from 'react-toastify'
 import { useNavigate } from "react-router-dom";
 
 function Register() {
@@ -216,17 +217,17 @@ function Register() {
     e.preventDefault();
 
     if (!formData.termsAccepted) {
-      alert("You must accept the terms and conditions.");
+      toast.info("You must accept the terms and conditions.");
       return;
     }
 
     if (!isPasswordValid) {
-      alert("Password does not meet requirements.");
+      toast.info("Password does not meet requirements.");
       return;
     }
 
     if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match.");
+      toast.error("Passwords do not match.");
       return;
     }
 
@@ -242,14 +243,14 @@ function Register() {
       const result = await res.json();
 
       if (res.ok) {
-        alert("Registration successful!");
+        toast.success("Registration successful!");
         navigate("/login");
       } else {
-        alert(result.message || "Registration failed.");
+        toast.error(result.message || "Registration failed.");
       }
     } catch (error) {
       console.error("Registration error:", error);
-      alert("Server error. Try again later.");
+      toast.error("Server error. Try again later.");
     }
   };
 
