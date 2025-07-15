@@ -11,6 +11,7 @@ import { ToastContainer } from "react-toastify";
 import Plans from "./Pages/Plans.js";
 import Settings from "./Pages/Settings.js";
 import BusinessRegister from "./Pages/Business/BusinessRegister.js";
+import BusinessDashboard from "./Pages/Business/BusinessDashboard.js";
 
 function App() {
   return (
@@ -26,6 +27,8 @@ function App() {
           <Route path="/plans" element={<Plans />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/businessregister" element={<BusinessRegister />} />
+          <Route path="/businessdashboard" element={<BusinessDashboard />} />
+
         </Route>
       </Routes>
     </UserProvider>

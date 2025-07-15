@@ -32,6 +32,7 @@ const SwitchBusiness = ({
                 onClick={() => {
                   onSwitch(biz);
                   onClose();
+                  navigate("/businessdashboard"); // ✅ navigate to business dashboard
                 }}
               >
                 {biz.name}
