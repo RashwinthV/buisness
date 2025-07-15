@@ -167,15 +167,21 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
         }`}
       >
         <ul className="nav flex-column  p-1 pt-5">
-          <li className="nav-item mb-3">
-            <div className="toggle-btn" onClick={() => setIsCollapsed(!isCollapsed)}>
-              <i
-                className={`bi ${
-                  isCollapsed ? "bi-chevron-double-right" : "bi-chevron-double-left"
-                }`}
-              ></i>
-            </div>
-          </li>
+<li className="nav-item mb-3">
+  <button
+    className="nav-link text-white d-flex align-items-center justify-content-center bg-transparent border-0"
+    onClick={() => setIsCollapsed(!isCollapsed)}
+    style={{ height: "40px" }} // match icon height if needed
+  >
+    <i
+      className={`bi ${
+        isCollapsed ? "bi-chevron-double-right" : "bi-chevron-double-left"
+      } fs-5`}
+    ></i>
+   
+  </button>
+</li>
+
 
           <li className="nav-item mb-3">
             <Link to="/" className="nav-link text-white d-flex align-items-center">
