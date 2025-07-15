@@ -6,6 +6,7 @@ import ProfileCard from "./Pages/Profile";
 import LoginForm from "./Pages/Login&register/Login";
 import RegisterForm from "./Pages/Login&register/Register";
 import { UserProvider } from "./context/userContext.js";
+import Developers from "./Pages/Developers.js";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path="/profile" element={<ProfileCard />} />
           <Route path="/login" element={<LoginForm />} />
           <Route path="/register" element={<RegisterForm />} />
+          <Route path="/developers" element={<Developers />} />
         </Route>
       </Routes>
     </UserProvider>

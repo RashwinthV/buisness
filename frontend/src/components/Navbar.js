@@ -160,6 +160,24 @@ function NavbarComponent() {
                 </button>
               </li>
             )}
+
+            {/* dev info  */}
+            <Link
+             to="/developers"
+              className="btn btn-sm btn-outline-info rounded-circle"
+              title="Developer Info"
+              style={{
+                width: "32px",
+                height: "32px",
+                padding: 0,
+                textAlign: "center",
+                lineHeight: "28px",
+              }}
+            >
+              <i className="bi bi-info-lg"></i>
+            </Link>
+
+
           </ul>
         </div>
       </div>
