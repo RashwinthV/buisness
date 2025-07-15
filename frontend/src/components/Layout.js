@@ -52,7 +52,7 @@ import Sidebar from "./Sidebar";
 import NavbarComponent from "./Navbar";
 import { Outlet } from "react-router-dom";
 import { useState, useEffect } from "react";
-import "../Styles/Sidebar.css";
+import "../Styles/Layout.css";
 
 const Layout = () => {
   const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth >= 768);
