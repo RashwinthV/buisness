@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Container, Row, Col, Card } from "react-bootstrap";
 import { Line, Bar } from "react-chartjs-2";
 import {
