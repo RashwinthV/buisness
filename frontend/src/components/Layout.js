@@ -6,6 +6,7 @@
 
 // const Layout = () => {
 //   const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth >= 768);
+//   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
 //   useEffect(() => {
 //     const handleResize = () => {
@@ -15,16 +16,25 @@
 //     return () => window.removeEventListener("resize", handleResize);
 //   }, []);
 
+//   const sidebarWidth = isSidebarCollapsed ? 70 : 220;
+
 //   return (
 //     <div>
 //       <NavbarComponent />
 //       <div className="d-flex" style={{ marginTop: "56px" }}>
-//         <Sidebar />
+//         {/* Sidebar visible only on large screens */}
+//         {isLargeScreen && (
+//           <Sidebar
+//             isCollapsed={isSidebarCollapsed}
+//             setIsCollapsed={setIsSidebarCollapsed}
+//           />
+//         )}
+
 //         <main
 //           className="flex-grow-1 p-3"
 //           style={{
-//             marginLeft: isLargeScreen ? "220px" : "0",
-//             marginBottom: isLargeScreen ? "0" : "60px", // for bottom bar
+//             marginLeft: isLargeScreen ? ${sidebarWidth}px : "0",
+//             marginBottom: "60px",
 //             transition: "margin 0.3s",
 //           }}
 //         >
@@ -35,7 +45,8 @@
 //   );
 // };
 
-// export default Layout;
+// export default Layout;
+
 
 import Sidebar from "./Sidebar";
 import NavbarComponent from "./Navbar";
@@ -58,33 +69,51 @@ const Layout = () => {
   const sidebarWidth = isSidebarCollapsed ? 70 : 220;
 
   return (
-    <div>
+    <div className="layout-container">
       <NavbarComponent />
-      <div className="d-flex" style={{ marginTop: "56px" }}>
-        {/* Sidebar visible only on large screens */}
-        {isLargeScreen && (
-          <Sidebar
-            isCollapsed={isSidebarCollapsed}
-            setIsCollapsed={setIsSidebarCollapsed}
-          />
-        )}
+
+      <div
+        className="layout-content"
+        style={{
+          marginTop: "56px",
+          display: "flex",
+          flexDirection: isLargeScreen ? "row" : "column",
+        }}
+      >
+        {isLargeScreen ? (
+          <div
+            style={{
+              width: `${sidebarWidth}px`,
+              transition: "width 0.3s",
+              flexShrink: 0,
+            }}
+          >
+            <Sidebar
+              isCollapsed={isSidebarCollapsed}
+              setIsCollapsed={setIsSidebarCollapsed}
+            />
+          </div>
+        ) : null}
 
         <main
           className="flex-grow-1 p-3"
           style={{
-            marginLeft: isLargeScreen ? `${sidebarWidth}px` : "0",
-            marginBottom: "60px",
-            transition: "margin 0.3s",
+            marginBottom: isLargeScreen ? 0 : "60px", // reserve space for bottom sidebar
+            width: "100%",
           }}
         >
           <Outlet />
         </main>
+
+        {/* Bottom Sidebar for small screens */}
+        {!isLargeScreen && (
+          <div className="bottom-sidebar">
+            <Sidebar isCollapsed={true} setIsCollapsed={() => {}} />
+          </div>
+        )}
       </div>
     </div>
   );
 };
 
 export default Layout;
-
-
-
