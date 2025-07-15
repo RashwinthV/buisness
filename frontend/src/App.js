@@ -12,6 +12,8 @@ import Plans from "./Pages/Plans.js";
 import Settings from "./Pages/Settings.js";
 import BusinessRegister from "./Pages/Business/BusinessRegister.js";
 import BusinessDashboard from "./Pages/Business/BusinessDashboard.js";
+import AddProduct from "./Pages/Business/AddProduct.js";
+import AddEmployee from "./Pages/Business/AddEmployee.js";
 
 function App() {
   return (
@@ -28,7 +30,8 @@ function App() {
           <Route path="/settings" element={<Settings />} />
           <Route path="/businessregister" element={<BusinessRegister />} />
           <Route path="/businessdashboard" element={<BusinessDashboard />} />
-
+          <Route path="/addproduct" element={<AddProduct />} />
+          <Route path="/addemployee" element={<AddEmployee />} />
         </Route>
       </Routes>
     </UserProvider>
