@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import CountUp from 'react-countup';
 import { Container, Row, Col, Card } from "react-bootstrap";
 import { Line, Bar } from "react-chartjs-2";
 import {
@@ -126,7 +127,7 @@ const Home = () => {
       <h4 className="mb-4 text-center text-md-start">Platform Analytics</h4>
 
       {/* Summary Cards */}
-      <Row className="gx-3 gy-3">
+      {/* <Row className="gx-3 gy-3">
         <Col xs={12} sm={6} lg={4}>
           <Card className="text-center shadow-sm h-100">
             <Card.Body>
@@ -151,8 +152,40 @@ const Home = () => {
             </Card.Body>
           </Card>
         </Col>
-      </Row>
+      </Row> */}
 
+<Row className="gx-3 gy-3">
+  <Col xs={12} sm={6} lg={4}>
+    <Card className="text-center shadow-sm h-100">
+      <Card.Body>
+        <Card.Title>Total Users</Card.Title>
+        <h4 className="text-primary">
+          <CountUp start={0} end={users} duration={1.5} separator="," />
+        </h4>
+      </Card.Body>
+    </Card>
+  </Col>
+  <Col xs={12} sm={6} lg={4}>
+    <Card className="text-center shadow-sm h-100">
+      <Card.Body>
+        <Card.Title>Total Businesses</Card.Title>
+        <h4 className="text-success">
+          <CountUp start={0} end={totalBusinesses} duration={1.5} separator="," />
+        </h4>
+      </Card.Body>
+    </Card>
+  </Col>
+  <Col xs={12} sm={12} lg={4}>
+    <Card className="text-center shadow-sm h-100">
+      <Card.Body>
+        <Card.Title>Total Products</Card.Title>
+        <h4 className="text-warning">
+          <CountUp start={0} end={totalProducts} duration={1.5} separator="," />
+        </h4>
+      </Card.Body>
+    </Card>
+  </Col>
+</Row>
       {/* Charts Section */}
       <Row className="gx-3 gy-4 mt-4">
         <Col xs={12} md={6}>
