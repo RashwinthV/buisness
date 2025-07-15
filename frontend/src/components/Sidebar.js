@@ -59,12 +59,12 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
           isCollapsed ? "collapsed" : "expanded"
         }`}
       >
-        <ul className="nav flex-column  p-1 pt-5">
+        <ul className="nav flex-column  p-1 pt-4">
 <li className="nav-item mb-3">
   <button
     className="nav-link text-white d-flex align-items-center justify-content-center bg-transparent border-0"
     onClick={() => setIsCollapsed(!isCollapsed)}
-    style={{ height: "40px" }} // match icon height if needed
+    style={{ height: "40px" }}
   >
     <i
       className={`bi ${
