@@ -34,7 +34,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
         <Link to="/businessdashboard" className="text-white text-center">
           <i className="bi bi-speedometer2 fs-4"></i>
         </Link>
-        <Link to="/settings" className="text-white text-center">
+        <Link to="/managebusiness" className="text-white text-center">
           <i className="bi bi-gear fs-4"></i>
         </Link>
         <button
@@ -102,11 +102,11 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
 
           <li className="nav-item mb-3">
             <Link
-              to="/settings"
+              to="/managebusiness"
               className="nav-link text-white d-flex align-items-center"
             >
               <i className="bi bi-gear me-2 fs-5"></i>
-              {!isCollapsed && <span>Settings</span>}
+              {!isCollapsed && <span>Manage</span>}
             </Link>
           </li>
 

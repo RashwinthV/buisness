@@ -1,9 +1,7 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
 import { Row, Col, Card } from "react-bootstrap";
 import CountUp from "react-countup";
 const BusinessDashboard = () => {
-  const navigate = useNavigate();
 const stats = [
   { title: "Total Products", count: 1234, color: "primary" },
   { title: "Total Employees", count: 567, color: "success" },
@@ -11,35 +9,10 @@ const stats = [
 ];
   return (
     <div className="container-fluid py-2">
-      {/* Page Header */}
-      <div className="row justify-content-center">
-        {/* Icon section */}
-        <div className="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
-          <h5 className="mb-0">Welcome Business Name</h5>
-          <div className="d-flex gap-3">
-            <button
-              className="btn btn-primary mb-3"
-              onClick={() => navigate("/addproduct")}
-            >
-              <i className="bi bi-plus-circle-fill fs-6 me-2"></i> Add Product
-            </button>
-
-            <button
-              className="btn btn-primary mb-3"
-              onClick={() => navigate("/addemployee")}
-            >
-              {" "}
-              <i className="bi bi-person-add fs-6 me-2"></i>
-              Add Employee
-            </button>
-          </div>
-        </div>
-      </div>
-<hr></hr>
 
       {/* Page Body */}
 
-
+<h5>Business Analytics</h5>
       <Row className="gx-3 gy-3">
   {stats.map((item, idx) => (
     <Col key={idx} xs={12} sm={6} lg={4}>

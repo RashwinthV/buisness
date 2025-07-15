@@ -14,6 +14,8 @@ import BusinessRegister from "./Pages/Business/BusinessRegister.js";
 import BusinessDashboard from "./Pages/Business/BusinessDashboard.js";
 import AddProduct from "./Pages/Business/AddProduct.js";
 import AddEmployee from "./Pages/Business/AddEmployee.js";
+import AddTrader from "./Pages/Business/AddTrader.js";
+import ManageBusiness from "./Pages/Business/ManageBusiness.js";
 
 function App() {
   return (
@@ -28,11 +30,12 @@ function App() {
           <Route path="/register" element={<RegisterForm />} />
           <Route path="/developers" element={<Developers />} />
           <Route path="/plans" element={<Plans />} />
-          <Route path="/settings" element={<Settings />} />
+          <Route path="/managebusiness" element={<ManageBusiness />} />
           <Route path="/businessregister" element={<BusinessRegister />} />
           <Route path="/businessdashboard" element={<BusinessDashboard />} />
           <Route path="/addproduct" element={<AddProduct />} />
           <Route path="/addemployee" element={<AddEmployee />} />
+          <Route path="/addtrader" element={<AddTrader />} />
         </Route>
       </Routes>
     </UserProvider>
