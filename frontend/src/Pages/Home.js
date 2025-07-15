@@ -2,10 +2,10 @@ import React from "react";
 
 const Home = () => {
   return (
-    <div>
+    <div className="container-fluid ">
       <h1 className="mb-4">Dashboard</h1>
 
-      <div className="row">
+      <div className="row lg-4">
         <div className="col-md-6 mb-4">
           <div className="card shadow-sm">
             <div className="card-body">
