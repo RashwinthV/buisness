@@ -61,8 +61,6 @@ export const BusinessProvider = ({ children }) => {
           }
         );
         const data = await response.json();
-        console.log(data);
-
         if (response.ok) {
           setBusinesses(data || []);
         } else {

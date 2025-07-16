@@ -10,7 +10,7 @@ const SwitchBusiness = ({
 }) => {
   const navigate = useNavigate();
   const { businesses, setSelectedBusinessId ,selectedBusinessId} = useBusiness();
-    const selectedBusiness = businesses?.find((b) => b.id === selectedBusinessId);
+  const selectedBusiness = businesses?.find((b) => b.businessId === selectedBusinessId);
 
   const setAccount=(AccountId)=>{
     setSelectedBusinessId(AccountId)
@@ -29,20 +29,20 @@ const SwitchBusiness = ({
           <ul className="list-group mb-3">
             {businesses.map((biz) => (
               <li
-                key={biz.id}
+                key={biz.businessId}
                 className={`list-group-item d-flex justify-content-between align-items-center ${
-                  selectedBusiness?.id === biz.id ? "active text-white" : ""
+                  selectedBusiness?.businessId === biz.businessId ? "active text-white" : ""
                 }`}
                 style={{ cursor: "pointer" }}
                 onClick={() => {
                   onSwitch(biz);
                   onClose();
-                  setAccount(biz?.id)
-                  navigate(`/businessdashboard/${biz.id}`);
+                  setAccount(biz?.businessId)
+                  navigate(`/businessdashboard/${biz.businessId}`);
                 }}
               >
                 {biz.name}
-                {selectedBusiness?.id === biz.id && (
+                {selectedBusiness?.businessId === biz.businessId && (
                   <i className="bi bi-check-circle-fill"></i>
                 )}
               </li>

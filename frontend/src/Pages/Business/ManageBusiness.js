@@ -7,7 +7,7 @@ import { useBusiness } from "../../context/BussinessContext";
 const ManageBusiness = () => {
   const [selectedForm, setSelectedForm] = useState(null); // form type: 'product', 'employee', etc.
   const { selectedBusinessId, businesses } = useBusiness();
-  const selectedBusiness = businesses?.find((b) => b.id === selectedBusinessId);
+  const selectedBusiness = businesses?.find((b) => b.businessId === selectedBusinessId);
   return (
     // <div className="container-fluid py-2">
     //   {/* Buttons Section */}

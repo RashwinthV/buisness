@@ -10,7 +10,6 @@ const BusinessDashboard = () => {
     { title: "Total Employees", count: 567, color: "success" },
     { title: "Total Transactions", count: 7890, color: "warning" },
   ];
-console.log(selectedBusinessId);
 
   return (
     <div className="container-fluid py-2">
