@@ -4,6 +4,7 @@ const allBusinesses = [
   {
     id: 1,
     name: "Copra Traders",
+    description: "Leading supplier of copra and coconut products.",
     email: "copra@example.com",
     contact: "9876543210",
     city: "Coimbatore",
@@ -15,6 +16,7 @@ const allBusinesses = [
   {
     id: 2,
     name: "Agri Farms",
+    description: "Organic farming and agricultural products.",
     email: "farm@example.com",
     contact: "7894561230",
     city: "Madurai",
@@ -26,6 +28,7 @@ const allBusinesses = [
   {
     id: 3,
     name: "Tech Manufacturing",
+    description: "High-quality machinery and parts manufacturing.",
     email: "tech@example.com",
     contact: "9873216540",
     city: "Chennai",
@@ -140,7 +143,7 @@ const AllBusinesses = () => {
               
 <div className="card shadow-sm h-100">
   <div className="card-body">
-    <div className="d-flex align-items-center mb-3">
+    <div className="d-flex align-items-center  mb-3">
       <img
         src={business.logo}
         alt={`${business.name} Logo`}
@@ -150,22 +153,28 @@ const AllBusinesses = () => {
         style={{ objectFit: "cover", border: "1px solid #ccc" }}
       />
       <h5 className="card-title mb-0">{business.name}</h5>
+      
     </div>
-
-    <p className="mb-1">
-      <strong>Location:</strong> {business.city}, {business.district}
+        <p className="mb-0">
+      <strong>Since:</strong> {calculateSince(business.startedOn)}
     </p>
-    <p className="mb-1">
+    <p className="mb-1 ">
+      <strong>Description:</strong> {business.description}
+    </p>
+<hr />
+        <p className="mb-1">
       <strong>Contact:</strong> {business.contact}
     </p>
+
     <p className="mb-1">
       <strong>Email:</strong> {business.email}
     </p>
     <p className="mb-1">
       <strong>Products:</strong> {business.productNames.join(", ")}
     </p>
-    <p className="mb-0">
-      <strong>Since:</strong> {calculateSince(business.startedOn)}
+
+        <p className="mb-1">
+      <strong>Location:</strong> {business.city}, {business.district}
     </p>
   </div>
 </div>
