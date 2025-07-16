@@ -1,16 +1,16 @@
 import React, { useState } from "react";
 import { Container, Row, Col, Button } from "react-bootstrap";
-import Image_default from "../Assets/Images/Default.png"; // ✅ import default image
+import Image_default from "../Assets/Images/Default.png";
 
 const Profile = () => {
   const [editMode, setEditMode] = useState(false);
+  const [showPasswordFields, setShowPasswordFields] = useState(false);
 
   const [user, setUser] = useState({
-    image: "", // base64 or url
+    image: "",
     name: "",
     email: "",
     mobile: "",
-    password: "",
     address1: "",
     address2: "",
     city: "",
@@ -18,9 +18,20 @@ const Profile = () => {
     pincode: "",
   });
 
+  const [passwords, setPasswords] = useState({
+    current: "",
+    newPass: "",
+    confirmNew: "",
+  });
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setUser((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handlePasswordChange = (e) => {
+    const { name, value } = e.target;
+    setPasswords((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleImageChange = (e) => {
@@ -31,7 +42,7 @@ const Profile = () => {
     reader.onloadend = () => {
       setUser((prev) => ({
         ...prev,
-        image: reader.result, // base64 for preview
+        image: reader.result,
       }));
     };
     reader.readAsDataURL(file);
@@ -84,26 +95,24 @@ const Profile = () => {
               ["name", "Name"],
               ["email", "Email"],
               ["mobile", "Mobile Number"],
-              ["password", "Password", "password"],
               ["address1", "Address Line 1"],
               ["address2", "Address Line 2"],
               ["city", "City"],
               ["district", "District"],
               ["pincode", "Pincode"],
-            ].map(([field, label, type = "text"]) => (
+            ].map(([field, label]) => (
               <Col md={field === "address1" || field === "address2" ? 12 : 4} key={field}>
                 <label>{label}</label>
                 {editMode ? (
                   <input
                     className="form-control"
                     name={field}
-                    type={type}
                     value={user[field]}
                     onChange={handleInputChange}
                     placeholder={`Enter ${label.toLowerCase()}`}
                   />
                 ) : (
-                  <div>{field === "password" && user[field] ? "••••••••" : user[field] || "-"}</div>
+                  <div>{user[field] || "-"}</div>
                 )}
               </Col>
             ))}
@@ -112,12 +121,73 @@ const Profile = () => {
       </Row>
 
       {editMode && (
-        <div className="text-end">
+        <div className="text-end mb-4">
           <Button variant="primary" onClick={() => setEditMode(false)}>
             Update
           </Button>
         </div>
       )}
+
+      {/* Password Update Section */}
+      <hr />
+      <div className="mb-3">
+        <h5>Change Password</h5>
+        {!showPasswordFields ? (
+          <Button variant="outline-primary" onClick={() => setShowPasswordFields(true)}>
+            Change Password
+          </Button>
+        ) : (
+          <Row className="gy-3">
+            <Col md={4}>
+              <label>Current Password</label>
+              <input
+                type="password"
+                className="form-control"
+                name="current"
+                value={passwords.current}
+                onChange={handlePasswordChange}
+                placeholder="Enter current password"
+              />
+            </Col>
+            <Col md={4}>
+              <label>New Password</label>
+              <input
+                type="password"
+                className="form-control"
+                name="newPass"
+                value={passwords.newPass}
+                onChange={handlePasswordChange}
+                placeholder="Enter new password"
+              />
+            </Col>
+            <Col md={4}>
+              <label>Confirm New Password</label>
+              <input
+                type="password"
+                className="form-control"
+                name="confirmNew"
+                value={passwords.confirmNew}
+                onChange={handlePasswordChange}
+                placeholder="Confirm new password"
+              />
+            </Col>
+            <Col xs={12} className="text-end">
+              <Button variant="success" className="me-2">
+                Update Password
+              </Button>
+              <Button
+                variant="outline-secondary"
+                onClick={() => {
+                  setShowPasswordFields(false);
+                  setPasswords({ current: "", newPass: "", confirmNew: "" });
+                }}
+              >
+                Cancel
+              </Button>
+            </Col>
+          </Row>
+        )}
+      </div>
     </Container>
   );
 };
