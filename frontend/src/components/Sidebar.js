@@ -257,14 +257,14 @@ const Sidebar = () => {
 
           <hr />
           <li className="nav-item mb-3">
-            <Link to="/businessdashboard" className="nav-link text-white d-flex align-items-center">
+            <Link to={`/businessdashboard/${selectedBusinessId}`} className="nav-link text-white d-flex align-items-center">
               <i className="bi bi-speedometer2 me-2 fs-5"></i>
               {!isCollapsed && <span>Dashboard</span>}
             </Link>
           </li>
 
           <li className="nav-item mb-3">
-            <Link to="/managebusiness" className="nav-link text-white d-flex align-items-center">
+            <Link  to={`/managebusiness/${selectedBusinessId}`} className="nav-link text-white d-flex align-items-center">
               <i className="bi bi-gear me-2 fs-5"></i>
               {!isCollapsed && <span>Manage</span>}
             </Link>
