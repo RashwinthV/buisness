@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const bussinessModel = require("../models/buissnessModel");
+const userModel = require("../models/userModel");
 
 exports.Getbussiness = async (req, res) => {
   try {
@@ -27,7 +28,7 @@ exports.Getbussiness = async (req, res) => {
 };
 
 exports.RegisterBusiness = async (req, res) => {
- try {
+  try {
     const {
       businessName,
       businessEmail,
@@ -44,11 +45,21 @@ exports.RegisterBusiness = async (req, res) => {
       businessZipCode,
       logo,
     } = req.body;
-    
-    
+
     const { id } = req.params;
 
-    // Example user ID (replace with auth middleware in production)
+    // ✅ Fetch user by ID
+    const user = await userModel.findById(id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // ✅ If user is not an 'owner', update role to 'owner'
+    if (user.role !== "owner") {
+      user.role = "owner";
+      await user.save();
+    }
+
     const ownedBy = id;
 
     const lastBusiness = await bussinessModel.findOne().sort({ businessId: -1 });
@@ -69,7 +80,7 @@ exports.RegisterBusiness = async (req, res) => {
       businessDistrict,
       businessZipCode,
       businessId: newBusinessId,
-      bussinessLogo: logo || null, // image URL from frontend
+      bussinessLogo: logo || null,
       ownedBy,
     });
 
@@ -86,7 +97,6 @@ exports.RegisterBusiness = async (req, res) => {
       .json({ message: "Server error", error: error.message });
   }
 };
-
 
 exports.GetAllbussiness=async(req,res)=>{
   try {

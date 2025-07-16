@@ -21,6 +21,12 @@ const BusinessSchema = new mongoose.Schema(
       required: true,
     },
 
+    // Description :
+    description: {
+      type: String,
+      required: true,
+    },
+
     // Owned By :
     ownedBy: {
       type: mongoose.Schema.Types.ObjectId,
@@ -36,13 +42,13 @@ const BusinessSchema = new mongoose.Schema(
       },
     ],
 
-    // Address Lane 1 :
+    // Address Line 1 :
     addressLine1: {
       type: String,
       required: true,
     },
 
-    // Address Lane 2 :
+    // Address Line 2 :
     addressLine2: {
       type: String,
       default: "",
@@ -72,6 +78,30 @@ const BusinessSchema = new mongoose.Schema(
       required: true,
     },
 
+    // GST Number (Optional) :
+    gstnumber: {
+      type: String,
+      default: "",
+    },
+
+    // Business City :
+    businessCity: {
+      type: String,
+      required: true,
+    },
+
+    // Business District :
+    businessDistrict: {
+      type: String,
+      required: true,
+    },
+
+    // Business Zip Code :
+    businessZipCode: {
+      type: String,
+      required: true,
+    },
+
     // Subscription Status :
     subscriptionStatus: {
       type: String,
@@ -86,10 +116,10 @@ const BusinessSchema = new mongoose.Schema(
       default: "Active",
     },
 
-    // Business Logo (Optional):
+    // Business Logo :
     bussinessLogo: {
       type: String,
-      default: "", // or null, based on your preference
+      default: "", // or null
     },
 
     // Created on :

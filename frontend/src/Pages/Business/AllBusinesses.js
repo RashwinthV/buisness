@@ -63,7 +63,6 @@
 //   const [filteredBusinesses, setFilteredBusinesses] = useState([]);
 //   const {businesses}=useBusiness()
 //   console.log("context bussiness",businesses);
-  
 
 //   useEffect(() => {
 //     const sorted = [...businesses].sort((a, b) =>
@@ -144,7 +143,7 @@
 //                   </p>
 //                 </div>
 //               </div> */}
-              
+
 // <div className="card shadow-sm h-100">
 //   <div className="card-body">
 //     <div className="d-flex align-items-center  mb-3">
@@ -157,7 +156,7 @@
 //         style={{ objectFit: "cover", border: "1px solid #ccc" }}
 //       />
 //       <h5 className="card-title mb-0">{business.name}</h5>
-      
+
 //     </div>
 //         <p className="mb-0">
 //       <strong>Since:</strong> {calculateSince(business.startedOn)}
@@ -183,7 +182,6 @@
 //   </div>
 // </div>
 
-
 //             </div>
 //           ))
 //         ) : (
@@ -197,7 +195,6 @@
 // };
 
 // export default AllBusinesses;
-
 
 import { useState, useEffect } from "react";
 import Image_default from "../../Assets/Images/Default.png";
@@ -218,9 +215,9 @@ const calculateSince = (dateString) => {
   const yearsPart = Math.floor(totalMonths / 12);
   const monthsPart = totalMonths % 12;
 
-  return `${yearsPart > 0 ? `${yearsPart} year${yearsPart > 1 ? "s" : ""}` : ""}${
-    monthsPart > 0 ? ` ${monthsPart} month${monthsPart > 1 ? "s" : ""}` : ""
-  }`;
+  return `${
+    yearsPart > 0 ? `${yearsPart} year${yearsPart > 1 ? "s" : ""}` : ""
+  }${monthsPart > 0 ? ` ${monthsPart} month${monthsPart > 1 ? "s" : ""}` : ""}`;
 };
 
 const AllBusinesses = () => {
@@ -251,16 +248,14 @@ const AllBusinesses = () => {
     const filtered = allbusinesses.filter((business) => {
       return (
         business.name.toLowerCase().includes(term) ||
-        business?.productNames?.some((p) =>
-          p.toLowerCase().includes(term)
-        )
+        business?.productNames?.some((p) => p.toLowerCase().includes(term))
       );
     });
 
     setFilteredBusinesses(filtered);
   };
-  
-  
+
+  console.log("context", allbusinesses);
 
   return (
     <div className="container py-2">
@@ -313,10 +308,10 @@ const AllBusinesses = () => {
                       : "Not available"}
                   </p>
 
-                  <p className="mb-1">
+                  {/* <p className="mb-1">
                     <strong>Description:</strong>{" "}
                     {business.description || "No description provided."}
-                  </p>
+                  </p> */}
 
                   <hr />
 
@@ -339,9 +334,16 @@ const AllBusinesses = () => {
                   )}
 
                   <p className="mb-1">
-                    <strong>Location:</strong>{" "}
-                    {business.businessCity}, {business.businessDistrict}
+                    <strong>Location:</strong> {business.addressLine1},{" "}
+                    {business.addressLine2}
+                    {business?.businessCity && ` ,${business?.businessCity}`}
                   </p>
+                  {business?.businessZipCode && (
+                    <p className="mb-1">
+                      <strong>Pin code:</strong>{" "}
+                      {`${business?.businessZipCode}`}
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
