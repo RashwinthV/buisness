@@ -207,6 +207,7 @@ function BusinessRegister() {
                     </label>
                     <input
                       type="date"
+                      
                       className="form-control"
                       name="startedOn"
                       value={formData.startedOn}
@@ -291,7 +292,7 @@ function BusinessRegister() {
                       City <span className="text-danger">*</span>
                     </label>
                     <input
-                      type="url"
+                      type="text"
                       className="form-control"
                       name="businessCity"
                       value={formData.businessCity}
@@ -381,7 +382,7 @@ function BusinessRegister() {
                       name="gstNumber"
                       value={formData.gstnumber}
                       onChange={handleChange}
-                      required
+                      placeholder="Enter GST Number"
                     />
                   </div>
                 </div>
