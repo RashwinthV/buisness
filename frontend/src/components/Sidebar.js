@@ -5,11 +5,12 @@ import SwitchBusinessModal from "./SwitchBusiness";
 import { useEffect } from "react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useBusiness } from "../context/BussinessContext";
 const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
   const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth >= 768);
   const [showSwitchBusiness, setShowSwitchBusiness] = useState(false);
   const [selectedBusiness, setSelectedBusiness] = useState(null);
-
+  const{selectedBusinessId}=useBusiness()
   const [businesses] = useState([
     { id: 1, name: "India Cricket" },
     { id: 2, name: "Royal Challengers Bengaluru" },
@@ -22,6 +23,8 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+  // console.log(selectedBusinessId);
+  
 
   // Bottom bar for small screens
   if (!isLargeScreen) {
@@ -31,10 +34,10 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
           <i className="bi bi-house-door fs-4"></i>
         </Link>
 
-        <Link to="/businessdashboard" className="text-white text-center">
+        <Link to={`/businessdashboard/${selectedBusinessId}`} className="text-white text-center">
           <i className="bi bi-speedometer2 fs-4"></i>
         </Link>
-        <Link to="/managebusiness" className="text-white text-center">
+        <Link to={`/managebusiness/${selectedBusinessId}`} className="text-white text-center">
           <i className="bi bi-gear fs-4"></i>
         </Link>
         <button

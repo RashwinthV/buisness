@@ -31,9 +31,9 @@ function App() {
           <Route path="/developers" element={<Developers />} />
           <Route path="/plans" element={<Plans />} />
           <Route path="/settings" element={<Settings />} />
-          <Route path="/managebusiness" element={<ManageBusiness />} />
+          <Route path="/managebusiness/:bussinessId" element={<ManageBusiness />} />
           <Route path="/businessregister" element={<BusinessRegister />} />
-          <Route path="/businessdashboard" element={<BusinessDashboard />} />
+          <Route path="/businessdashboard/:bussinessId" element={<BusinessDashboard />} />
           <Route path="/addproduct" element={<AddProduct />} />
           <Route path="/addemployee" element={<AddEmployee />} />
           <Route path="/addtrader" element={<AddTrader />} />

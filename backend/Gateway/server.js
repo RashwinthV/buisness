@@ -11,8 +11,14 @@ const userService = createProxyMiddleware({
   changeOrigin: true,
 });
 
+const BussinessService = createProxyMiddleware({
+  target: "http://localhost:4011",
+  changeOrigin: true,
+});
+
 
 app.use('/v1',userService)
+app.use('/v2',BussinessService)
 
 const port = process.env.PORT || 4000;
 

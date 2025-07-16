@@ -5,13 +5,13 @@ import { useBusiness } from "../context/BussinessContext";
 const SwitchBusiness = ({
   show,
   onClose,
-  // businesses = [],
-  selectedBusiness,
   onSwitch,
   onAddBusiness,
 }) => {
   const navigate = useNavigate();
-  const { businesses, setSelectedBusinessId } = useBusiness();
+  const { businesses, setSelectedBusinessId ,selectedBusinessId} = useBusiness();
+    const selectedBusiness = businesses?.find((b) => b.id === selectedBusinessId);
+
   const setAccount=(AccountId)=>{
     setSelectedBusinessId(AccountId)
   }
@@ -38,7 +38,7 @@ const SwitchBusiness = ({
                   onSwitch(biz);
                   onClose();
                   setAccount(biz?.id)
-                  navigate("/businessdashboard"); // ✅ navigate to business dashboard
+                  navigate(`/businessdashboard/${biz.id}`);
                 }}
               >
                 {biz.name}
