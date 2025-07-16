@@ -1,7 +1,7 @@
 import { useState } from "react";
 import AddProduct from "./AddProduct";
 import AddEmployee from "./AddEmployee";
-import AddTrader from "./AddTrader";
+import AddTradeParty from "./AddTradeParty";
 
 
 const ManageBusiness = () => {
@@ -29,20 +29,13 @@ const ManageBusiness = () => {
                 <i className="bi bi-person-add fs-6 me-2"></i> Add Employee
               </button>
             </div>
+           
             <div className="col-auto">
               <button
                 className="btn btn-primary w-100"
                 onClick={() => setSelectedForm("trader")}
               >
-                <i className="bi bi-currency-rupee me-2"></i> Add Seller
-              </button>
-            </div>
-            <div className="col-auto">
-              <button
-                className="btn btn-primary w-100"
-                onClick={() => setSelectedForm("trader")}
-              >
-                <i className="bi bi-bag-fill fs-6 me-2"></i> Add Buyer
+                <i className="bi bi-tags-fill fs-6 me-2"></i> Add Trade Party
               </button>
             </div>
           </div>
@@ -54,7 +47,7 @@ const ManageBusiness = () => {
 
           {selectedForm === "product" && <AddProduct />}
           {selectedForm === "employee" && <AddEmployee />}
-          {selectedForm === "trader" && <AddTrader />}
+          {selectedForm === "trader" && <AddTradeParty />}
         </div>
       </div>
 

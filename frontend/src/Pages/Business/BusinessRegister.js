@@ -9,22 +9,35 @@ function BusinessRegister() {
   const [formData, setFormData] = useState({
     businessName: "",
     businessEmail: "",
+    description: "",
     addressLine1: "",
     addressLine2: "",
     googleMapLink: "",
     ownerContact: "",
     officeContact: "",
     startedOn: "",
+    gstnumber: "",
+    businessCity: "",
+    businessDistrict: "",
+    businessZipCode: "",
+    logo: null, // <-- added field
   });
 
   const [userPhone, setUserPhone] = useState("");
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    const { name, value, type, files } = e.target;
+    if (type === "file") {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: files[0],
+      }));
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -178,6 +191,34 @@ function BusinessRegister() {
                 <div className="row">
                   <div className="mb-3 col-md-6">
                     <label className="form-label">
+                      Business Logo (Optional)
+                    </label>
+                    <input
+                      type="file"
+                      className="form-control"
+                      name="logo"
+                      accept="image/*"
+                      onChange={handleChange}
+                    />
+                  </div>
+                  <div className="mb-3 col-md-6">
+                    <label className="form-label">
+                      Started On <span className="text-danger">*</span>
+                    </label>
+                    <input
+                      type="date"
+                      className="form-control"
+                      name="startedOn"
+                      value={formData.startedOn}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="row">
+                  <div className="mb-3 col-md-6">
+                    <label className="form-label">
                       Business Name <span className="text-danger">*</span>
                     </label>
                     <input
@@ -203,6 +244,19 @@ function BusinessRegister() {
                       required
                     />
                   </div>
+                </div>
+                <div className="mb-3">
+                  <label className="form-label">
+                    Description <span className="text-danger">*</span>
+                  </label>
+                  <textarea
+                    className="form-control"
+                    name="description"
+                    rows="3"
+                    value={formData.description}
+                    onChange={handleChange}
+                    required
+                  ></textarea>
                 </div>
 
                 <div className="row">
@@ -320,14 +374,12 @@ function BusinessRegister() {
 
                 <div className="row">
                   <div className="mb-3 col-md-6">
-                    <label className="form-label">
-                      Started On <span className="text-danger">*</span>
-                    </label>
+                    <label className="form-label">GST Number (Optional)</label>
                     <input
-                      type="date"
+                      type="text"
                       className="form-control"
-                      name="startedOn"
-                      value={formData.startedOn}
+                      name="gstNumber"
+                      value={formData.gstnumber}
                       onChange={handleChange}
                       required
                     />
