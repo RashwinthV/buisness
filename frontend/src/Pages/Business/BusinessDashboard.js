@@ -1,7 +1,7 @@
 import { Row, Col, Card } from "react-bootstrap";
 import CountUp from "react-countup";
 import { useBusiness } from "../../context/BussinessContext";
-
+import Image_default from "../../Assets/Images/Default.png";
 const BusinessDashboard = () => {
   const { selectedBusinessId, businesses } = useBusiness();
   const selectedBusiness = businesses?.find((b) => b.businessId === selectedBusinessId);
@@ -13,7 +13,17 @@ const BusinessDashboard = () => {
 
   return (
     <div className="container-fluid py-2">
-      <h3 className="text-center mb-5"><strong>{selectedBusiness?.name} </strong></h3>
+                      <div className="card shadow-sm border-0 mb-4">
+        <div className="card-body">     
+                          <img
+                            src={selectedBusiness.bussinessLogo || Image_default}
+                            alt="Business Logo"
+                            className="mb-2"
+                            width="1200"
+                            height="100"
+                            style={{ objectFit: "contain",}}
+                          />
+      <h3 className="text-center mb-5"><strong>{selectedBusiness?.name} </strong></h3></div></div>
       <h5>Business Analytics</h5>
 
       <Row className="gx-3 gy-3">

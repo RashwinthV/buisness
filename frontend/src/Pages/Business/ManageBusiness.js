@@ -3,7 +3,8 @@ import AddProduct from "./AddProduct";
 import AddEmployee from "./AddEmployee";
 import AddTradeParty from "./AddTradeParty";
 import { useBusiness } from "../../context/BussinessContext";
-
+import BusinessProfile from "./BusinessProfile";
+import Image_default from "../../Assets/Images/Default.png";
 const ManageBusiness = () => {
   const [selectedForm, setSelectedForm] = useState(null); // form type: 'product', 'employee', etc.
   const { selectedBusinessId, businesses } = useBusiness();
@@ -55,11 +56,21 @@ const ManageBusiness = () => {
     //     {selectedForm === "trader" && <AddTradeParty />}
     //   </div>
     // </div>
-    <div className="container my-4">
+
+
+    <div className="container-fluid py-2">
       {/* Business Info Card */}
       <div className="card shadow-sm border-0 mb-4">
         <div className="card-body">
           <div className="text-center mb-4">
+                    <img
+                      src={selectedBusiness.bussinessLogo || Image_default}
+                      alt="Business Logo"
+                      className="mb-2"
+                      width="1200"
+                      height="100"
+                      style={{ objectFit: "contain",}}
+                    />
             <h3 className="fw-bold text-primary mb-0">
               {selectedBusiness?.name}
             </h3>
@@ -110,7 +121,7 @@ const ManageBusiness = () => {
 
       {/* Form Section */}
       <div className="row justify-content-center mt-4">
-        {/* {selectedForm === "businessedit" && <AddBusiness />} */}
+        {selectedForm === "businessedit" && <BusinessProfile />}
 
         {selectedForm === "product" && <AddProduct />}
         {selectedForm === "employee" && <AddEmployee />}
