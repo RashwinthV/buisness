@@ -299,9 +299,9 @@ const AllBusinesses = () => {
                       src={business.bussinessLogo || Image_default}
                       alt={`${business.name} Logo`}
                       className="rounded-circle me-3"
-                      width="48"
-                      height="48"
-                      style={{ objectFit: "cover", border: "1px solid #ccc" }}
+                      width="60"
+                      height="60"
+                      style={{ objectFit: "contain", border: "1px solid #ccc" }}
                     />
                     <h5 className="card-title mb-0">{business.name}</h5>
                   </div>

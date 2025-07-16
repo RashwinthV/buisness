@@ -71,7 +71,7 @@ const SwitchBusiness = ({
           className="rounded-circle"
           width="32"
           height="32"
-          style={{ objectFit: "cover", border: "1px solid #ccc" }}
+          style={{ objectFit: "contain", border: "1px solid #ccc" }}
         />
         <span>{biz.name}</span>
       </div>
