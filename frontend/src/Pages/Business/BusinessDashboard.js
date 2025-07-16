@@ -4,12 +4,13 @@ import { useBusiness } from "../../context/BussinessContext";
 
 const BusinessDashboard = () => {
   const { selectedBusinessId, businesses } = useBusiness();
-  const selectedBusiness = businesses?.find((b) => b.id === selectedBusinessId);
+  const selectedBusiness = businesses?.find((b) => b.businessId === selectedBusinessId);
   const stats = [
     { title: "Total Products", count: 1234, color: "primary" },
     { title: "Total Employees", count: 567, color: "success" },
     { title: "Total Transactions", count: 7890, color: "warning" },
   ];
+console.log(selectedBusinessId);
 
   return (
     <div className="container-fluid py-2">

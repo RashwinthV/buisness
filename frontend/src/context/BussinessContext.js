@@ -1,4 +1,3 @@
-
 // import { createContext, useState, useContext } from "react";
 // const BusinessContext = createContext();
 // export const useBusiness = () => useContext(BusinessContext);
@@ -25,7 +24,7 @@
 //         setBusinesses,
 //         selectedBusinessId,
 //         setSelectedBusinessId,
-        
+
 //       }}
 //     >
 //       {children}
@@ -40,38 +39,35 @@ const BusinessContext = createContext();
 export const useBusiness = () => useContext(BusinessContext);
 
 export const BusinessProvider = ({ children }) => {
-const [businesses, setBusinesses] = useState([
-   { id: 1, name: "India Cricket" },
-    { id: 2, name: "Royal Challengers Bengaluru" },
- ]);
+  const [businesses, setBusinesses] = useState([]);
   const [selectedBusinessId, setSelectedBusinessId] = useState(null);
 
   const baseUrl = process.env.REACT_APP_BACKEND_URI;
   const { user } = useUser();
-  const token=localStorage.getItem('token')
+  const token = localStorage.getItem("token");
 
   // ✅ Fetch businesses from backend based on user
   useEffect(() => {
     const fetchBusinesses = async () => {
       if (!user?.id) return;
 
-
       try {
-        const response = await fetch(`${baseUrl}/v2/bussiness/getbussiness/${user.id}`,
-            {
-                headers:{
-                    Authorization:`Bearer ${token}`
-                }
-            }
+        const response = await fetch(
+          `${baseUrl}/v2/bussiness/getbussiness/${user.id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
         const data = await response.json();
-console.log(data);
+        console.log(data);
 
-        // if (response.ok) {
-        //   setBusinesses(data || []);
-        // } else {
-        //   toast.error(data?.message || "Failed to fetch businesses");
-        // }
+        if (response.ok) {
+          setBusinesses(data || []);
+        } else {
+          toast.error(data?.message || "Failed to fetch businesses");
+        }
       } catch (error) {
         toast.error("Error fetching businesses");
         console.error(error);
@@ -81,24 +77,26 @@ console.log(data);
     fetchBusinesses();
   }, [user]);
 
-  // ✅ Set default selectedBusinessId once businesses are loaded
-  useEffect(() => {
-    if (businesses.length === 0) return;
+useEffect(() => {
+  if (businesses.length === 0) return;
 
-    const storedId = localStorage.getItem("AccountId");
-    const storedIdAsNumber = storedId ? parseInt(storedId) : null;
-    const isValidStoredId = businesses.some(b => b.id === storedIdAsNumber);
+  const storedId = localStorage.getItem("AccountId");
+  const storedIdAsNumber = storedId ? parseInt(storedId) : null;
 
-    if (isValidStoredId) {
-      setSelectedBusinessId(storedIdAsNumber);
-    } else {
-      const defaultId = businesses[0]?.id;
-      if (defaultId) {
-        setSelectedBusinessId(defaultId);
-        localStorage.setItem("AccountId", defaultId);
-      }
+  // ❌ Fix this line
+  const isValidStoredId = businesses.some((b) => b.businessId === storedIdAsNumber);
+
+  if (isValidStoredId) {
+    setSelectedBusinessId(storedIdAsNumber);
+  } else {
+    const defaultId = businesses[0]?.businessId; // ✅ Fix here too
+    if (defaultId) {
+      setSelectedBusinessId(defaultId);
+      localStorage.setItem("AccountId", defaultId);
     }
-  }, [businesses]);
+  }
+}, [businesses]);
+
 
   // ✅ Keep localStorage in sync with selection
   useEffect(() => {
