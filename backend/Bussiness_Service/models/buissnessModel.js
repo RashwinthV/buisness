@@ -54,10 +54,10 @@ const BusinessSchema = new mongoose.Schema(
       default: "",
     },
 
-    // Contact Number ( Owner ) : -- to be fetched from user model
+    // Contact Number ( Owner ) :
     contactNumberOwner: {
       type: String,
-      required: true, // should be set manually on creation
+      required: true,
     },
 
     // Contact Number ( Office ) :
@@ -66,27 +66,33 @@ const BusinessSchema = new mongoose.Schema(
       default: "",
     },
 
-    // Started on : (Actual Inaugurated Date)
+    // Started on :
     startedOn: {
       type: Date,
       required: true,
     },
 
-    // Subscription Status : ( Regular / Prime )
+    // Subscription Status :
     subscriptionStatus: {
       type: String,
       enum: ["Regular", "Prime"],
       default: "Regular",
     },
 
-    // Business Status : ( Active / Inactive )
+    // Business Status :
     businessStatus: {
       type: String,
       enum: ["Active", "Inactive"],
       default: "Active",
     },
 
-    // Created on : (creation date in site)
+    // Business Logo (Optional):
+    bussinessLogo: {
+      type: String,
+      default: "", // or null, based on your preference
+    },
+
+    // Created on :
     createdOn: {
       type: Date,
       default: Date.now,
@@ -94,7 +100,7 @@ const BusinessSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-    collection: "business", // 👈 ADD THIS
+    collection: "business",
   }
 );
 

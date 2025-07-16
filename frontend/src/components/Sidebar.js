@@ -34,7 +34,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
         </Link>
 
         <Link to="/allbusinesses" className="text-white text-center">
-          <i class="bi bi-list-ul fs-4"></i>
+          <i className="bi bi-list-ul fs-4"></i>
         </Link>
 
         <Link

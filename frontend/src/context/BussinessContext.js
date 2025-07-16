@@ -102,6 +102,7 @@ useEffect(() => {
       localStorage.setItem("AccountId", selectedBusinessId);
     }
   }, [selectedBusinessId]);
+console.log(businesses);
 
   return (
     <BusinessContext.Provider
