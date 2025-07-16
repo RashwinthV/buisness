@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-      "start:all": "concurrently \"npm start --prefix Gateway\" \"npm start --prefix image_service\" \"npm start --prefix user_Service\" \"npm start --prefix Bussiness_Service\"",
+      "start": "concurrently \"npm start --prefix Gateway\" \"npm start --prefix image_service\" \"npm start --prefix user_Service\" \"npm start --prefix Bussiness_Service\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

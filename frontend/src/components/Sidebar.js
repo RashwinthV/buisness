@@ -7,11 +7,10 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useBusiness } from "../context/BussinessContext";
 const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
-  
   const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth >= 768);
   const [showSwitchBusiness, setShowSwitchBusiness] = useState(false);
   const [selectedBusiness, setSelectedBusiness] = useState(null);
-  const{selectedBusinessId}=useBusiness()
+  const { selectedBusinessId } = useBusiness();
   const [businesses] = useState([
     { id: 1, name: "India Cricket" },
     { id: 2, name: "Royal Challengers Bengaluru" },
@@ -25,7 +24,6 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
   // console.log(selectedBusinessId);
-  
 
   // Bottom bar for small screens
   if (!isLargeScreen) {
@@ -35,14 +33,20 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
           <i className="bi bi-house-door fs-4"></i>
         </Link>
 
-                <Link to="/allbusinesses" className="text-white text-center">
+        <Link to="/allbusinesses" className="text-white text-center">
           <i class="bi bi-list-ul fs-4"></i>
         </Link>
 
-        <Link to={`/businessdashboard/${selectedBusinessId}`} className="text-white text-center">
+        <Link
+          to={`/businessdashboard/${selectedBusinessId}`}
+          className="text-white text-center"
+        >
           <i className="bi bi-speedometer2 fs-4"></i>
         </Link>
-        <Link to={`/managebusiness/${selectedBusinessId}`} className="text-white text-center">
+        <Link
+          to={`/managebusiness/${selectedBusinessId}`}
+          className="text-white text-center"
+        >
           <i className="bi bi-gear fs-4"></i>
         </Link>
         <button
@@ -97,7 +101,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
             </Link>
           </li>
 
-                    <li className="nav-item mb-1">
+          <li className="nav-item mb-1">
             <Link
               to="/allbusinesses"
               className="nav-link text-white d-flex align-items-center"
@@ -110,7 +114,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
           <hr></hr>
           <li className="nav-item mb-3">
             <Link
-              to="/businessdashboard"
+              to={`/businessdashboard/${selectedBusinessId}`}
               className="nav-link text-white d-flex align-items-center"
             >
               <i className="bi bi-speedometer2 me-2 fs-5"></i>
@@ -120,7 +124,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
 
           <li className="nav-item mb-3">
             <Link
-              to="/managebusiness"
+              to={`/managebusiness/${selectedBusinessId}`}
               className="nav-link text-white d-flex align-items-center"
             >
               <i className="bi bi-gear me-2 fs-5"></i>
