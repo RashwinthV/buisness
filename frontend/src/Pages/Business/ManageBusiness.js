@@ -75,7 +75,7 @@ const ManageBusiness = () => {
                 className="btn btn-outline-primary w-100 d-flex align-items-center justify-content-center"
                 onClick={() => setSelectedForm("businessedit")}
               >
-                <i class="bi bi-pencil-square"></i> Edit Business
+                <i className="bi bi-pencil-square me-2"></i> Edit Business
               </button>
             </div>
             <div className="col-12 col-sm-6 col-md-4 col-lg-3">
