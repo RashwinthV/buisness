@@ -226,29 +226,29 @@ const calculateSince = (dateString) => {
 const AllBusinesses = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredBusinesses, setFilteredBusinesses] = useState([]);
-  const { businesses } = useBusiness();
+  const { allbusinesses } = useBusiness();
 
   useEffect(() => {
-    if (businesses.length > 0) {
-      const sorted = [...businesses].sort((a, b) =>
+    if (allbusinesses.length > 0) {
+      const sorted = [...allbusinesses].sort((a, b) =>
         a.name.localeCompare(b.name)
       );
       setFilteredBusinesses(sorted);
     }
-  }, [businesses]);
+  }, [allbusinesses]);
 
   const handleSearch = () => {
     const term = searchTerm.trim().toLowerCase();
 
     if (!term) {
-      const sorted = [...businesses].sort((a, b) =>
+      const sorted = [...allbusinesses].sort((a, b) =>
         a.name.localeCompare(b.name)
       );
       setFilteredBusinesses(sorted);
       return;
     }
 
-    const filtered = businesses.filter((business) => {
+    const filtered = allbusinesses.filter((business) => {
       return (
         business.name.toLowerCase().includes(term) ||
         business?.productNames?.some((p) =>
@@ -259,6 +259,8 @@ const AllBusinesses = () => {
 
     setFilteredBusinesses(filtered);
   };
+  
+  
 
   return (
     <div className="container py-2">

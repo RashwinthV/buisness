@@ -86,3 +86,22 @@ exports.RegisterBusiness = async (req, res) => {
       .json({ message: "Server error", error: error.message });
   }
 };
+
+
+exports.GetAllbussiness=async(req,res)=>{
+  try {
+    const allbusinesses=await bussinessModel.find();
+    if(allbusinesses.length===0){
+      res.json({message:"No bussiness  found"})
+    }
+    
+    res.json(allbusinesses)
+    
+  }catch (error) {
+    console.error("Business registration error:", error.message);
+    return res
+      .status(500)
+      .json({ message: "Server error", error: error.message });
+  }
+
+}
