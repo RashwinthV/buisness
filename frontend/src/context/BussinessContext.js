@@ -73,7 +73,7 @@ export const BusinessProvider = ({ children }) => {
     };
 
     fetchBusinesses();
-  }, [user]);
+  }, [user,baseUrl,token]);
 
 useEffect(() => {
   if (businesses.length === 0) return;
