@@ -1,15 +1,20 @@
 import { Modal, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom"; // ✅ import
+import { useBusiness } from "../context/BussinessContext";
 
 const SwitchBusiness = ({
   show,
   onClose,
-  businesses = [],
+  // businesses = [],
   selectedBusiness,
   onSwitch,
   onAddBusiness,
 }) => {
-  const navigate = useNavigate(); // ✅ define inside the component
+  const navigate = useNavigate();
+  const { businesses, setSelectedBusinessId } = useBusiness();
+  const setAccount=(AccountId)=>{
+    setSelectedBusinessId(AccountId)
+  }
 
   return (
     <Modal show={show} onHide={onClose} centered>
@@ -32,6 +37,7 @@ const SwitchBusiness = ({
                 onClick={() => {
                   onSwitch(biz);
                   onClose();
+                  setAccount(biz?.id)
                   navigate("/businessdashboard"); // ✅ navigate to business dashboard
                 }}
               >

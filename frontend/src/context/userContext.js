@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect, useContext } from "react";
 
 export const UserContext = createContext();
 
@@ -16,6 +16,7 @@ export const UserProvider = ({ children }) => {
     localStorage.setItem("user", JSON.stringify(userData));
     setUser(userData);
   };
+
   const isloggedin = () => {
     const user = localStorage.getItem("user");
     if (user) {
@@ -25,9 +26,7 @@ export const UserProvider = ({ children }) => {
   };
 
   const logout = () => {
-    localStorage.removeItem("user");
-        localStorage.removeItem("token");
-
+   localStorage.clear();
     setUser(null);
   };
 
@@ -36,4 +35,9 @@ export const UserProvider = ({ children }) => {
       {children}
     </UserContext.Provider>
   );
+};
+
+
+export const useUser = () => {
+  return useContext(UserContext);
 };

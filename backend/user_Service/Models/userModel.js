@@ -1,79 +1,87 @@
 const mongoose = require("mongoose");
 
-const UserSchema = new mongoose.Schema({
-  firstName: {
-    type: String,
-    required: true,
-    trim: true,
-  },
-  lastName: {
-    type: String,
-    trim: true,
-  },
-  login:{
-    type:String,
-    enum:["Manual","Social"],
-    default:"Manual",
-    required:true
-  },
-  Role:{
-    type:String,
-    enum:["Owner","Manager"]
-  },
-  age: {
-    type: Number,
-    min: 0,
-  },
-  gender: {
-    type: String,
-    enum: ["Male", "Female", "Other"],
-  },
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-  },
-  emailVerified: {
-    type: Boolean,
-    default: false,
-  },
-  password: {
-    type: String,
-  },
-  phoneNo: {
-    type: String,
-    unique: true,
-  },
-  address: {
-    line1: {
+const UserSchema = new mongoose.Schema(
+  {
+    firstName: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    lastName: {
+      type: String,
+      trim: true,
+    },
+    login: {
+      type: String,
+      enum: ["Manual", "Social"],
+      default: "Manual",
+      required: true,
+    },
+    Role: {
+      type: String,
+      enum: ["Owner", "Manager", "user"],
+      default: "user",
+    },
+    age: {
+      type: Number,
+      min: 0,
+    },
+    gender: {
+      type: String,
+      enum: ["Male", "Female", "Other"],
+    },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    emailVerified: {
+      type: Boolean,
+      default: false,
+    },
+    password: {
       type: String,
     },
-    line2: {
+    profilepic: {
       type: String,
+      default: null,
     },
-    city: {
+    phoneNo: {
       type: String,
+      unique: true,
     },
-    state: {
-      type: String,
+    address: {
+      line1: {
+        type: String,
+      },
+      line2: {
+        type: String,
+      },
+      city: {
+        type: String,
+      },
+      state: {
+        type: String,
+      },
+      country: {
+        type: String,
+      },
+      pincode: {
+        type: String,
+      },
     },
-    country: {
+    otp: {
       type: String,
+      default: null,
     },
-    pincode: {
-      type: String,
+    newsSubscription: {
+      type: Boolean,
+      default: false,
     },
   },
-  otp: {
-    type: String,
-    default: null,
-  },
-  newsSubscription: {
-    type: Boolean,
-    default: false,
-  },
-}, {
-  timestamps: true,
-});
+  {
+    timestamps: true,
+  }
+);
 
 module.exports = mongoose.model("user", UserSchema);

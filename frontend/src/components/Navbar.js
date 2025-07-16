@@ -1,13 +1,12 @@
-import  {useContext } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import { Link, useNavigate } from "react-router-dom";
-import { UserContext } from "../context/userContext";
+import {  useUser } from "../context/userContext";
 import image from '../Assets/Images/Default.png'
 
 function NavbarComponent() {
   const navigate = useNavigate();
-  const { logout, isloggedin, user } = useContext(UserContext);
+  const { logout, isloggedin, user } = useUser();
   const isLoggedIn = isloggedin();
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark fixed-top shadow-sm">

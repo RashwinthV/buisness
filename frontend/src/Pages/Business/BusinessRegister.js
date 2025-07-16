@@ -17,7 +17,7 @@ function BusinessRegister() {
     startedOn: "",
   });
 
-  const [userPhone, setUserPhone] = useState(""); // fallback input if ownerContact not auto-fetched
+  const [userPhone, setUserPhone] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
