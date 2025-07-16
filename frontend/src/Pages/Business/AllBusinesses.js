@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-
+import Image_default from "../../Assets/Images/Default.png";
 const allBusinesses = [
   {
     id: 1,
@@ -10,6 +10,7 @@ const allBusinesses = [
     district: "Coimbatore",
     startedOn: "2020-06-01",
     productNames: ["Copra", "Shell", "Matta"],
+    logo: Image_default, // Replace with actual logo
   },
   {
     id: 2,
@@ -20,6 +21,7 @@ const allBusinesses = [
     district: "Madurai",
     startedOn: "2023-01-15",
     productNames: ["Coconut", "Fertilizer"],
+    logo: Image_default,
   },
   {
     id: 3,
@@ -30,6 +32,7 @@ const allBusinesses = [
     district: "Chennai",
     startedOn: "2021-11-20",
     productNames: ["Machinery", "Parts"],
+    logo: Image_default,
   },
 ];
 
@@ -114,7 +117,7 @@ const AllBusinesses = () => {
         {filteredBusinesses.length > 0 ? (
           filteredBusinesses.map((business) => (
             <div className="col-12 col-md-6 col-lg-4 mb-4" key={business.id}>
-              <div className="card shadow-sm h-100">
+              {/* <div className="card shadow-sm h-100">
                 <div className="card-body">
                   <h5 className="card-title">{business.name}</h5>
                   <p className="mb-1">
@@ -133,7 +136,41 @@ const AllBusinesses = () => {
                     <strong>Since:</strong> {calculateSince(business.startedOn)}
                   </p>
                 </div>
-              </div>
+              </div> */}
+              
+<div className="card shadow-sm h-100">
+  <div className="card-body">
+    <div className="d-flex align-items-center mb-3">
+      <img
+        src={business.logo}
+        alt={`${business.name} Logo`}
+        className="rounded-circle me-3"
+        width="48"
+        height="48"
+        style={{ objectFit: "cover", border: "1px solid #ccc" }}
+      />
+      <h5 className="card-title mb-0">{business.name}</h5>
+    </div>
+
+    <p className="mb-1">
+      <strong>Location:</strong> {business.city}, {business.district}
+    </p>
+    <p className="mb-1">
+      <strong>Contact:</strong> {business.contact}
+    </p>
+    <p className="mb-1">
+      <strong>Email:</strong> {business.email}
+    </p>
+    <p className="mb-1">
+      <strong>Products:</strong> {business.productNames.join(", ")}
+    </p>
+    <p className="mb-0">
+      <strong>Since:</strong> {calculateSince(business.startedOn)}
+    </p>
+  </div>
+</div>
+
+
             </div>
           ))
         ) : (
