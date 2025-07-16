@@ -15,10 +15,14 @@ const BussinessService = createProxyMiddleware({
   target: "http://localhost:4011",
   changeOrigin: true,
 });
+const imageService = createProxyMiddleware({
+  target: "http://localhost:4012",
+  changeOrigin: true,
+});
 
-
-app.use('/v1',userService)
-app.use('/v2',BussinessService)
+app.use("/v1", userService);
+app.use("/v2", BussinessService);
+app.use("/v3", imageService);
 
 const port = process.env.PORT || 4000;
 
