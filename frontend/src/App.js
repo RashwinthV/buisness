@@ -13,7 +13,7 @@ import BusinessRegister from "./Pages/Business/BusinessRegister.js";
 import BusinessDashboard from "./Pages/Business/BusinessDashboard.js";
 import AddProduct from "./Pages/Business/AddProduct.js";
 import AddEmployee from "./Pages/Business/AddEmployee.js";
-import AddTrader from "./Pages/Business/AddTrader.js";
+import AddTradeParty from "./Pages/Business/AddTradeParty.js";
 import ManageBusiness from "./Pages/Business/ManageBusiness.js";
 import { AppProviders } from "./context/AppProviders.js";
 
@@ -36,7 +36,7 @@ function App() {
           <Route path="/businessdashboard/:bussinessId" element={<BusinessDashboard />} />
           <Route path="/addproduct" element={<AddProduct />} />
           <Route path="/addemployee" element={<AddEmployee />} />
-          <Route path="/addtrader" element={<AddTrader />} />
+          <Route path="/AddTradeParty" element={<AddTradeParty />} />
         </Route>
       </Routes>
     </AppProviders>
