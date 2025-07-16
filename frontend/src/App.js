@@ -17,6 +17,7 @@ import AddTradeParty from "./Pages/Business/AddTradeParty.js";
 import ManageBusiness from "./Pages/Business/ManageBusiness.js";
 import { AppProviders } from "./context/AppProviders.js";
 import AllBusinesses from "./Pages/Business/AllBusinesses.js";
+import BusinessProfile  from "./Pages/Business/BusinessProfile.js";
 
 function App() {
   return (
@@ -45,7 +46,10 @@ function App() {
           <Route path="/addemployee" element={<AddEmployee />} />
           <Route path="/addtradeparty" element={<AddTradeParty />} />
           <Route path="/allbusinesses" element={<AllBusinesses />} />
+                            <Route path="/businessprofile" element={<BusinessProfile />} />
+
         </Route>
+
       </Routes>
     </AppProviders>
   );
