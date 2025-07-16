@@ -16,6 +16,7 @@ import AddEmployee from "./Pages/Business/AddEmployee.js";
 import AddTradeParty from "./Pages/Business/AddTradeParty.js";
 import ManageBusiness from "./Pages/Business/ManageBusiness.js";
 import { AppProviders } from "./context/AppProviders.js";
+import AllBusinesses from "./Pages/Business/AllBusinesses.js";
 
 function App() {
   return (
@@ -31,12 +32,19 @@ function App() {
           <Route path="/developers" element={<Developers />} />
           <Route path="/plans" element={<Plans />} />
           <Route path="/settings" element={<Settings />} />
-          <Route path="/managebusiness/:bussinessId" element={<ManageBusiness />} />
+          <Route
+            path="/managebusiness/:bussinessId"
+            element={<ManageBusiness />}
+          />
           <Route path="/businessregister" element={<BusinessRegister />} />
-          <Route path="/businessdashboard/:bussinessId" element={<BusinessDashboard />} />
+          <Route
+            path="/businessdashboard/:bussinessId"
+            element={<BusinessDashboard />}
+          />
           <Route path="/addproduct" element={<AddProduct />} />
           <Route path="/addemployee" element={<AddEmployee />} />
-          <Route path="/AddTradeParty" element={<AddTradeParty />} />
+          <Route path="/addtradeparty" element={<AddTradeParty />} />
+          <Route path="/allbusinesses" element={<AllBusinesses />} />
         </Route>
       </Routes>
     </AppProviders>

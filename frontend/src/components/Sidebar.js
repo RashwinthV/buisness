@@ -34,6 +34,10 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
           <i className="bi bi-house-door fs-4"></i>
         </Link>
 
+                <Link to="/allbusinesses" className="text-white text-center">
+          <i class="bi bi-search fs-4"></i>
+        </Link>
+
         <Link to={`/businessdashboard/${selectedBusinessId}`} className="text-white text-center">
           <i className="bi bi-speedometer2 fs-4"></i>
         </Link>
@@ -89,6 +93,16 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
             >
               <i className="bi bi-house-door me-2 fs-5"></i>
               {!isCollapsed && <span>Home</span>}
+            </Link>
+          </li>
+
+                    <li className="nav-item mb-1">
+            <Link
+              to="/allbusinesses"
+              className="nav-link text-white d-flex align-items-center"
+            >
+              <i className="bi bi-search me-2 fs-5"></i>
+              {!isCollapsed && <span>All Businesses</span>}
             </Link>
           </li>
 
