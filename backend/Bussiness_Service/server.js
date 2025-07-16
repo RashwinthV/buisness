@@ -11,7 +11,7 @@ app.use(express.json())
 connectDb()
 
 app.use('/bussiness',bussinessRoute)
-
+ 
 
 
 const port=process.env.PORT||4011
