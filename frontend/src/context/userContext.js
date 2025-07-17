@@ -6,6 +6,8 @@ const defaultUser = null;
 
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(defaultUser);
+    const token = localStorage.getItem("token");
+
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
@@ -31,7 +33,7 @@ export const UserProvider = ({ children }) => {
   };
 
   return (
-    <UserContext.Provider value={{ user, login, logout, isloggedin }}>
+    <UserContext.Provider value={{ user, login, logout, isloggedin,token }}>
       {children}
     </UserContext.Provider>
   );

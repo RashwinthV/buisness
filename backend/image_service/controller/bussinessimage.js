@@ -1,49 +1,72 @@
-const fs = require('fs');
 const path = require('path');
-const axios = require('axios');
+const fs = require('fs');
 const sharp = require('sharp');
-const FormData = require('form-data');
+const cloudinary = require('cloudinary').v2;
+
+// Cloudinary Config
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+}); 
 
 exports.uploadImage = async (req, res) => {
   try {
     const inputPath = path.join(__dirname, '..', req.file.path);
     const outputPath = `${inputPath}-resized.jpg`;
 
-    // Resize and compress image using sharp, then save to disk
     await sharp(inputPath)
-      .resize(800) // width in px
-      .jpeg({ quality: 70 }) // compression
+      .resize({ width: 800 }) 
+      .jpeg({ quality: 70 })
       .toFile(outputPath);
 
-    // Prepare FormData for upload
-    const form = new FormData();
-    form.append('source', fs.createReadStream(outputPath));
-    form.append('action', 'upload');
-    form.append('key', process.env.FREEIMAGE_API_KEY);
-    form.append('format', 'json');
-
-    // Make the upload request
-    const response = await axios.post('https://freeimage.host/api/1/upload', form, {
-      headers: form.getHeaders(),
-      maxBodyLength: Infinity,
-      timeout: 15000, // optional: timeout to prevent hangs
+    const result = await cloudinary.uploader.upload(outputPath, {
+      folder: 'business-logo',
+      use_filename: true,
+      unique_filename: false,
+      overwrite: true,
     });
 
-    // Cleanup both original and resized files
+    // 3. Clean up local files
     fs.unlinkSync(inputPath);
     fs.unlinkSync(outputPath);
 
-    if (response.data?.image?.url) {
-      return res.status(200).json({ imageUrl: response.data.image.url });
-    } else {
-      return res.status(400).json({ error: 'Image upload failed', response: response.data });
-    }
+    return res.status(200).json({
+      success: true,
+      imageUrl: result.secure_url,
+      public_id: result.public_id,
+    });
 
   } catch (error) {
-    console.error('Image upload error:', error.message);
-    return res.status(500).json({ error: 'Server error during image upload' });
+    console.error('Cloudinary Upload Error:', error.message);
+    return res.status(500).json({ success: false, error: 'Image upload failed' });
   }
 };
+
+
+
+exports.deleteImage = async (req, res) => {
+  try {
+    const { public_id } = req.body;
+
+    if (!public_id) {
+      return res.status(400).json({ success: false, message: 'Missing public_id' });
+    }
+
+    const result = await cloudinary.uploader.destroy(public_id);
+
+    if (result.result !== 'ok') {
+      return res.status(400).json({ success: false, message: 'Image not found or already deleted' });
+    }
+
+    return res.status(200).json({ success: true, message: 'Image deleted successfully' });
+
+  } catch (error) {
+    console.error('Delete error:', error.message);
+    return res.status(500).json({ success: false, message: 'Failed to delete image' });
+  }
+};
+
 
 
 exports.getImages = async (req, res) => {

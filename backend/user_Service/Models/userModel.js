@@ -43,8 +43,8 @@ const UserSchema = new mongoose.Schema(
       type: String,
     },
     profilepic: {
-      type: String,
-      default: null,
+      imageUrl: { type: String, default: null },
+      deleteUrl: { type: String, default: null },
     },
     phoneNo: {
       type: String,

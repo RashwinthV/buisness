@@ -8,7 +8,7 @@ const BusinessProfile = () => {
   const [editMode, setEditMode] = useState(false);
 
   const [business, setBusiness] = useState({
-    ownerId: "user123", // From DB per business
+    ownerId: "user124", // From DB per business
     logo: "",
     startedOn: "",
     name: "",

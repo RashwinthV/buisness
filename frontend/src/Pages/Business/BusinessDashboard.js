@@ -4,26 +4,34 @@ import { useBusiness } from "../../context/BussinessContext";
 import Image_default from "../../Assets/Images/Default.png";
 const BusinessDashboard = () => {
   const { selectedBusinessId, businesses } = useBusiness();
-  const selectedBusiness = businesses?.find((b) => b.businessId === selectedBusinessId);
+  const selectedBusiness = businesses?.find(
+    (b) => b.businessId === selectedBusinessId
+  );
   const stats = [
     { title: "Total Products", count: 1234, color: "primary" },
     { title: "Total Employees", count: 567, color: "success" },
     { title: "Total Transactions", count: 7890, color: "warning" },
   ];
 
+  console.log(selectedBusiness);
+
   return (
     <div className="container-fluid py-2">
-                      <div className="card shadow-sm border-0 mb-4">
-        <div className="card-body">     
-                          <img
-                            src={selectedBusiness.bussinessLogo || Image_default}
-                            alt="Business Logo"
-                            className="mb-2"
-                            width="1200"
-                            height="100"
-                            style={{ objectFit: "contain",}}
-                          />
-      <h3 className="text-center mb-5"><strong>{selectedBusiness?.name} </strong></h3></div></div>
+      <div className="card shadow-sm border-0 mb-4">
+        <div className="card-body">
+          <img
+            src={selectedBusiness?.bussinessLogo || Image_default}
+            alt="Business Logo"
+            className="mb-2"
+            width="1200"
+            height="100"
+            style={{ objectFit: "contain" }}
+          />
+          <h3 className="text-center mb-5">
+            <strong>{selectedBusiness?.name} </strong>
+          </h3>
+        </div>
+      </div>
       <h5>Business Analytics</h5>
 
       <Row className="gx-3 gy-3">
