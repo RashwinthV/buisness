@@ -49,6 +49,10 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
         >
           <i className="bi bi-gear fs-4"></i>
         </Link>
+                <Link to={`/entry/${selectedBusinessId}`} className="text-white text-center">
+          <i class="bi bi-receipt-cutoff  fs-4"></i>
+             
+        </Link>
         <button
           onClick={() => setShowSwitchBusiness(true)}
           className="btn btn-link text-white text-center p-0"
@@ -131,7 +135,15 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
               {!isCollapsed && <span>Manage</span>}
             </Link>
           </li>
-
+          <li className="nav-item mb-3">
+            <Link
+              to={`/entry/${selectedBusinessId}`}
+              className="nav-link text-white d-flex align-items-center"
+            >
+              <i class="bi bi-receipt-cutoff me-2 fs-5"></i>
+              {!isCollapsed && <span>Transactions</span>}
+            </Link>
+          </li>
           <li className="nav-item">
             <button
               className="nav-link text-white d-flex align-items-center bg-transparent border-0"

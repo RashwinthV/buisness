@@ -36,6 +36,7 @@ import AddTradeParty from "./Pages/Business/AddTradeParty.js";
 import BusinessDashboard from "./Pages/Dashboard/BusinessDashboard.js";
 import ManageBusiness from "./Pages/Dashboard/ManageBusiness.js";
 import AllBusinesses from "./Pages/Dashboard/AllBusinesses.js";
+import Entry from "./Pages/Dashboard/Entry.js";
 
 
 function App() {
@@ -68,6 +69,7 @@ function App() {
           <Route path="/businessdashboard/:bussinessId" element={<BusinessDashboard />} />
           <Route path="/managebusiness/:bussinessId" element={<ManageBusiness />} />
           <Route path="/allbusinesses" element={<AllBusinesses />} />
+          <Route path="/entry" element={<Entry />} />
         </Route>
       </Routes>
     </AppProviders>
