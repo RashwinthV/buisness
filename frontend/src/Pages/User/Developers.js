@@ -1,8 +1,8 @@
-import Giticon from "../Assets/Icons/icons8-github-48.png";
-import Linkedin from "../Assets/Icons/icons8-linkedin-48.png";
-import Instagram from "../Assets/Icons/icons8-instagram-48.png";
-import Kirithik_pic from "../Assets/Images/Kirithik-Profile.jpg";
-import Rashwinth_pic from "../Assets/Images/Rashwinth-Profile.jpg";
+import Giticon from "../../Assets/Icons/icons8-github-48.png";
+import Linkedin from "../../Assets/Icons/icons8-linkedin-48.png";
+import Instagram from "../../Assets/Icons/icons8-instagram-48.png";
+import Kirithik_pic from "../../Assets/Images/Kirithik-Profile.jpg";
+import Rashwinth_pic from "../../Assets/Images/Rashwinth-Profile.jpg";
 
 const calculateAge = (dob) => {
   const birthDate = new Date(dob);

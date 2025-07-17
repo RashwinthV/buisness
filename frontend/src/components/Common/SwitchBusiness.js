@@ -1,7 +1,7 @@
 import { Modal, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom"; // ✅ import
-import { useBusiness } from "../context/BussinessContext";
-import Image_default from "../../src/Assets/Images/Default.png"; // ✅ import default image
+import { useBusiness } from "../../context/BussinessContext";
+import Image_default from "../../Assets/Images/Default.png"; // ✅ import default image
 
 const SwitchBusiness = ({
   show,

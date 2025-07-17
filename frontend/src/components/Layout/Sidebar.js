@@ -1,11 +1,11 @@
-import "../Styles/Sidebar.css";
+import "../../Styles/Sidebar.css";
 
-import SwitchBusinessModal from "./SwitchBusiness";
+import SwitchBusinessModal from "../Common/SwitchBusiness";
 
 import { useEffect } from "react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { useBusiness } from "../context/BussinessContext";
+import { useBusiness } from "../../context/BussinessContext";
 const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
   const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth >= 768);
   const [showSwitchBusiness, setShowSwitchBusiness] = useState(false);

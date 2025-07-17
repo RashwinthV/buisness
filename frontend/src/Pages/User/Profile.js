@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Container, Row, Col, Button } from "react-bootstrap";
-import Image_default from "../Assets/Images/Default.png";
-import { useUser } from "../context/userContext";
+import Image_default from "../../Assets/Images/Default.png";
+import { useUser } from "../../context/userContext";
 import { toast } from "react-toastify";
 import {
   getVerificationStatus,
   VerificationModal,
-} from "../Utils/VerifyStatus";
+} from "../../Utils/VerifyStatus";
 
 const Profile = () => {
   const [editMode, setEditMode] = useState(false);

@@ -3,7 +3,6 @@ import { Container, Row, Col, Button } from "react-bootstrap";
 import Image_default from "../../Assets/Images/Default.png"; // Replace with your actual image path
 import { getVerificationStatus, VerificationModal } from '../../Utils/VerifyStatus.js'; // adjust path
 
-// const BusinessProfile = () => {
 //   const currentUserId = "user123"; // Replace with auth context or prop
 
 //   const [editMode, setEditMode] = useState(false);
@@ -628,6 +627,8 @@ const BusinessProfile = () => {
     address2: "",
     city: "",
     district: "",
+    state :"",
+    country :"",
     pincode: "",
     mapLink: "",
     contactOwner: "",
@@ -843,6 +844,34 @@ const BusinessProfile = () => {
                 <div>{business.district || "-"}</div>
               )}
             </Col>
+            <Col md={4}>
+  <label>State</label>
+  {editMode ? (
+    <input
+      className="form-control"
+      name="state"
+      value={business.state}
+      onChange={handleInputChange}
+    />
+  ) : (
+    <div>{business.state || "-"}</div>
+  )}
+</Col>
+
+<Col md={4}>
+  <label>Country</label>
+  {editMode ? (
+    <input
+      className="form-control"
+      name="country"
+      value={business.country}
+      onChange={handleInputChange}
+    />
+  ) : (
+    <div>{business.country || "-"}</div>
+  )}
+</Col>
+
 
             <Col md={4}>
               <label>Pincode</label>

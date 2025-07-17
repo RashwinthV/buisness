@@ -1,19 +1,19 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import { Link, useNavigate } from "react-router-dom";
-import {  useUser } from "../context/userContext";
-import image from '../Assets/Images/Default.png'
+import { useUser } from "../../context/userContext";
+import image from "../../Assets/Images/Default.png";
 
 function NavbarComponent() {
   const navigate = useNavigate();
   const { logout, isloggedin, user } = useUser();
   const isLoggedIn = isloggedin();
- 
+
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark fixed-top shadow-sm">
       <div className="container-fluid">
         <Link to="/" className="navbar-brand fw-bold">
-          Business 
+          Business
         </Link>
 
         {/* ❌ Removed navbar-toggler and collapse behavior */}
@@ -28,13 +28,15 @@ function NavbarComponent() {
                   data-bs-toggle="dropdown"
                 >
                   <img
-                    src={user?.profilepic||image}
+                    src={user?.profilepic || image}
                     alt="Profile"
                     width="32"
                     height="32"
                     className="rounded-circle me-2"
                   />
-                  <span className="fw-semibold text-white">{user?.firstName}</span>
+                  <span className="fw-semibold text-white">
+                    {user?.firstName}
+                  </span>
                 </p>
                 <ul className="dropdown-menu dropdown-menu-end">
                   <li>

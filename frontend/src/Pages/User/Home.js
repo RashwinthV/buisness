@@ -14,7 +14,7 @@ import {
   LineElement,
 } from "chart.js";
 import { useContext } from "react";
-import { UserContext } from "../context/userContext";
+import { UserContext } from "../../context/userContext";
 ChartJS.register(
   LineElement,
   PointElement,
