@@ -1,8 +1,7 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import Image_default from "../../Assets/Images/Default.png"; // Replace with your default image path
+import Image_default from "../../Assets/Images/Default.png";
 
 const AddProduct = () => {
   const navigate = useNavigate();

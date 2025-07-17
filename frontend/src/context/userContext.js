@@ -31,9 +31,11 @@ export const UserProvider = ({ children }) => {
    localStorage.clear();
     setUser(null);
   };
+    const isAuthenticated = !!user;
+
 
   return (
-    <UserContext.Provider value={{ user, login, logout, isloggedin,token }}>
+    <UserContext.Provider value={{ user,isAuthenticated, login, logout, isloggedin,token }}>
       {children}
     </UserContext.Provider>
   );

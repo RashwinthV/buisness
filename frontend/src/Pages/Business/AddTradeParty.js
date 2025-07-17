@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
@@ -115,7 +114,6 @@ function AddTradeParty() {
         </div>
       </div>
 
-     
       <div className="row gy-3">
         <div className="col-md-6">
           <label>Name *</label>

@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -38,8 +37,18 @@ const AddEmployee = () => {
 
   const handleSubmit = async () => {
     const requiredFields = [
-      "name", "contact", "workField", "dob", "doj", "salary",
-      "addressLine1", "city", "district", "zipCode", "idProof", "idNumber",
+      "name",
+      "contact",
+      "workField",
+      "dob",
+      "doj",
+      "salary",
+      "addressLine1",
+      "city",
+      "district",
+      "zipCode",
+      "idProof",
+      "idNumber",
     ];
 
     for (const field of requiredFields) {
@@ -119,7 +128,7 @@ const AddEmployee = () => {
           </div>
         </div>
       </div>
-<h6 className="text-danger">Personal Details</h6>
+      <h6 className="text-danger">Personal Details</h6>
       <div className="row gy-3">
         <div className="col-md-4">
           <label>Name *</label>
@@ -153,7 +162,7 @@ const AddEmployee = () => {
           />
         </div>
 
-                <div className="col-md-4">
+        <div className="col-md-4">
           <label>Address Line 1 *</label>
           <input
             type="text"
@@ -173,7 +182,7 @@ const AddEmployee = () => {
             onChange={handleChange}
           />
         </div>
-                <div className="col-md-4">
+        <div className="col-md-4">
           <label>City *</label>
           <input
             type="text"
@@ -194,26 +203,26 @@ const AddEmployee = () => {
           />
         </div>
         <div className="col-md-4">
-  <label>State *</label>
-  <input
-    type="text"
-    name="state"
-    className="form-control"
-    value={formData.state}
-    onChange={handleChange}
-  />
-</div>
+          <label>State *</label>
+          <input
+            type="text"
+            name="state"
+            className="form-control"
+            value={formData.state}
+            onChange={handleChange}
+          />
+        </div>
 
-<div className="col-md-4">
-  <label>Country *</label>
-  <input
-    type="text"
-    name="country"
-    className="form-control"
-    value={formData.country}
-    onChange={handleChange}
-  />
-</div>
+        <div className="col-md-4">
+          <label>Country *</label>
+          <input
+            type="text"
+            name="country"
+            className="form-control"
+            value={formData.country}
+            onChange={handleChange}
+          />
+        </div>
 
         <div className="col-md-4">
           <label>Zip Code *</label>
@@ -238,7 +247,7 @@ const AddEmployee = () => {
           />
         </div>
 
-                <div className="col-md-4">
+        <div className="col-md-4">
           <label>Field of Work *</label>
           <select
             className="form-select"
@@ -262,10 +271,6 @@ const AddEmployee = () => {
             onChange={handleChange}
           />
         </div>
-
-
-
-
 
         <div className="col-md-4">
           <label>ID Proof *</label>

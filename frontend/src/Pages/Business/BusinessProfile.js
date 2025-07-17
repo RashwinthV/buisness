@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import Image_default from "../../Assets/Images/Default.png"; // Replace with your actual image path
-import { getVerificationStatus, VerificationModal } from '../../Utils/VerifyStatus.js'; // adjust path
+import {
+  getVerificationStatus,
+  VerificationModal,
+} from "../../Utils/VerifyStatus.js"; // adjust path
 
 //   const currentUserId = "user123"; // Replace with auth context or prop
 
@@ -627,8 +630,8 @@ const BusinessProfile = () => {
     address2: "",
     city: "",
     district: "",
-    state :"",
-    country :"",
+    state: "",
+    country: "",
     pincode: "",
     mapLink: "",
     contactOwner: "",
@@ -751,14 +754,12 @@ const BusinessProfile = () => {
             </Col>
 
             <Col md={6}>
-<label>
-  Email{" "}
-  {getVerificationStatus(
-    business.emailVerified,
-    "email",
-    () => handleOpenVerify("email", business.email)
-  )}
-</label>
+              <label>
+                Email{" "}
+                {getVerificationStatus(business.emailVerified, "email", () =>
+                  handleOpenVerify("email", business.email)
+                )}
+              </label>
               {editMode ? (
                 <input
                   type="email"
@@ -845,33 +846,32 @@ const BusinessProfile = () => {
               )}
             </Col>
             <Col md={4}>
-  <label>State</label>
-  {editMode ? (
-    <input
-      className="form-control"
-      name="state"
-      value={business.state}
-      onChange={handleInputChange}
-    />
-  ) : (
-    <div>{business.state || "-"}</div>
-  )}
-</Col>
+              <label>State</label>
+              {editMode ? (
+                <input
+                  className="form-control"
+                  name="state"
+                  value={business.state}
+                  onChange={handleInputChange}
+                />
+              ) : (
+                <div>{business.state || "-"}</div>
+              )}
+            </Col>
 
-<Col md={4}>
-  <label>Country</label>
-  {editMode ? (
-    <input
-      className="form-control"
-      name="country"
-      value={business.country}
-      onChange={handleInputChange}
-    />
-  ) : (
-    <div>{business.country || "-"}</div>
-  )}
-</Col>
-
+            <Col md={4}>
+              <label>Country</label>
+              {editMode ? (
+                <input
+                  className="form-control"
+                  name="country"
+                  value={business.country}
+                  onChange={handleInputChange}
+                />
+              ) : (
+                <div>{business.country || "-"}</div>
+              )}
+            </Col>
 
             <Col md={4}>
               <label>Pincode</label>
@@ -908,14 +908,12 @@ const BusinessProfile = () => {
             </Col>
 
             <Col md={6}>
- <label>
-  Contact (Owner){" "}
-  {getVerificationStatus(
-    business.numberVerified,
-    "phone",
-    () => handleOpenVerify("phone", business.contactOwner)
-  )}
-</label>
+              <label>
+                Contact (Owner){" "}
+                {getVerificationStatus(business.numberVerified, "phone", () =>
+                  handleOpenVerify("phone", business.contactOwner)
+                )}
+              </label>
               {editMode ? (
                 <input
                   className="form-control"
