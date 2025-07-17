@@ -18,17 +18,20 @@ const BusinessDashboard = () => {
     <div className="container-fluid py-2">
       <div className="card shadow-sm border-0 mb-4">
         <div className="card-body">
+          <div className="text-center mb-4">
           <img
             src={selectedBusiness?.bussinessLogo||selectedBusiness?.logo.imageUrl || Image_default}
             alt="Business Logo"
-            className="mb-2"
-            width="1200"
-            height="100"
-            style={{ objectFit: "contain" }}
+            className="mb-2 img-fluid"
+            style={{
+    maxHeight: "100px",
+    objectFit: "contain",
+  }}
           />
           <h3 className="text-center mb-5">
             <strong>{selectedBusiness?.name} </strong>
           </h3>
+          </div>
         </div>
       </div>
       <h5>Business Analytics</h5>

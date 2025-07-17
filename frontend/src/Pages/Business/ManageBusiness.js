@@ -66,10 +66,11 @@ const ManageBusiness = () => {
                     <img
                       src={selectedBusiness?.bussinessLogo||selectedBusiness?.logo.imageUrl || Image_default}
                       alt="Business Logo"
-                      className="mb-2"
-                      width="1200"
-                      height="100"
-                      style={{ objectFit: "contain",}}
+                      className="mb-2 img-fluid"
+                      style={{
+    maxHeight: "100px",
+    objectFit: "contain",
+  }}
                     />
             <h3 className="fw-bold text-primary mb-0">
               {selectedBusiness?.name}
