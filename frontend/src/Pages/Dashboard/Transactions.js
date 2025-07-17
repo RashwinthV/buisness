@@ -1,6 +1,8 @@
 import {  useState } from "react";
 import moment from "moment";
+import { useBusiness } from "../../context/BussinessContext";
 import { Modal, Button } from "react-bootstrap";
+import Image_default from "../../Assets/Images/Default.png";
 
 // Sample placeholder data
 const dummyProducts = [
@@ -28,11 +30,6 @@ const Entry = () => {
   const [entries, setEntries] = useState([]);
   const [sortBy, setSortBy] = useState("date");
 
-
-const [ setType] = useState(""); // "sales" or "purchase"
-
- 
-
   const closeModal = () => {
     setEntryType(null);
     setModalShow(false);
@@ -43,6 +40,11 @@ const [ setType] = useState(""); // "sales" or "purchase"
     closeModal();
   };
 
+    const { selectedBusinessId, businesses } = useBusiness();
+    const selectedBusiness = businesses?.find(
+      (b) => b.businessId === selectedBusinessId
+    );
+
   const sortedEntries = [...entries].sort((a, b) => {
     if (sortBy === "date") return new Date(b.date) - new Date(a.date);
     if (sortBy === "type") return a.type.localeCompare(b.type);
@@ -52,10 +54,23 @@ const [ setType] = useState(""); // "sales" or "purchase"
 
   return (
     <div className="container py-4">
-      <h4 className="mb-3 text-center">Business Entries</h4>
+              <div className="card shadow-sm border-0 mb-4">
 
-      {/* Buttons */}
-      <div className="text-center mb-4 d-flex gap-3 justify-content-center flex-wrap">
+                  <div className="card-body text-center">
+                  <img
+                    src={selectedBusiness?.bussinessLogo||selectedBusiness?.logo.imageUrl || Image_default}
+                    alt="Business Logo"
+                    className="mb-2 img-fluid"
+                    style={{
+            maxHeight: "80px",
+            objectFit: "contain",
+          }}
+                  />
+                  <h4 className="text-center mb-3">
+                    <strong>{selectedBusiness?.name} </strong>
+                  </h4>
+
+                       <div className="text-center mb-4 d-flex gap-3 justify-content-center flex-wrap">
 <button className="btn btn-outline-primary" onClick={() => {
   setEntryType("sales");
   setModalShow(true);
@@ -65,8 +80,13 @@ const [ setType] = useState(""); // "sales" or "purchase"
   setEntryType("purchase");
   setModalShow(true);
 }}>Purchase Entry</button>
+</div>
 
       </div>
+                  </div>
+
+      {/* Buttons */}
+ 
 
       {/* Sort */}
       <div className="mb-3 d-flex align-items-center gap-2">
@@ -142,11 +162,11 @@ export default Entry;
 // ------------------------------
 const EntryModal = ({ show, onHide, type, products, employees, onSubmit }) => {
   const [form, setForm] = useState({
-    partyName: "",
-    date: moment().format("YYYY-MM-DD"),
-    owner: "",
-    entryBy: "",
-    products: [],
+        partyName: "",
+        partyContact: "",
+        date: moment().format("YYYY-MM-DD"),
+        entryBy: "",
+        products: [],
   });
 
   const addProduct = () => {

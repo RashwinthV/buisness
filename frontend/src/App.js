@@ -36,7 +36,7 @@ import AddTradeParty from "./Pages/Business/AddTradeParty.js";
 import BusinessDashboard from "./Pages/Dashboard/BusinessDashboard.js";
 import ManageBusiness from "./Pages/Dashboard/ManageBusiness.js";
 import AllBusinesses from "./Pages/Dashboard/AllBusinesses.js";
-import Entry from "./Pages/Dashboard/Entry.js";
+import Transactions from "./Pages/Dashboard/Transactions.js";
 import ProtectedBusiness from "./context/ProtectedBusinessRoute.js";
 import ScrollToTop from "./components/Layout/scroll.js";
 
@@ -83,10 +83,10 @@ function App() {
           />
           <Route path="/allbusinesses" element={<AllBusinesses />} />
           <Route
-            path="/entry/:businessId"
+            path="/transactions/:businessId"
             element={
               <ProtectedBusiness>
-                <Entry />
+                <Transactions />
               </ProtectedBusiness>
             }
           />

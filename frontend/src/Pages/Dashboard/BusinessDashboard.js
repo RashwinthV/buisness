@@ -1,60 +1,84 @@
-import { Row, Col, Card } from "react-bootstrap";
-import CountUp from "react-countup";
+
+import { useState } from "react";
+
+
 import { useBusiness } from "../../context/BussinessContext";
 import Image_default from "../../Assets/Images/Default.png";
+import Analytics from "./Tabs/Analytics";
+import Products from "./Tabs/Product";
+import Employees from "./Tabs/Employee";
+import Vehicles from "./Tabs/Vehicle";
+import TradeParties from "./Tabs/TradeParty";
 const BusinessDashboard = () => {
   const { selectedBusinessId, businesses } = useBusiness();
   const selectedBusiness = businesses?.find(
     (b) => b.businessId === selectedBusinessId
   );
-  const stats = [
-    { title: "Total Products", count: 1234, color: "primary" },
-    { title: "Total Employees", count: 567, color: "success" },
-    { title: "Total Transactions", count: 7890, color: "warning" },
-  ];
 
- 
+
+   const [activeTab, setActiveTab] = useState("Analytics");
+
+  const renderTabContent = () => {
+    switch (activeTab) {
+      case "Analytics":
+        return <Analytics />;
+      case "Products":
+        return <Products />;
+      case "Employees":
+        return <Employees />;
+      case "Vehicles":
+        return <Vehicles />;
+      case "Trade Parties":
+        return <TradeParties />;
+      default:
+        return null;
+    }
+  };
+
+  const tabs = ["Analytics", "Products", "Employees", "Vehicles", "Trade Parties"];
+
   return (
     <div className="container-fluid py-2">
       <div className="card shadow-sm border-0 mb-4">
-        <div className="card-body">
-          <div className="text-center mb-4">
-          <img
-            src={selectedBusiness?.bussinessLogo||selectedBusiness?.logo.imageUrl || Image_default}
-            alt="Business Logo"
-            className="mb-2 img-fluid"
-            style={{
-    maxHeight: "100px",
-    objectFit: "contain",
-  }}
-          />
-          <h3 className="text-center mb-5">
-            <strong>{selectedBusiness?.name} </strong>
-          </h3>
+      
+                        <div className="card-body text-center">
+                        <img
+                          src={selectedBusiness?.bussinessLogo||selectedBusiness?.logo.imageUrl || Image_default}
+                          alt="Business Logo"
+                          className="mb-2 img-fluid"
+                          style={{
+                  maxHeight: "80px",
+                  objectFit: "contain",
+                }}
+                        />
+                        <h4 className="text-center mb-3">
+                          <strong>{selectedBusiness?.name} </strong>
+                        </h4>
           </div>
-        </div>
       </div>
-      <h5>Business Analytics</h5>
 
-      <Row className="gx-3 gy-3">
-        {stats.map((item, idx) => (
-          <Col key={idx} xs={12} sm={6} lg={4}>
-            <Card className="text-center shadow-sm h-100">
-              <Card.Body>
-                <Card.Title>{item.title}</Card.Title>
-                <h4 className={`text-${item.color}`}>
-                  <CountUp
-                    start={0}
-                    end={item.count}
-                    duration={1.5}
-                    separator=","
-                  />
-                </h4>
-              </Card.Body>
-            </Card>
-          </Col>
+    <div className="container mt-4">
+      <div className="d-flex flex-wrap gap-2 mb-3">
+        {tabs.map((tab) => (
+          <button
+            key={tab}
+            onClick={() => setActiveTab(tab)}
+            className={`btn ${activeTab === tab ? "btn-primary" : "btn-outline-primary"}`}
+          >
+            {tab}
+          </button>
         ))}
-      </Row>
+      </div>
+
+      {/* Shared content display div */}
+      <div className="container p-3 rounded shadow-sm">
+        {renderTabContent()}
+      </div>
+    </div>
+
+
+
+
     </div>
   );
 };

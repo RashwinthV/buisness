@@ -49,7 +49,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
         >
           <i className="bi bi-gear fs-4"></i>
         </Link>
-                <Link to={`/entry/${selectedBusinessId}`} className="text-white text-center">
+                <Link to={`/transactions/${selectedBusinessId}`} className="text-white text-center">
           <i className="bi bi-receipt-cutoff  fs-4"></i>
              
         </Link>
@@ -137,7 +137,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
           </li>
           <li className="nav-item mb-3">
             <Link
-              to={`/entry/${selectedBusinessId}`}
+              to={`/transactions/${selectedBusinessId}`}
               className="nav-link text-white d-flex align-items-center"
             >
               <i className="bi bi-receipt-cutoff me-2 fs-5"></i>

@@ -28,13 +28,13 @@ const ManageBusiness = () => {
               alt="Business Logo"
               className="mb-2 img-fluid"
               style={{
-                maxHeight: "100px",
+                maxHeight: "80px",
                 objectFit: "contain",
               }}
             />
-            <h3 className="fw-bold text-primary mb-0">
+            <h4 className="fw-bold text-primary mb-0">
               {selectedBusiness?.name}
-            </h3>
+            </h4>
             <small className="text-muted">
               Manage business operations from the panel below
             </small>
