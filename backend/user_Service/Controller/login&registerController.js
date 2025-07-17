@@ -70,26 +70,22 @@ exports.Login = async (req, res) => {
     const { email, password } = req.body;
     const JWT_SECRET = process.env.JWT_SECRET || "your_jwt_secret_key";
 
-    // Validate input
     if (!email || !password) {
       return res
         .status(400)
         .json({ message: "Email and password are required" });
     }
 
-    // Check if user exists
     const user = await userModel.findOne({ email });
     if (!user) {
       return res.status(401).json({ message: "user not found" });
     }
 
-    // Compare password
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
-    // Create JWT
     const payload = {
       userId: user._id,
       email: user.email,
@@ -104,6 +100,7 @@ exports.Login = async (req, res) => {
         id: user._id,
         email: user.email,
         firstName: user.firstName,
+         profilepic:user.profilepic.imageUrl
       },
     });
   } catch (error) {

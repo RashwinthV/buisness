@@ -255,7 +255,6 @@ const AllBusinesses = () => {
     setFilteredBusinesses(filtered);
   };
 
-  console.log("context", allbusinesses);
 
   return (
     <div className="container py-2">
@@ -291,7 +290,7 @@ const AllBusinesses = () => {
                 <div className="card-body">
                   <div className="d-flex align-items-center mb-3">
                     <img
-                      src={business.bussinessLogo || Image_default}
+                      src={business.bussinessLogo||business.logo.imageUrl || Image_default}
                       alt={`${business.name} Logo`}
                       className="rounded-circle me-3"
                       width="60"

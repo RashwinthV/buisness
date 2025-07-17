@@ -1,23 +1,61 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import Image_default from "../Assets/Images/Default.png";
+import { useUser } from "../context/userContext";
+import { toast } from "react-toastify";
+import {
+  getVerificationStatus,
+  VerificationModal,
+} from "../Utils/VerifyStatus";
 
 const Profile = () => {
   const [editMode, setEditMode] = useState(false);
   const [showPasswordFields, setShowPasswordFields] = useState(false);
-
-  const [user, setUser] = useState({
-    image: "",
-    name: "",
-    email: "",
-    mobile: "",
-    address1: "",
-    address2: "",
-    city: "",
-    district: "",
-    pincode: "",
+  const { user, token } = useUser();
+  const baseUrl = process.env.REACT_APP_BACKEND_URI;
+  const userId = user?.id;
+  const [isVerified, setIsVerified] = useState(false);
+  const [rules, setRules] = useState(false);
+  const [passwordsMatch, setPasswordsMatch] = useState(true);
+  const [passwordValidations, setPasswordValidations] = useState({
+    minLength: false,
+    hasUppercase: false,
+    hasNumber: false,
+    hasSpecialChar: false,
   });
 
+  const [userData, setUserData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    phoneNo: "",
+    age: "",
+    gender: "",
+    profilepic: {
+      imageUrl: null,
+      publicId: null,
+    },
+    address: {
+      line1: "",
+      line2: "",
+      city: "",
+      state: "",
+      country: "",
+      pincode: "",
+    },
+  });
+
+  const [passwords, setPasswords] = useState({
+    current: "",
+    newPass: "",
+    confirmNew: "",
+  });
+
+  const [showModal, setShowModal] = useState(false);
+  const [modalType, setModalType] = useState(null);
+  const [modalValue, setModalValue] = useState(null);
+
+  // ✅ Fetch user data test ok
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -38,65 +76,130 @@ const Profile = () => {
         }
       } catch (error) {
         console.error("Fetch error:", error);
-        toast.error("Error Fetching user Data");
+        toast.error("Error fetching user data");
       }
     };
 
     fetchUserData();
   }, [user, token, userId, baseUrl]);
 
-useEffect(() => {
-  const handleUnload = async () => {
-    const imageUploaded = userData.profilepic?.publicId;
-    const imageIsNew =
-      !user?.profilepic?.imageUrl ||
-      user?.profilepic?.imageUrl !== userData.profilepic?.imageUrl;
+  //test ok
+  useEffect(() => {
+    const newPass = passwords.newPass;
+    const confirmPass = passwords.confirmNew;
 
-    if (imageUploaded && imageIsNew) {
-      try {
-        await fetch(`${baseUrl}/v3/userimage/deleteimage/${user?.id}`, {
+    setPasswordValidations({
+      minLength: newPass.length >= 6,
+      hasUppercase: /[A-Z]/.test(newPass),
+      hasNumber: /\d/.test(newPass),
+      hasSpecialChar: /[!@#$%^&*(),.?":{}|<>]/.test(newPass),
+    });
+
+    setRules(newPass.length > 0);
+
+    // ✅ Check match
+    setPasswordsMatch(confirmPass === "" || newPass === confirmPass);
+  }, [passwords.newPass, passwords.confirmNew]);
+
+
+  //test ok 
+
+  const handleProfileUpdate = async () => {
+    try {
+      const res = await fetch(`${baseUrl}/v1/users/updateuser/${userId}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(userData),
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        toast.success("Profile updated successfully");
+        setEditMode(false);
+
+        const newProfilePicUrl = data.profilepic.imageUrl;
+        const storedUser = JSON.parse(localStorage.getItem("user"));
+
+        if (storedUser) {
+          storedUser.profilepic = newProfilePicUrl;
+
+          localStorage.setItem("user", JSON.stringify(storedUser));
+        }
+        window.location.reload();
+      } else {
+        toast.error(data.message || "Failed to update profile");
+      }
+    } catch (err) {
+      console.error("Update error:", err);
+      toast.error("Error updating profile");
+    }
+  };
+
+  //test ok
+  const verifyCurrentPassword = async () => {
+    try {
+      const res = await fetch(
+        `${baseUrl}/v1/users/verify-password/${user?.id}`,
+        {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify({ public_id: userData.profilepic.publicId }),
-        });
-        console.log("🧹 Auto-deleted profile image on unload.");
-      } catch (err) {
-        console.error("⚠️ Auto-delete failed:", err);
+          body: JSON.stringify({ password: passwords.current }),
+        }
+      );
+
+      const data = await res.json();
+      if (res.ok) {
+        setIsVerified(true);
+        toast.success("Password verified");
+      } else {
+        toast.error(data.message || "Incorrect password");
       }
+    } catch (err) {
+      console.error("Verify password error:", err);
+      toast.error("Error verifying password");
     }
   };
+//test ok 
+  const handlePasswordUpdate = async () => {
+    if (passwords.newPass !== passwords.confirmNew) {
+      toast.error("Passwords do not match");
+      return;
+    }
 
-  // Handle tab close, refresh, or manual unload
-  window.addEventListener("beforeunload", handleUnload);
+    try {
+      const res = await fetch(
+        `${baseUrl}/v1/users/change-password/${user?.id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ newPassword: passwords.newPass }),
+        }
+      );
 
-  // Handle route change/component unmount
-  return () => {
-    window.removeEventListener("beforeunload", handleUnload);
-    handleUnload();
+      const data = await res.json();
+      if (res.ok) {
+        toast.success("Password updated successfully");
+        setPasswords({ current: "", newPass: "", confirmNew: "" });
+        setShowPasswordFields(false);
+        setIsVerified(false);
+      } else {
+        toast.error(data.message || "Password update failed");
+      }
+    } catch (err) {
+      console.error("Password update error:", err);
+      toast.error("Server error");
+    }
   };
-}, [
-  userData.profilepic?.publicId,
-  userData.profilepic?.imageUrl,
-  user?.profilepic?.imageUrl,
-  user?.id,
-  token,
-  baseUrl,
-]);
-
-
-
-
-  
-  const [passwords, setPasswords] = useState({
-    current: "",
-    newPass: "",
-    confirmNew: "",
-  });
-
-  const status = useVerificationStatus(userId);
+//test ok 
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -105,6 +208,15 @@ useEffect(() => {
       [name]: value,
     }));
   };
+//test ok 
+
+  const resetPasswordFields = () => {
+    setShowPasswordFields(false);
+    setPasswords({ current: "", newPass: "", confirmNew: "" });
+    setIsVerified(false);
+    setRules(false);
+  };
+//test ok 
 
   const handleAddressChange = (e) => {
     const { name, value } = e.target;
@@ -117,12 +229,12 @@ useEffect(() => {
     }));
   };
 
+  //test ok
   const handlePasswordChange = (e) => {
     const { name, value } = e.target;
     setPasswords((prev) => ({ ...prev, [name]: value }));
   };
-
-  // ✅ Handle image upload with deletion of previous one
+  //test ok
   const handleImageChange = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -131,7 +243,6 @@ useEffect(() => {
     const originalImage = user?.profilepic?.imageUrl;
     const isNewImage = originalImage !== userData.profilepic?.imageUrl;
 
-    // 🧹 Delete previous image before uploading new one
     if (currentImageId && isNewImage) {
       try {
         await fetch(`${baseUrl}/v3/userimage/deleteimage/${userId}`, {
@@ -164,7 +275,6 @@ useEffect(() => {
 
       if (res.ok && data.success) {
         const { image_url, public_id } = data;
-
         setUserData((prev) => ({
           ...prev,
           profilepic: {
@@ -172,7 +282,6 @@ useEffect(() => {
             publicId: public_id,
           },
         }));
-
         toast.success("Image uploaded successfully!");
       } else {
         toast.error(data.error || "Upload failed");
@@ -245,7 +354,13 @@ useEffect(() => {
               ["gender", "Gender"],
             ].map(([field, label]) => (
               <Col md={4} key={field}>
-                <label>{label}</label>
+                <label>
+                  {label}
+                  {field === "email" &&
+                    getVerificationStatus(user?.emailVerified, "email", () =>
+                      handleVerifyClick("email", userData.email)
+                    )}
+                </label>
                 {editMode ? (
                   <input
                     className="form-control"
@@ -268,7 +383,10 @@ useEffect(() => {
               ["country", "Country"],
               ["pincode", "Pincode"],
             ].map(([field, label]) => (
-              <Col md={field === "address1" || field === "address2" ? 12 : 4} key={field}>
+              <Col
+                md={field === "line1" || field === "line2" ? 12 : 4}
+                key={field}
+              >
                 <label>{label}</label>
                 {editMode ? (
                   <input
@@ -289,7 +407,7 @@ useEffect(() => {
 
       {editMode && (
         <div className="text-end mb-4">
-          <Button variant="primary" onClick={() => setEditMode(false)}>
+          <Button variant="primary" onClick={handleProfileUpdate}>
             Update
           </Button>
         </div>
@@ -298,6 +416,7 @@ useEffect(() => {
       <hr />
       <div className="mb-3">
         <h5>Change Password</h5>
+
         {!showPasswordFields ? (
           <Button
             variant="outline-primary"
@@ -307,62 +426,134 @@ useEffect(() => {
           </Button>
         ) : (
           <Row className="gy-3">
-            <Col md={4}>
-              <label>Current Password</label>
-              <input
-                type="password"
-                className="form-control"
-                name="current"
-                value={passwords.current}
-                onChange={handlePasswordChange}
-                placeholder="Enter current password"
-              />
-            </Col>
-            <Col md={4}>
-              <label>New Password</label>
-              <input
-                type="password"
-                className="form-control"
-                name="newPass"
-                value={passwords.newPass}
-                onChange={handlePasswordChange}
-                placeholder="Enter new password"
-              />
-            </Col>
-            <Col md={4}>
-              <label>Confirm New Password</label>
-              <input
-                type="password"
-                className="form-control"
-                name="confirmNew"
-                value={passwords.confirmNew}
-                onChange={handlePasswordChange}
-                placeholder="Confirm new password"
-              />
-            </Col>
-            <Col xs={12} className="text-end">
-              <Button variant="success" className="me-2">
-                Update Password
-              </Button>
-              <Button
-                variant="outline-secondary"
-                onClick={() => {
-                  setShowPasswordFields(false);
-                  setPasswords({
-                    current: "",
-                    newPass: "",
-                    confirmNew: "",
-                  });
-                }}
-              >
-                Cancel
-              </Button>
-            </Col>
+            {!isVerified && (
+              <>
+                <Col md={4}>
+                  <label>Current Password</label>
+                  <input
+                    type="password"
+                    className="form-control"
+                    name="current"
+                    value={passwords.current}
+                    onChange={handlePasswordChange}
+                    placeholder="Enter current password"
+                  />
+                </Col>
+                <Col md={2} className="d-flex align-items-end">
+                  <Button
+                    variant="outline-success"
+                    className="w-100"
+                    onClick={verifyCurrentPassword}
+                    disabled={!passwords.current}
+                  >
+                    Verify
+                  </Button>
+                </Col>
+              </>
+            )}
+
+            {isVerified && (
+              <>
+                <Col md={4}>
+                  <label>New Password</label>
+                  <input
+                    type="password"
+                    className="form-control"
+                    name="newPass"
+                    value={passwords.newPass}
+                    onChange={handlePasswordChange}
+                    placeholder="Enter new password"
+                  />
+                  {rules && (
+                    <ul className="list-unstyled mt-2">
+                      <li
+                        style={{
+                          color: passwordValidations.minLength
+                            ? "green"
+                            : "red",
+                        }}
+                      >
+                        {passwordValidations.minLength ? "✔" : "✖"} Minimum 6
+                        characters
+                      </li>
+                      <li
+                        style={{
+                          color: passwordValidations.hasUppercase
+                            ? "green"
+                            : "red",
+                        }}
+                      >
+                        {passwordValidations.hasUppercase ? "✔" : "✖"} At least
+                        1 uppercase letter
+                      </li>
+                      <li
+                        style={{
+                          color: passwordValidations.hasNumber
+                            ? "green"
+                            : "red",
+                        }}
+                      >
+                        {passwordValidations.hasNumber ? "✔" : "✖"} At least 1
+                        number
+                      </li>
+                      <li
+                        style={{
+                          color: passwordValidations.hasSpecialChar
+                            ? "green"
+                            : "red",
+                        }}
+                      >
+                        {passwordValidations.hasSpecialChar ? "✔" : "✖"} At
+                        least 1 special character
+                      </li>
+                    </ul>
+                  )}
+                </Col>
+
+                <Col md={4}>
+                  <label>Confirm New Password</label>
+                  <input
+                    type="password"
+                    className="form-control"
+                    name="confirmNew"
+                    value={passwords.confirmNew}
+                    onChange={handlePasswordChange}
+                    placeholder="Confirm new password"
+                  />
+                  {passwords.confirmNew && (
+                    <div
+                      className="mt-1"
+                      style={{ color: passwordsMatch ? "green" : "red" }}
+                    >
+                      {passwordsMatch
+                        ? "✔ Passwords match"
+                        : "✖ Passwords do not match"}
+                    </div>
+                  )}
+                </Col>
+
+                <Col xs={12} className="text-end">
+                  <Button
+                    variant="success"
+                    className="me-2"
+                    onClick={handlePasswordUpdate}
+                  >
+                    Update Password
+                  </Button>
+                  <Button
+                    variant="outline-secondary"
+                    onClick={resetPasswordFields}
+                  >
+                    Cancel
+                  </Button>
+                </Col>
+              </>
+            )}
           </Row>
         )}
       </div>
 
-      {/* ✅ Verification Modal */}
+      {/* //Optional: Verification Modal */}
       <VerificationModal
         show={showModal}
         onHide={() => setShowModal(false)}

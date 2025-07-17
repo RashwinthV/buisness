@@ -15,7 +15,7 @@ const SwitchBusiness = ({
 
   const setAccount=(AccountId)=>{
     setSelectedBusinessId(AccountId)
-  }
+  }  
 
   return (
     <Modal show={show} onHide={onClose} centered>
@@ -66,7 +66,7 @@ const SwitchBusiness = ({
     >
       <div className="d-flex align-items-center gap-2">
         <img
-          src={biz.bussinessLogo || Image_default}
+          src={biz.bussinessLogo ||biz.logo.imageUrl|| Image_default}
           alt="Business Logo"
           className="rounded-circle"
           width="32"

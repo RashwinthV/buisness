@@ -48,21 +48,21 @@ exports.RegisterBusiness = async (req, res) => {
 
     const { id } = req.params;
 
-    // ✅ Fetch user by ID
     const user = await userModel.findById(id);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    // ✅ If user is not an 'owner', update role to 'owner'
-    if (user.role !== "owner") {
-      user.role = "owner";
+    if (user.Role !== "Owner") {
+      user.Role = "Owner";
       await user.save();
     }
 
     const ownedBy = id;
 
-    const lastBusiness = await bussinessModel.findOne().sort({ businessId: -1 });
+    const lastBusiness = await bussinessModel
+      .findOne()
+      .sort({ businessId: -1 });
     const newBusinessId = lastBusiness ? lastBusiness.businessId + 1 : 1001;
 
     const newBusiness = new bussinessModel({
@@ -80,7 +80,10 @@ exports.RegisterBusiness = async (req, res) => {
       businessDistrict,
       businessZipCode,
       businessId: newBusinessId,
-      bussinessLogo: logo || null,
+      logo: {
+        imageUrl: logo?.imageUrl || null,
+        publicId: logo?.publicId || null,
+      },
       ownedBy,
     });
 
@@ -98,20 +101,18 @@ exports.RegisterBusiness = async (req, res) => {
   }
 };
 
-exports.GetAllbussiness=async(req,res)=>{
+exports.GetAllbussiness = async (req, res) => {
   try {
-    const allbusinesses=await bussinessModel.find();
-    if(allbusinesses.length===0){
-      res.json({message:"No bussiness  found"})
+    const allbusinesses = await bussinessModel.find();
+    if (allbusinesses.length === 0) {
+      res.json({ message: "No bussiness  found" });
     }
-    
-    res.json(allbusinesses)
-    
-  }catch (error) {
+
+    res.json(allbusinesses);
+  } catch (error) {
     console.error("Business registration error:", error.message);
     return res
       .status(500)
       .json({ message: "Server error", error: error.message });
   }
-
-}
+};

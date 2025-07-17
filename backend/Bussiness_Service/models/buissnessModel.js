@@ -81,6 +81,7 @@ const BusinessSchema = new mongoose.Schema(
     // GST Number (Optional) :
     gstnumber: {
       type: String,
+      unique:true,
       default: "",
     },
 
@@ -120,6 +121,10 @@ const BusinessSchema = new mongoose.Schema(
     bussinessLogo: {
       type: String,
       default: "", // or null
+    },
+     logo: {
+      imageUrl: { type: String, default: null },
+      publicId: { type: String, default: null },
     },
 
     // Created on :

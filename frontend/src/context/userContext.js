@@ -19,6 +19,10 @@ export const UserProvider = ({ children }) => {
     setUser(userData);
   };
 
+  const profilepic=()=>{
+    
+  }
+
   const isloggedin = () => {
     const user = localStorage.getItem("user");
     if (user) {

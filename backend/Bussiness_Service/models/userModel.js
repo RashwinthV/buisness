@@ -42,9 +42,9 @@ const UserSchema = new mongoose.Schema(
     password: {
       type: String,
     },
-    profilepic: {
-      type: String,
-      default: null,
+   profilepic: {
+      imageUrl: { type: String, default: null },
+      publicId: { type: String, default: null },
     },
     phoneNo: {
       type: String,

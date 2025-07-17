@@ -8,6 +8,7 @@ function NavbarComponent() {
   const navigate = useNavigate();
   const { logout, isloggedin, user } = useUser();
   const isLoggedIn = isloggedin();
+ 
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark fixed-top shadow-sm">
       <div className="container-fluid">
@@ -27,7 +28,7 @@ function NavbarComponent() {
                   data-bs-toggle="dropdown"
                 >
                   <img
-                    src={user?.profilePic||image}
+                    src={user?.profilepic||image}
                     alt="Profile"
                     width="32"
                     height="32"

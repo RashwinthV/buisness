@@ -51,7 +51,7 @@ function BusinessRegister() {
       window.removeEventListener("beforeunload", handleUnload);
       handleUnload(); // for route changes
     };
-  }, [formData.publicId]);
+  }, [formData.publicId, baseUrl, formData.submitted, token, user?.id]);
 
   const handleChange = async (e) => {
     const { name, value, type, files } = e.target;
@@ -64,13 +64,16 @@ function BusinessRegister() {
       imageFormData.append("image", file);
 
       try {
-        const res = await fetch(`${baseUrl}/v3/bussinessimage/upload/${user?.id}`, {
-          method: "POST",
-          body: imageFormData,
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const res = await fetch(
+          `${baseUrl}/v3/bussinessimage/upload/${user?.id}`,
+          {
+            method: "POST",
+            body: imageFormData,
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
         const result = await res.json();
 
@@ -78,8 +81,10 @@ function BusinessRegister() {
           toast.success("Logo uploaded!");
           setFormData((prev) => ({
             ...prev,
-            logo: result.imageUrl, // Cloudinary secure_url or similar
-            publicId: result.public_id, // 🆕 Store public_id
+            logo: {
+              imageUrl: result.imageUrl,
+              publicId: result.public_id,
+            },
           }));
         } else {
           toast.error("Image upload failed.");
@@ -113,16 +118,15 @@ function BusinessRegister() {
         return;
       }
     }
-    console.log(formData);
 
     try {
       const res = await fetch(`${baseUrl}/v2/bussiness/register/${user?.id}`, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json", // ✅ Required to parse bod
+          "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(formData), // Includes logo URL
+        body: JSON.stringify(formData),
       });
 
       const result = await res.json();
@@ -162,7 +166,7 @@ function BusinessRegister() {
                     />
                     {formData.logo && (
                       <img
-                        src={formData.logo}
+                        src={formData.logo||formData.logo.imageUrl}
                         alt="Preview"
                         className="mt-2"
                         style={{

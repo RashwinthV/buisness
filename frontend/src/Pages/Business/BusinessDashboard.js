@@ -13,14 +13,13 @@ const BusinessDashboard = () => {
     { title: "Total Transactions", count: 7890, color: "warning" },
   ];
 
-  console.log(selectedBusiness);
 
   return (
     <div className="container-fluid py-2">
       <div className="card shadow-sm border-0 mb-4">
         <div className="card-body">
           <img
-            src={selectedBusiness?.bussinessLogo || Image_default}
+            src={selectedBusiness?.bussinessLogo||selectedBusiness?.logo.imageUrl || Image_default}
             alt="Business Logo"
             className="mb-2"
             width="1200"

@@ -44,31 +44,19 @@ const UserSchema = new mongoose.Schema(
     },
     profilepic: {
       imageUrl: { type: String, default: null },
-      deleteUrl: { type: String, default: null },
+      publicId: { type: String, default: null },
     },
     phoneNo: {
       type: String,
       unique: true,
     },
     address: {
-      line1: {
-        type: String,
-      },
-      line2: {
-        type: String,
-      },
-      city: {
-        type: String,
-      },
-      state: {
-        type: String,
-      },
-      country: {
-        type: String,
-      },
-      pincode: {
-        type: String,
-      },
+      line1: { type: String, default: "" },
+      line2: { type: String, default: "" },
+      city: { type: String, default: "" },
+      state: { type: String, default: "" },
+      country: { type: String, default: "" },
+      pincode: { type: String, default: "" },
     },
     otp: {
       type: String,

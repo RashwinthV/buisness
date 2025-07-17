@@ -64,7 +64,7 @@ const ManageBusiness = () => {
         <div className="card-body">
           <div className="text-center mb-4">
                     <img
-                      src={selectedBusiness.bussinessLogo || Image_default}
+                      src={selectedBusiness?.bussinessLogo||selectedBusiness?.logo.imageUrl || Image_default}
                       alt="Business Logo"
                       className="mb-2"
                       width="1200"
