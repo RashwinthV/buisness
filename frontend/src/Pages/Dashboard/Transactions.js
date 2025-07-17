@@ -19,15 +19,49 @@ const partyList = [
 ];
 
 
+
 const dummyEmployees = [
   { id: 1, name: "Arun Kumar" },
   { id: 2, name: "Sneha R" },
 ];
-
+const dummytransactions = [
+  {
+    type: "Sales",
+    partyName: "ABC Traders",
+    date: "2025-07-15T10:30:00Z",
+    products: [
+      { name: "Product A", qty: 2, total: 400 },
+      { name: "Product B", qty: 1, total: 250 },
+    ],
+    grandTotal: 650,
+    entryBy: "Kirithik",
+  },
+  {
+    type: "Purchase",
+    partyName: "XYZ Suppliers",
+    date: "2025-07-14T14:00:00Z",
+    products: [
+      { name: "Product C", qty: 5, total: 1000 },
+      { name: "Product D", qty: 3, total: 750 },
+    ],
+    grandTotal: 1750,
+    entryBy: "Saran",
+  },
+  {
+    type: "Sales",
+    partyName: "LMN Wholesale",
+    date: "2025-07-13T09:00:00Z",
+    products: [
+      { name: "Product E", qty: 10, total: 2000 },
+    ],
+    grandTotal: 2000,
+    entryBy: "Admin",
+  },
+];
 const Entry = () => {
   const [entryType, setEntryType] = useState(null); // "sales" or "purchase"
   const [modalShow, setModalShow] = useState(false);
-  const [entries, setEntries] = useState([]);
+  const [entries, setEntries] = useState(dummytransactions);
   const [sortBy, setSortBy] = useState("date");
 
   const closeModal = () => {
@@ -103,42 +137,45 @@ const Entry = () => {
       </div>
 
       {/* Entry Table */}
-      {sortedEntries.length > 0 ? (
-        <table className="table table-bordered">
-          <thead>
-            <tr>
-              <th>S.No</th>
-              <th>Type</th>
-              <th>Party Name</th>
-              <th>Date</th>
-              <th>Products</th>
-              <th>Grand Total</th>
-              <th>Entry By</th>
-            </tr>
-          </thead>
-          <tbody>
-            {sortedEntries.map((entry, i) => (
-              <tr key={i}>
-                <td>{i + 1}</td>
-                <td>{entry.type}</td>
-                <td>{entry.partyName}</td>
-                <td>{moment(entry.date).format("YYYY-MM-DD")}</td>
-                <td>
-                  {entry.products.map((p, idx) => (
-                    <div key={idx}>
-                      {p.name} x {p.qty} = ₹{p.total}
-                    </div>
-                  ))}
-                </td>
-                <td>₹{entry.grandTotal}</td>
-                <td>{entry.entryBy}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      ) : (
-        <div className="text-muted">No entries added yet.</div>
-      )}
+{sortedEntries.length > 0 ? (
+  <div className="table-responsive">
+    <table className="table table-hover">
+      <thead>
+        <tr>
+          <th>S.No</th>
+          <th>Type</th>
+          <th>Party Name</th>
+          <th>Date</th>
+          <th>Products</th>
+          <th>Grand Total</th>
+          <th>Entry By</th>
+        </tr>
+      </thead>
+      <tbody>
+        {sortedEntries.map((entry, i) => (
+          <tr key={i}>
+            <td>{i + 1}</td>
+            <td>{entry.type}</td>
+            <td>{entry.partyName}</td>
+            <td>{moment(entry.date).format("YYYY-MM-DD")}</td>
+            <td>
+              {entry.products.map((p, idx) => (
+                <div key={idx}>
+                  {p.name} x {p.qty} = ₹{p.total}
+                </div>
+              ))}
+            </td>
+            <td>₹{entry.grandTotal}</td>
+            <td>{entry.entryBy}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+) : (
+  <div className="text-muted">No entries added yet.</div>
+)}
+
 
       {/* Entry Modal */}
       {modalShow && (
