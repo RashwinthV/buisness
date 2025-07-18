@@ -3,19 +3,17 @@ import { useNavigate } from "react-router-dom"; // ✅ import
 import { useBusiness } from "../../context/BussinessContext";
 import Image_default from "../../Assets/Images/Default.png"; // ✅ import default image
 
-const SwitchBusiness = ({
-  show,
-  onClose,
-  onSwitch,
-  onAddBusiness,
-}) => {
+const SwitchBusiness = ({ show, onClose, onSwitch, onAddBusiness }) => {
   const navigate = useNavigate();
-  const { businesses, setSelectedBusinessId ,selectedBusinessId} = useBusiness();
-  const selectedBusiness = businesses?.find((b) => b.businessId === selectedBusinessId);
+  const { businesses, setSelectedBusinessId, selectedBusinessId } =
+    useBusiness();
+  const selectedBusiness = businesses?.find(
+    (b) => b.businessId === selectedBusinessId
+  );
 
-  const setAccount=(AccountId)=>{
-    setSelectedBusinessId(AccountId)
-  }  
+  const setAccount = (AccountId) => {
+    setSelectedBusinessId(AccountId);
+  };
 
   return (
     <Modal show={show} onHide={onClose} centered>
@@ -50,40 +48,40 @@ const SwitchBusiness = ({
           //   ))}
           // </ul>
           <ul className="list-group mb-3">
-  {businesses.map((biz) => (
-    <li
-      key={biz.businessId}
-      className={`list-group-item d-flex justify-content-between align-items-center ${
-        selectedBusiness?.businessId === biz.businessId ? "active text-white" : ""
-      }`}
-      style={{ cursor: "pointer" }}
-      onClick={() => {
-        onSwitch(biz);
-        onClose();
-        setAccount(biz?.businessId);
-        navigate(`/businessdashboard/${biz.businessId}`);
-      }}
-    >
-      <div className="d-flex align-items-center gap-2">
-        <img
-          src={biz.bussinessLogo ||biz.logo.imageUrl|| Image_default}
-          alt="Business Logo"
-          className="rounded-circle"
-          width="32"
-          height="32"
-          style={{ objectFit: "fill",  }}
-        />
-        <span>{biz.name}</span>
-      </div>
+            {businesses.map((biz) => (
+              <li
+                key={biz.businessId}
+                className={`list-group-item d-flex justify-content-between align-items-center ${
+                  selectedBusiness?.businessId === biz.businessId
+                    ? "active text-white"
+                    : ""
+                }`}
+                style={{ cursor: "pointer" }}
+                onClick={() => {
+                  onSwitch(biz);
+                  onClose();
+                  setAccount(biz?.businessId);
+                  navigate(`/businessdashboard/${biz.businessId}`);
+                }}
+              >
+                <div className="d-flex align-items-center gap-2">
+                  <img
+                    src={biz.logo.imageUrl || Image_default}
+                    alt="Business Logo"
+                    className="rounded-circle"
+                    width="32"
+                    height="32"
+                    style={{ objectFit: "fill" }}
+                  />
+                  <span>{biz?.businessName}</span>
+                </div>
 
-      {selectedBusiness?.businessId === biz.businessId && (
-        <i className="bi bi-check-circle-fill"></i>
-      )}
-    </li>
-  ))}
-</ul>
-
-
+                {selectedBusiness?.businessId === biz.businessId && (
+                  <i className="bi bi-check-circle-fill"></i>
+                )}
+              </li>
+            ))}
+          </ul>
         )}
 
         <div className="d-grid">

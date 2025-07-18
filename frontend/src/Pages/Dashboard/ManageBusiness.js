@@ -21,7 +21,6 @@ const ManageBusiness = () => {
           <div className="text-center mb-4">
             <img
               src={
-                selectedBusiness?.bussinessLogo ||
                 selectedBusiness?.logo.imageUrl ||
                 Image_default
               }
@@ -33,7 +32,7 @@ const ManageBusiness = () => {
               }}
             />
             <h4 className="fw-bold text-primary mb-0">
-              {selectedBusiness?.name}
+              {selectedBusiness?.businessName}
             </h4>
             <small className="text-muted">
               Manage business operations from the panel below

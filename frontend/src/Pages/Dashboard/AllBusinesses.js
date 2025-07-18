@@ -28,11 +28,12 @@ const AllBusinesses = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredBusinesses, setFilteredBusinesses] = useState([]);
   const { allbusinesses } = useBusiness();
+  
 
   useEffect(() => {
     if (allbusinesses.length > 0) {
       const sorted = [...allbusinesses].sort((a, b) =>
-        a.name.localeCompare(b.name)
+        a.businessName.localeCompare(b.businessName)
       );
       setFilteredBusinesses(sorted);
     }
@@ -43,7 +44,7 @@ const AllBusinesses = () => {
 
     if (!term) {
       const sorted = [...allbusinesses].sort((a, b) =>
-        a.name.localeCompare(b.name)
+        a.businessName.localeCompare(b.businessName)
       );
       setFilteredBusinesses(sorted);
       return;
@@ -51,13 +52,14 @@ const AllBusinesses = () => {
 
     const filtered = allbusinesses.filter((business) => {
       return (
-        business.name.toLowerCase().includes(term) ||
+        business.businessName.toLowerCase().includes(term) ||
         business?.productNames?.some((p) => p.toLowerCase().includes(term))
       );
     });
 
     setFilteredBusinesses(filtered);
   };
+  
 
 
   return (
@@ -94,14 +96,14 @@ const AllBusinesses = () => {
                 <div className="card-body">
                   <div className="d-flex align-items-center mb-3">
                     <img
-                      src={business.bussinessLogo||business.logo.imageUrl || Image_default}
-                      alt={`${business.name} Logo`}
+                      src={business.logo.imageUrl || Image_default}
+                      alt={`${business.businessName} Logo`}
                       className="rounded-circle me-3"
                       width="60"
                       height="60"
                       style={{ objectFit: "contain", border: "1px solid #ccc" }}
                     />
-                    <h5 className="card-title mb-0">{business.name}</h5>
+                    <h5 className="card-title mb-0">{business.businessName}</h5>
                   </div>
 
                   <p className="mb-1">
@@ -120,13 +122,12 @@ const AllBusinesses = () => {
 
                   <p className="mb-1">
                     <strong>Contact:</strong>{" "}
-                    {business.contactNumberOffice ||
-                      business.contactNumberOwner ||
-                      "Not available"}
+                    {business.officeContact ||
+                      " N/A"}
                   </p>
 
                   <p className="mb-1">
-                    <strong>Email:</strong> {business.email}
+                    <strong>Email:</strong> {business.businessEmail}
                   </p>
 
                   {business.productNames?.length > 0 && (

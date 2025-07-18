@@ -1,10 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import Image_default from "../../Assets/Images/Default.png"; // Replace with your actual image path
 import {
   getVerificationStatus,
   VerificationModal,
 } from "../../Utils/VerifyStatus.js"; // adjust path
+import { useBusiness } from "../../context/BussinessContext.js";
+import { useUser } from "../../context/userContext.js";
+import { toast } from "react-toastify";
+import { useBusinessImageUpload } from "../../Utils/BussinessImageUploader.js";
 
 //   const currentUserId = "user123"; // Replace with auth context or prop
 
@@ -610,53 +614,115 @@ import {
 //   );
 // };
 
+const cleanValue = (val) => (val === "Unknown" ? "" : val);
+
 const BusinessProfile = () => {
-  const currentUserId = "user123";
+  const { user, token } = useUser();
+  const { businesses, selectedBusinessId } = useBusiness();
+  const baseUrl = process.env.REACT_APP_BACKEND_URI;
+  const currentUserId=user?.id
 
   const [editMode, setEditMode] = useState(false);
   const [showVerifyModal, setShowVerifyModal] = useState(false);
   const [verifyType, setVerifyType] = useState("");
   const [verifyValue, setVerifyValue] = useState("");
+  const submittedRef = useRef(false);
 
   const [business, setBusiness] = useState({
-    ownerId: "user123", // From DB per business
-    logo: "",
+    _id: "",
+    ownerId: "",
+    logo: null,
     startedOn: "",
-    name: "",
-    email: "",
+    businessName: "",
+    businessEmail: "",
     emailVerified: false,
     description: "",
-    address1: "",
-    address2: "",
-    city: "",
-    district: "",
-    state: "",
-    country: "",
-    pincode: "",
-    mapLink: "",
-    contactOwner: "",
+    addressLine1: "",
+    addressLine2: "",
+    businessCity: "",
+    businessDistrict: "",
+    businessState: "",
+    businessCountry: "",
+    businessZipCode: "",
+    googleMapLink: "",
+    ownerContact: "",
+    officeContact: "",
     numberVerified: false,
-    contactOffice: "",
-    gst: "",
+    gstnumber: "",
+    ownedBy: "",
   });
+
+  useEffect(() => {
+    const selected = businesses?.find((b) => b.businessId === selectedBusinessId);
+    if (selected) {
+      setBusiness({
+        _id: selected._id,
+        ownerId: selected.ownerId || user?.id || "",
+        logo: selected.logo || null,
+        startedOn: cleanValue(selected.startedOn),
+        businessName: cleanValue(selected.businessName),
+        businessEmail: cleanValue(selected.businessEmail),
+        emailVerified: selected.emailVerified || false,
+        description: cleanValue(selected.description),
+        addressLine1: cleanValue(selected.addressLine1),
+        addressLine2: cleanValue(selected.addressLine2),
+        businessCity: cleanValue(selected.businessCity),
+        businessDistrict: cleanValue(selected.businessDistrict),
+        businessState: cleanValue(selected.businessState),
+        businessCountry: cleanValue(selected.businessCountry),
+        businessZipCode: cleanValue(selected.businessZipCode),
+        googleMapLink: cleanValue(selected.googleMapLink),
+        ownerContact: cleanValue(selected.ownerContact),
+        officeContact: cleanValue(selected.officeContact),
+        numberVerified: selected.numberVerified || false,
+        gstnumber: cleanValue(selected.gstnumber),
+        ownedBy: selected.ownedBy || "",
+      });
+    }
+  }, [businesses, selectedBusinessId, user?.id]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setBusiness((prev) => ({ ...prev, [name]: value }));
   };
 
+  const handleLogoDelete = async () => {
+    try {
+      const res = await fetch(`${baseUrl}/v3/bussinessimage/deleteimage/${user?.id}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ public_id: business.logo?.publicId }),
+      });
+
+      if (res.ok) {
+        toast.success("Image deleted!");
+        setBusiness((prev) => ({ ...prev, logo: null }));
+      } else {
+        const result = await res.json();
+        toast.error(result.message || "Failed to delete image.");
+      }
+    } catch (error) {
+      console.error("Delete error:", error);
+      toast.error("Error deleting image.");
+    }
+  };
+
+  const { handleImageUpload } = useBusinessImageUpload({
+    userId: user?.id,
+    token,
+    publicId: business.logo?.publicId,
+    submittedRef,
+    setImageData: (logo) => setBusiness((prev) => ({ ...prev, logo })),
+    baseUrl,
+  });
+
   const handleLogoChange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
-
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setBusiness((prev) => ({
-        ...prev,
-        logo: reader.result,
-      }));
-    };
-    reader.readAsDataURL(file);
+    handleImageUpload(file);
   };
 
   const handleOpenVerify = (type, value) => {
@@ -673,11 +739,46 @@ const BusinessProfile = () => {
     }
   };
 
-  return (
+  const formatDateForInput = (date) => {
+    if (!date) return "";
+    const d = new Date(date);
+    return d.toISOString().split("T")[0];
+  };
+
+  const handleSubmit = async () => {
+    try {
+      const res = await fetch(
+        `${baseUrl}/v2/bussiness/${user?.id}/updatebusiness/${business?._id}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(business),
+        }
+      );
+
+      const result = await res.json();
+      if (res.ok) {
+        submittedRef.current = true;
+        toast.success("Business Profile updated successfully");
+        setBusiness(result.business || business);
+        setEditMode(false);
+      } else {
+        toast.error(result.message || "Failed to update business");
+      }
+    } catch (error) {
+      console.error("Business update error:", error);
+      toast.error("Error updating business profile");
+    }
+  };
+
+   return (
     <Container className="py-4">
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h4 className="mb-0">Business Profile</h4>
-        {currentUserId === business.ownerId && (
+        {currentUserId === business.ownedBy && (
           <Button
             variant="outline-secondary"
             size="sm"
@@ -701,7 +802,11 @@ const BusinessProfile = () => {
             }}
           >
             <img
-              src={business.logo || Image_default}
+              src={
+                business?.bussinessLogo ||
+                business?.logo?.imageUrl ||
+                Image_default
+              }
               alt="Business Logo"
               style={{ width: "100%", height: "100%", objectFit: "cover" }}
               onError={(e) => (e.target.src = Image_default)}
@@ -710,6 +815,12 @@ const BusinessProfile = () => {
 
           {editMode && (
             <div className="mt-2">
+              <button
+                className="btn btn-sm btn-outline-danger mb-3"
+                onClick={handleLogoDelete}
+              >
+                <i className="bi bi-trash3"></i> Delete Logo
+              </button>
               <input
                 type="file"
                 accept="image/*"
@@ -729,11 +840,14 @@ const BusinessProfile = () => {
                   type="date"
                   className="form-control"
                   name="startedOn"
-                  value={business.startedOn}
+                  value={formatDateForInput(business.startedOn)}
                   onChange={handleInputChange}
                 />
               ) : (
-                <div>{business.startedOn || "-"}</div>
+                <div>
+                  {new Date(business.startedOn).toLocaleDateString("en-gb") ||
+                    "-"}
+                </div>
               )}
             </Col>
 
@@ -743,13 +857,13 @@ const BusinessProfile = () => {
                 <input
                   type="text"
                   className="form-control"
-                  name="name"
-                  value={business.name}
+                  name="businessName"
+                  value={business.businessName}
                   onChange={handleInputChange}
                   placeholder="Business Name"
                 />
               ) : (
-                <div>{business.name || "-"}</div>
+                <div>{business.businessName || "-"}</div>
               )}
             </Col>
 
@@ -757,20 +871,20 @@ const BusinessProfile = () => {
               <label>
                 Email{" "}
                 {getVerificationStatus(business.emailVerified, "email", () =>
-                  handleOpenVerify("email", business.email)
+                  handleOpenVerify("email", business.businessEmail)
                 )}
               </label>
               {editMode ? (
                 <input
                   type="email"
                   className="form-control"
-                  name="email"
-                  value={business.email}
+                  name="businessEmail"
+                  value={business.businessEmail}
                   onChange={handleInputChange}
                   placeholder="Email"
                 />
               ) : (
-                <div>{business.email || "-"}</div>
+                <div>{business.businessEmail || "-"}</div>
               )}
             </Col>
 
@@ -795,12 +909,12 @@ const BusinessProfile = () => {
               {editMode ? (
                 <input
                   className="form-control"
-                  name="address1"
-                  value={business.address1}
+                  name="addressLine1"
+                  value={business.addressLine1}
                   onChange={handleInputChange}
                 />
               ) : (
-                <div>{business.address1 || "-"}</div>
+                <div>{business.addressLine1 || "-"}</div>
               )}
             </Col>
 
@@ -809,12 +923,12 @@ const BusinessProfile = () => {
               {editMode ? (
                 <input
                   className="form-control"
-                  name="address2"
-                  value={business.address2}
+                  name="addressLine2"
+                  value={business.addressLine2}
                   onChange={handleInputChange}
                 />
               ) : (
-                <div>{business.address2 || "-"}</div>
+                <div>{business.addressLine2 || "-"}</div>
               )}
             </Col>
 
@@ -822,13 +936,13 @@ const BusinessProfile = () => {
               <label>City</label>
               {editMode ? (
                 <input
-                  className="form-control"
-                  name="city"
-                  value={business.city}
+                  name="businessCity"
+                  value={business.businessCity                  }
                   onChange={handleInputChange}
+                  className="form-control"
                 />
               ) : (
-                <div>{business.city || "-"}</div>
+                <div>{business.businessCity || "-"}</div>
               )}
             </Col>
 
@@ -837,12 +951,12 @@ const BusinessProfile = () => {
               {editMode ? (
                 <input
                   className="form-control"
-                  name="district"
-                  value={business.district}
+                  name="businessDistrict"
+                  value={business.businessDistrict}
                   onChange={handleInputChange}
                 />
               ) : (
-                <div>{business.district || "-"}</div>
+                <div>{business.businessDistrict || "-"}</div>
               )}
             </Col>
             <Col md={4}>
@@ -850,12 +964,12 @@ const BusinessProfile = () => {
               {editMode ? (
                 <input
                   className="form-control"
-                  name="state"
-                  value={business.state}
+                  name="businessState"
+                  value={business.businessState}
                   onChange={handleInputChange}
                 />
               ) : (
-                <div>{business.state || "-"}</div>
+                <div>{business.businessState || "-"}</div>
               )}
             </Col>
 
@@ -864,12 +978,12 @@ const BusinessProfile = () => {
               {editMode ? (
                 <input
                   className="form-control"
-                  name="country"
-                  value={business.country}
+                  name="businessCountry"
+                  value={business.businessCountry}
                   onChange={handleInputChange}
                 />
               ) : (
-                <div>{business.country || "-"}</div>
+                <div>{business.businessCountry || "-"}</div>
               )}
             </Col>
 
@@ -878,29 +992,34 @@ const BusinessProfile = () => {
               {editMode ? (
                 <input
                   className="form-control"
-                  name="pincode"
-                  value={business.pincode}
+                  name="businessZipCode"
+                  value={business.businessZipCode}
                   onChange={handleInputChange}
                 />
               ) : (
-                <div>{business.pincode || "-"}</div>
+                <div>{business.businessZipCode || "-"}</div>
               )}
             </Col>
 
             <Col md={12}>
               <label>Google Map Link</label>
+              <br />
               {editMode ? (
                 <input
                   type="url"
                   className="form-control"
-                  name="mapLink"
-                  value={business.mapLink}
+                  name="googleMapLink"
+                  value={business.googleMapLink}
                   onChange={handleInputChange}
                   placeholder="Google Maps URL"
                 />
-              ) : business.mapLink ? (
-                <a href={business.mapLink} target="_blank" rel="noreferrer">
-                  {business.mapLink}
+              ) : business.googleMapLink ? (
+                <a
+                  href={business.googleMapLink}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {`Directions to ${business.businessName}`}
                 </a>
               ) : (
                 <div>-</div>
@@ -911,18 +1030,18 @@ const BusinessProfile = () => {
               <label>
                 Contact (Owner){" "}
                 {getVerificationStatus(business.numberVerified, "phone", () =>
-                  handleOpenVerify("phone", business.contactOwner)
+                  handleOpenVerify("phone", business.ownerContact)
                 )}
               </label>
               {editMode ? (
                 <input
                   className="form-control"
-                  name="contactOwner"
-                  value={business.contactOwner}
+                  name="ownerContact"
+                  value={business.ownerContact}
                   onChange={handleInputChange}
                 />
               ) : (
-                <div>{business.contactOwner || "-"}</div>
+                <div>{business.ownerContact || "-"}</div>
               )}
             </Col>
 
@@ -931,12 +1050,12 @@ const BusinessProfile = () => {
               {editMode ? (
                 <input
                   className="form-control"
-                  name="contactOffice"
-                  value={business.contactOffice}
+                  name="officeContact"
+                  value={business.officeContact}
                   onChange={handleInputChange}
                 />
               ) : (
-                <div>{business.contactOffice || "-"}</div>
+                <div>{business.officeContact || "-"}</div>
               )}
             </Col>
 
@@ -945,12 +1064,12 @@ const BusinessProfile = () => {
               {editMode ? (
                 <input
                   className="form-control"
-                  name="gst"
-                  value={business.gst}
+                  name="gstnumber"
+                  value={business.gstnumber}
                   onChange={handleInputChange}
                 />
               ) : (
-                <div>{business.gst || "-"}</div>
+                <div>{business.gstnumber || "-"}</div>
               )}
             </Col>
           </Row>
@@ -959,7 +1078,7 @@ const BusinessProfile = () => {
 
       {editMode && (
         <div className="text-end">
-          <Button variant="primary" onClick={() => setEditMode(false)}>
+          <Button variant="primary" onClick={handleSubmit}>
             Update
           </Button>
         </div>

@@ -69,6 +69,14 @@ const businessSchema = new mongoose.Schema(
       imageUrl: { type: String, default: "" },
       publicId: { type: String, default: "" },
     },
+    numberVerified: {
+      type: Boolean,
+      default: false,
+    },
+    emailVerified: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );

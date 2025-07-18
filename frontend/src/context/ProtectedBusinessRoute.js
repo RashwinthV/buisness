@@ -29,7 +29,6 @@ const ProtectedBusiness = ({ children }) => {
     // Parse and check business access
     const selectedId = parseInt(businessId);
     const match = businesses.some((b) => b.businessId === selectedId);
-    console.log(match);
 
     if (!match) {
       if (location.pathname === `/businessdashboard/${selectedId}`) {
@@ -49,14 +48,12 @@ const ProtectedBusiness = ({ children }) => {
 
     setAuthChecked(true);
   }, [isAuthenticated, businesses, businessId, location.pathname]);
-  console.log({ businessId, authChecked, isAuthenticated });
 
   // 🚨 Redirect if not authenticated
   if (!isAuthenticated) {
     return null;
   }
 
-  // 🚨 Redirect immediately if businessId is missing (param not present)
 if (!businessId || businessId === "null" || businessId === "undefined") {
    toast.info("your don't have any business", {
       position: "top-center",

@@ -15,9 +15,8 @@ exports.Getbussiness = async (req, res) => {
     const businesses = await bussinessModel.find({ ownedBy: userId });
 
     if (!businesses || businesses.length === 0) {
-      return res
-        .status(404)
-        // .json({ message: "No businesses found for this user" });
+      return res.status(404);
+      // .json({ message: "No businesses found for this user" });
     }
 
     res.status(200).json(businesses);
@@ -42,9 +41,30 @@ exports.RegisterBusiness = async (req, res) => {
       gstnumber,
       businessCity,
       businessDistrict,
+      businessState,
+      businessCountry,
       businessZipCode,
       logo,
     } = req.body;
+
+    const requiredFields = [
+      businessName,
+      businessEmail,
+      addressLine1,
+      businessCity,
+      businessDistrict,
+      businessState,
+      businessCountry,
+      businessZipCode,
+      ownerContact,
+      startedOn,
+    ];
+
+    if (requiredFields.some((field) => !field)) {
+      return res
+        .status(400)
+        .json({ message: "Please fill all required fields." });
+    }
 
     const { id } = req.params;
 
@@ -53,51 +73,54 @@ exports.RegisterBusiness = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
+    // Ensure Role is 'Owner'
     if (user.Role !== "Owner") {
       user.Role = "Owner";
       await user.save();
     }
 
-    const ownedBy = id;
-
+    // Auto-increment businessId logic (optional)
     const lastBusiness = await bussinessModel
       .findOne()
       .sort({ businessId: -1 });
     const newBusinessId = lastBusiness ? lastBusiness.businessId + 1 : 1001;
 
     const newBusiness = new bussinessModel({
-      name: businessName,
-      email: businessEmail,
+      ownedBy: id, // 🔄 Use 'userId' as defined in schema
+      businessName,
+      businessEmail,
+      businessId:newBusinessId,
       description,
       addressLine1,
       addressLine2,
       googleMapLink,
-      contactNumberOwner: ownerContact,
-      contactNumberOffice: officeContact,
+      ownerContact,
+      officeContact,
       startedOn,
       gstnumber,
       businessCity,
       businessDistrict,
+      businessState,
+      businessCountry,
       businessZipCode,
-      businessId: newBusinessId,
       logo: {
-        imageUrl: logo?.imageUrl || null,
-        publicId: logo?.publicId || null,
+        imageUrl: logo?.imageUrl || "",
+        publicId: logo?.publicId || "",
       },
-      ownedBy,
     });
 
-    const saved = await newBusiness.save();
+    const savedBusiness = await newBusiness.save();
 
     return res.status(201).json({
       message: "Business registered successfully",
-      business: saved,
+      business: savedBusiness,
     });
   } catch (error) {
     console.error("Business registration error:", error.message);
-    return res
-      .status(500)
-      .json({ message: "Server error", error: error.message });
+    return res.status(500).json({
+      message: "Server error during business registration",
+      error: error.message,
+    });
   }
 };
 
@@ -107,12 +130,38 @@ exports.GetAllbussiness = async (req, res) => {
     if (allbusinesses.length === 0) {
       res.json({ message: "No bussiness  found" });
     }
-
     res.json(allbusinesses);
   } catch (error) {
     console.error("Business registration error:", error.message);
     return res
       .status(500)
       .json({ message: "Server error", error: error.message });
+  }
+};
+
+
+exports.UpadateBussiness= async (req, res) => {
+  const { businessId } = req.params;
+  const userId = req.params.id;
+  const updateData = req.body;
+
+  try {
+    const business = await bussinessModel.findById(businessId);
+    if (!business) {
+      return res.status(404).json({ success: false, message: "Business not found" });
+    }
+    if (String(business.ownedBy) !== String(userId)) {
+      return res.status(403).json({ success: false, message: "Not authorized to update this business" });
+    }
+
+
+    Object.assign(business, updateData);
+
+    await business.save();
+
+    return res.status(200).json({ success: true, message: "Business updated successfully", business });
+  } catch (err) {
+    console.error("Business update error:", err.message);
+    return res.status(500).json({ success: false, message: "Server error" });
   }
 };
