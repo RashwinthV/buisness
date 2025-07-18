@@ -17,7 +17,7 @@ exports.Getbussiness = async (req, res) => {
     if (!businesses || businesses.length === 0) {
       return res
         .status(404)
-        .json({ message: "No businesses found for this user" });
+        // .json({ message: "No businesses found for this user" });
     }
 
     res.status(200).json(businesses);

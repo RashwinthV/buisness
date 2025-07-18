@@ -1,4 +1,5 @@
 import { createContext, useState, useEffect, useContext } from "react";
+import {  useNavigate } from "react-router-dom";
 
 export const UserContext = createContext();
 
@@ -7,6 +8,7 @@ const defaultUser = null;
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(defaultUser);
     const token = localStorage.getItem("token");
+    const navigate=useNavigate()
 
 
   useEffect(() => {
@@ -29,6 +31,7 @@ export const UserProvider = ({ children }) => {
 
   const logout = () => {
    localStorage.clear();
+    navigate("/home")
     setUser(null);
   };
     const isAuthenticated = !!user;

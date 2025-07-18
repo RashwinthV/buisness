@@ -23,39 +23,63 @@ const ProtectedBusiness = ({ children }) => {
       return;
     }
 
-    // Wait for business list to load
+    // Wait for businesses to be available
     if (!businesses || businesses.length === 0) return;
 
+    // Parse and check business access
     const selectedId = parseInt(businessId);
     const match = businesses.some((b) => b.businessId === selectedId);
+    console.log(match);
 
     if (!match) {
       if (location.pathname === `/businessdashboard/${selectedId}`) {
         toast.warning("You don't have access to this Dashboard");
         setTimeout(() => setRedirectNow(true), 300);
-      } else if (location.pathname === `/entry/${selectedId}`) {
-        toast.warning("You don't have access to this Transaction", {position: "top-center",
-       autoClose: 3000,
-        theme: "dark"});
-        setTimeout(() => setRedirectNow(true), 300); 
+      } else if (location.pathname === `/transactions/${selectedId}`) {
+        toast.warning("You don't have access to this Transaction", {
+          position: "top-center",
+          autoClose: 3000,
+          theme: "dark",
+        });
+        setTimeout(() => setRedirectNow(true), 300);
       }
     } else {
       setHasAccess(true);
     }
 
     setAuthChecked(true);
-  }, [isAuthenticated, businesses, businessId]);
+  }, [isAuthenticated, businesses, businessId, location.pathname]);
+  console.log({ businessId, authChecked, isAuthenticated });
 
-  if (!authChecked) return null;
-
-  if (!isAuthenticated) return <Navigate to="/login" />;
-
-  if (redirectNow && !hasAccess && defaultBusinessId) {
-    return <Navigate to={`/home`} />;
+  // 🚨 Redirect if not authenticated
+  if (!isAuthenticated) {
+    return null;
   }
 
-  if (!hasAccess) return null;
+  // 🚨 Redirect immediately if businessId is missing (param not present)
+if (!businessId || businessId === "null" || businessId === "undefined") {
+   toast.info("your don't have any business", {
+      position: "top-center",
+      autoClose: 1500,
+      theme: "dark",
+    });
+    toast.info("Please register your business first", {
+      position: "top-center",
+      autoClose: 3000,
+      theme: "dark",
+    });
+    return <Navigate to="/businessregister" />;
+  }
 
+  // 🚨 Redirect if user lacks access
+  if (redirectNow && !hasAccess && defaultBusinessId) {
+    return <Navigate to="/home" />;
+  }
+
+  // Wait until checks are complete
+  if (!authChecked || !hasAccess) return null;
+
+  // ✅ Allow access
   return children;
 };
 

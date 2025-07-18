@@ -34,6 +34,7 @@
 import { createContext, useState, useContext, useEffect } from "react";
 import { useUser } from "./userContext";
 import { toast } from "react-toastify";
+import { Navigate } from "react-router-dom";
 
 const BusinessContext = createContext();
 export const useBusiness = () => useContext(BusinessContext);
@@ -66,6 +67,7 @@ export const BusinessProvider = ({ children }) => {
           setBusinesses(data || []);
         } else {
           toast.error(data?.message || "Failed to fetch businesses");
+          <Navigate to="/businessregister"/>
         }
       } catch (error) {
         toast.error("Error fetching businesses");
