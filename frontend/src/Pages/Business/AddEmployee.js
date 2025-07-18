@@ -90,8 +90,8 @@ const AddEmployee = () => {
   };
 
   return (
-    <div className="container py-4">
-      <h4 className="mb-4 text-center">Add New Employee</h4>
+    <div className="container py-2">
+      <h4 className="mb-2 text-center">Add New Employee</h4>
 
       <div className="row mb-4 justify-content-center">
         <div className="col-12 text-center mb-3">

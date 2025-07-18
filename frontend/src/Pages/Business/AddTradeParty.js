@@ -74,8 +74,8 @@ function AddTradeParty() {
   };
 
   return (
-    <div className="container py-4">
-      <h4 className="text-center mb-4">Add New Trade Party</h4>
+    <div className="container py-2">
+      <h4 className="text-center mb-2">Add New Trade Party</h4>
 
       {/* Image Upload Preview */}
       <div className="row mb-4 justify-content-center">

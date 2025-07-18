@@ -57,8 +57,8 @@ const AddProduct = () => {
   };
 
   return (
-    <div className="container py-4">
-      <h4 className="mb-4 text-center">Add New Product</h4>
+    <div className="container py-2">
+      <h4 className="mb-2 text-center">Add New Product</h4>
 
       {/* Image Upload & Preview */}
       <div className="row mb-4 justify-content-center">

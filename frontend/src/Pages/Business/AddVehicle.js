@@ -49,8 +49,8 @@ const AddVehicle = () => {
   };
 
   return (
-    <div className="container py-4">
-      <h4 className="mb-4 text-center">Vehicle Registration</h4>
+    <div className="container py-2">
+      <h4 className="mb-2  text-center">Vehicle Registration</h4>
 
       {/* Vehicle Image Upload */}
       <div className="row mb-4 justify-content-center">
