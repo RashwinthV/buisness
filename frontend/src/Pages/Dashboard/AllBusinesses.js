@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Image_default from "../../Assets/Images/Default.png";
 import { useBusiness } from "../../context/BussinessContext";
+import { Button } from "react-bootstrap";
 
 const calculateSince = (dateString) => {
   if (!dateString) return "Not available";
@@ -94,6 +95,7 @@ const AllBusinesses = () => {
             <div className="col-12 col-md-6 col-lg-4 mb-4" key={business._id}>
               <div className="card shadow-sm h-100">
                 <div className="card-body">
+                  <div className="justify-content-between d-flex align-items-center mb-3">
                   <div className="d-flex align-items-center mb-3">
                     <img
                       src={business.logo.imageUrl || Image_default}
@@ -105,7 +107,12 @@ const AllBusinesses = () => {
                     />
                     <h5 className="card-title mb-0">{business.businessName}</h5>
                   </div>
-
+                                    <div className="d-flex align-items-center mb-3">
+                   
+                    <Button
+                      className="btn-sm bg-dark"><i class="bi bi-eye"></i></Button>
+                  </div>
+                  </div>
                   <p className="mb-1">
                     <strong>Since:</strong>{" "}
                     {business.startedOn
@@ -148,7 +155,9 @@ const AllBusinesses = () => {
                       {`${business?.businessZipCode}`}
                     </p>
                   )}
+                  
                 </div>
+                
               </div>
             </div>
           ))
