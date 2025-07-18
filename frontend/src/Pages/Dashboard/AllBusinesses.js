@@ -1,5 +1,3 @@
-
-
 import { useState, useEffect } from "react";
 import Image_default from "../../Assets/Images/Default.png";
 import { useBusiness } from "../../context/BussinessContext";
@@ -29,7 +27,6 @@ const AllBusinesses = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredBusinesses, setFilteredBusinesses] = useState([]);
   const { allbusinesses } = useBusiness();
-  
 
   useEffect(() => {
     if (allbusinesses.length > 0) {
@@ -60,8 +57,6 @@ const AllBusinesses = () => {
 
     setFilteredBusinesses(filtered);
   };
-  
-
 
   return (
     <div className="container py-2">
@@ -96,22 +91,27 @@ const AllBusinesses = () => {
               <div className="card shadow-sm h-100">
                 <div className="card-body">
                   <div className="justify-content-between d-flex align-items-center mb-3">
-                  <div className="d-flex align-items-center mb-3">
-                    <img
-                      src={business.logo.imageUrl || Image_default}
-                      alt={`${business.businessName} Logo`}
-                      className="rounded-circle me-3"
-                      width="60"
-                      height="60"
-                      style={{ objectFit: "contain", border: "1px solid #ccc" }}
-                    />
-                    <h5 className="card-title mb-0">{business.businessName}</h5>
-                  </div>
-                                    <div className="d-flex align-items-center mb-3">
-                   
-                    <Button
-                      className="btn-sm bg-dark"><i class="bi bi-eye"></i></Button>
-                  </div>
+                    <div className="d-flex align-items-center mb-3">
+                      <img
+                        src={business.logo.imageUrl || Image_default}
+                        alt={`${business.businessName} Logo`}
+                        className="rounded-circle me-3"
+                        width="60"
+                        height="60"
+                        style={{
+                          objectFit: "contain",
+                          border: "1px solid #ccc",
+                        }}
+                      />
+                      <h5 className="card-title mb-0">
+                        {business.businessName}
+                      </h5>
+                    </div>
+                    <div className="d-flex align-items-center mb-3">
+                      <Button className="btn-sm bg-dark">
+                        <i class="bi bi-eye"></i>
+                      </Button>
+                    </div>
                   </div>
                   <p className="mb-1">
                     <strong>Since:</strong>{" "}
@@ -128,9 +128,7 @@ const AllBusinesses = () => {
                   <hr />
 
                   <p className="mb-1">
-                    <strong>Contact:</strong>{" "}
-                    {business.officeContact ||
-                      " N/A"}
+                    <strong>Contact:</strong> {business.officeContact || " N/A"}
                   </p>
 
                   <p className="mb-1">
@@ -155,9 +153,7 @@ const AllBusinesses = () => {
                       {`${business?.businessZipCode}`}
                     </p>
                   )}
-                  
                 </div>
-                
               </div>
             </div>
           ))
