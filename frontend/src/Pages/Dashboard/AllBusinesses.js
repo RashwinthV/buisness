@@ -90,7 +90,7 @@ const AllBusinesses = () => {
             <div className="col-12 col-md-6 col-lg-4 mb-4" key={business._id}>
               <div className="card shadow-sm h-100">
                 <div className="card-body">
-                  <div className="justify-content-between d-flex align-items-center mb-3">
+                  <div className="justify-content-between d-flex align-items-center">
                     <div className="d-flex align-items-center mb-3">
                       <img
                         src={business.logo.imageUrl || Image_default}
@@ -119,6 +119,8 @@ const AllBusinesses = () => {
                       ? calculateSince(business.startedOn)
                       : "Not available"}
                   </p>
+                               
+
 
                   {/* <p className="mb-1">
                     <strong>Description:</strong>{" "}
