@@ -108,7 +108,7 @@ const AllBusinesses = () => {
                       </h5>
                     </div>
                     <div className="d-flex align-items-center mb-3">
-                      <Button className="btn-sm bg-dark">
+                      <Button className="btn-sm btn-secondary">
                         <i class="bi bi-eye"></i>
                       </Button>
                     </div>
