@@ -27,6 +27,7 @@ const dummyEmployees = [
 const dummytransactions = [
   {
     type: "Sales",
+    id: "TRANS-1",
     partyName: "ABC Traders",
     date: "2025-07-15T10:30:00Z",
     products: [
@@ -38,6 +39,7 @@ const dummytransactions = [
   },
   {
     type: "Purchase",
+    id: "TRANS-2",
     partyName: "XYZ Suppliers",
     date: "2025-07-14T14:00:00Z",
     products: [
@@ -49,6 +51,7 @@ const dummytransactions = [
   },
   {
     type: "Sales",
+    id: "TRANS-3",
     partyName: "LMN Wholesale",
     date: "2025-07-13T09:00:00Z",
     products: [
@@ -143,18 +146,21 @@ const Entry = () => {
       <thead>
         <tr>
           <th>S.No</th>
+          <th> Transaction Id</th>
           <th>Type</th>
           <th>Party Name</th>
           <th>Date</th>
           <th>Products</th>
           <th>Grand Total</th>
           <th>Entry By</th>
+          <th>Actions</th>
         </tr>
       </thead>
       <tbody>
         {sortedEntries.map((entry, i) => (
           <tr key={i}>
             <td>{i + 1}</td>
+            <td>{entry.id}</td>
             <td>{entry.type}</td>
             <td>{entry.partyName}</td>
             <td>{moment(entry.date).format("YYYY-MM-DD")}</td>
@@ -167,6 +173,12 @@ const Entry = () => {
             </td>
             <td>₹{entry.grandTotal}</td>
             <td>{entry.entryBy}</td>
+            <td>          <Button
+                        variant="primary"
+                        className="me-1"
+                        size="sm"
+                        onClick={() => ""}
+                      ><i class="bi bi-pencil-square"></i></Button></td>
           </tr>
         ))}
       </tbody>
