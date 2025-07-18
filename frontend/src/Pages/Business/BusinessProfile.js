@@ -793,9 +793,9 @@ const BusinessProfile = () => {
         <Col xs={12} md={4} className="text-center mb-3">
           <div
             style={{
-              width: "120px",
-              height: "120px",
-              borderRadius: "50%",
+              width: "150px",
+              height: "150px",
+              borderRadius: "20%",
               overflow: "hidden",
               margin: "0 auto",
               border: "2px solid #ddd",
@@ -808,7 +808,7 @@ const BusinessProfile = () => {
                 Image_default
               }
               alt="Business Logo"
-              style={{ width: "100%", height: "100%", objectFit: "cover" }}
+              style={{ width: "100%", height: "100%", objectFit: "contain" }}
               onError={(e) => (e.target.src = Image_default)}
             />
           </div>
