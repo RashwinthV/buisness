@@ -199,7 +199,6 @@ import { ToastContainer } from "react-toastify";
 import { AppProviders } from "./context/AppProviders";
 import ScrollToTop from "./components/Layout/scroll";
 import appRoutes from "./Routes/AppRoutes";
-import { useUser } from "./context/userContext";
 
 function App() {
 
