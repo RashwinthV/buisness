@@ -66,7 +66,7 @@ const SwitchBusiness = ({ show, onClose, onSwitch, onAddBusiness }) => {
               >
                 <div className="d-flex align-items-center gap-2">
                   <img
-                    src={biz.logo.imageUrl || Image_default}
+                    src={biz.logo?.imageUrl || Image_default}
                     alt="Business Logo"
                     className="rounded-circle"
                     width="32"

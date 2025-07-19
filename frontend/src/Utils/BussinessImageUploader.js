@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { toast } from "react-toastify";
 
 export const useBusinessImageUpload = ({
@@ -39,33 +38,33 @@ export const useBusinessImageUpload = ({
     }
   };
 
-  // Cleanup image on page unload if not submitted
-  useEffect(() => {
-    const handleUnload = async () => {
-      if (publicId && !submittedRef?.current && userId) {
-        try {
-          await fetch(`${baseUrl}/v3/bussinessimage/deleteimage/${userId}`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify({ public_id: publicId }),
-          });
-          console.log("image deleted in image  unload");
+  // // Cleanup image on page unload if not submitted
+  // useEffect(() => {
+  //   const handleUnload = async () => {
+  //     if (publicId && !submittedRef?.current && userId) {
+  //       try {
+  //         await fetch(`${baseUrl}/v3/bussinessimage/deleteimage/${userId}`, {
+  //           method: "POST",
+  //           headers: {
+  //             "Content-Type": "application/json",
+  //             Authorization: `Bearer ${token}`,
+  //           },
+  //           body: JSON.stringify({ public_id: publicId }),
+  //         });
+  //         console.log("image deleted in image  unload");
           
-        } catch (err) {
-          console.warn("Image cleanup failed:", err.message);
-        }
-      }
-    };
+  //       } catch (err) {
+  //         console.warn("Image cleanup failed:", err.message);
+  //       }
+  //     }
+  //   };
 
-    window.addEventListener("beforeunload", handleUnload);
-    return () => {
-      window.removeEventListener("beforeunload", handleUnload);
-      handleUnload();
-    };
-  }, [publicId, submittedRef, token, baseUrl, userId]);
+  //   window.addEventListener("beforeunload", handleUnload);
+  //   return () => {
+  //     window.removeEventListener("beforeunload", handleUnload);
+  //     handleUnload();
+  //   };
+  // }, [publicId, submittedRef, token, baseUrl, userId]);
 
   return {
     handleImageUpload,

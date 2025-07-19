@@ -164,7 +164,7 @@ const ManageBusiness = () => {
       <div className="card shadow-sm border-0 mb-4">
         <div className="card-body text-center">
           <img
-            src={selectedBusiness?.logo.imageUrl || Image_default}
+            src={selectedBusiness.logo?.imageUrl || Image_default}
             alt="Business Logo"
             className="mb-2 img-fluid"
             style={{ maxHeight: "80px", objectFit: "contain" }}

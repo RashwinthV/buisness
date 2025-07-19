@@ -77,6 +77,10 @@ const appRoutes = [
         path: "allbusinesses",
         element: <AllBusinesses />,
       },
+        {
+        path: "viewbusinessprofile/:businessId",
+        element: <BusinessProfile />,
+      },
     ],
   },
 ];

@@ -9,16 +9,16 @@ import { useBusiness } from "../../context/BussinessContext.js";
 import { useUser } from "../../context/userContext.js";
 import { toast } from "react-toastify";
 import { useBusinessImageUpload } from "../../Utils/BussinessImageUploader.js";
-
-
+import { useParams } from "react-router-dom";
 
 const cleanValue = (val) => (val === "Unknown" ? "" : val);
 
 const BusinessProfile = () => {
   const { user, token } = useUser();
-  const { businesses, selectedBusinessId } = useBusiness();
+  const { allbusinesses, selectedBusinessId } = useBusiness();
   const baseUrl = process.env.REACT_APP_BACKEND_URI;
-  const currentUserId=user?.id
+  const currentUserId = user?.id;
+  const { businessId: paramBusinessId } = useParams();
 
   const [editMode, setEditMode] = useState(false);
   const [showVerifyModal, setShowVerifyModal] = useState(false);
@@ -51,7 +51,15 @@ const BusinessProfile = () => {
   });
 
   useEffect(() => {
-    const selected = businesses?.find((b) => b.businessId === selectedBusinessId);
+    if (!allbusinesses || allbusinesses.length === 0) return;
+    const businessId = parseInt(paramBusinessId);
+
+    const selected = allbusinesses.find((b) =>
+      paramBusinessId
+        ? b.businessId === businessId
+        : b.businessId === selectedBusinessId
+    );
+
     if (selected) {
       setBusiness({
         _id: selected._id,
@@ -77,7 +85,7 @@ const BusinessProfile = () => {
         ownedBy: selected.ownedBy || "",
       });
     }
-  }, [businesses, selectedBusinessId, user?.id]);
+  }, [allbusinesses, selectedBusinessId, user?.id, paramBusinessId]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -86,14 +94,17 @@ const BusinessProfile = () => {
 
   const handleLogoDelete = async () => {
     try {
-      const res = await fetch(`${baseUrl}/v3/bussinessimage/deleteimage/${user?.id}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ public_id: business.logo?.publicId }),
-      });
+      const res = await fetch(
+        `${baseUrl}/v3/bussinessimage/deleteimage/${user?.id}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ public_id: business.logo?.publicId }),
+        }
+      );
 
       if (res.ok) {
         toast.success("Image deleted!");
@@ -163,6 +174,7 @@ const BusinessProfile = () => {
         toast.success("Business Profile updated successfully");
         setBusiness(result.business || business);
         setEditMode(false);
+        window.location.reload();
       } else {
         toast.error(result.message || "Failed to update business");
       }
@@ -172,11 +184,10 @@ const BusinessProfile = () => {
     }
   };
 
-   return (
+  return (
     <Container className="py-4">
-       <h4 className="mb-2  text-center">Business Profile</h4>
+      <h4 className="mb-2  text-center">Business Profile</h4>
       <div className="d-flex justify-content-end align-items-center mb-4">
-       
         {currentUserId === business.ownedBy && (
           <Button
             variant="outline-primary"
@@ -186,20 +197,12 @@ const BusinessProfile = () => {
           >
             {editMode ? "Cancel" : <i className="bi bi-pencil-square"></i>}
           </Button>
-
-          
         )}
 
-                {currentUserId === business.ownedBy && (
-          <Button
-            variant="outline-danger"
-            size="sm"
-            onClick={() =>"/home"}
-          >
-            <i class="bi bi-trash3-fill"></i>
+        {currentUserId === business.ownedBy && (
+          <Button variant="outline-danger" size="sm" onClick={() => "/home"}>
+            <i className="bi bi-trash3-fill"></i>
           </Button>
-
-          
         )}
       </div>
 
@@ -284,9 +287,10 @@ const BusinessProfile = () => {
             <Col md={6}>
               <label>
                 Email{" "}
-                {getVerificationStatus(business.emailVerified, "email", () =>
-                  handleOpenVerify("email", business.businessEmail)
-                )}
+                {currentUserId === business.ownedBy &&
+                  getVerificationStatus(business.emailVerified, "email", () =>
+                    handleOpenVerify("email", business.businessEmail)
+                  )}
               </label>
               {editMode ? (
                 <input
@@ -351,7 +355,7 @@ const BusinessProfile = () => {
               {editMode ? (
                 <input
                   name="businessCity"
-                  value={business.businessCity                  }
+                  value={business.businessCity}
                   onChange={handleInputChange}
                   className="form-control"
                 />
@@ -443,7 +447,7 @@ const BusinessProfile = () => {
             <Col md={6}>
               <label>
                 Contact (Owner){" "}
-                {getVerificationStatus(business.numberVerified, "phone", () =>
+                 {currentUserId === business.ownedBy&&getVerificationStatus(business.numberVerified, "phone", () =>
                   handleOpenVerify("phone", business.ownerContact)
                 )}
               </label>

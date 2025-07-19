@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import Image_default from "../../Assets/Images/Default.png";
 import { useBusiness } from "../../context/BussinessContext";
 import { Button } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 
 const calculateSince = (dateString) => {
   if (!dateString) return "Not available";
@@ -27,6 +28,7 @@ const AllBusinesses = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredBusinesses, setFilteredBusinesses] = useState([]);
   const { allbusinesses } = useBusiness();
+  const navigate=useNavigate()
 
   useEffect(() => {
     if (allbusinesses.length > 0) {
@@ -57,6 +59,13 @@ const AllBusinesses = () => {
 
     setFilteredBusinesses(filtered);
   };
+
+const viewProfile=(businessId)=>{
+  // console.log(businessId);
+navigate(`/viewbusinessprofile/${businessId}`)
+  
+
+}
 
   return (
     <div className="container py-2">
@@ -93,7 +102,7 @@ const AllBusinesses = () => {
                   <div className="justify-content-between d-flex align-items-center">
                     <div className="d-flex align-items-center mb-3">
                       <img
-                        src={business.logo.imageUrl || Image_default}
+                        src={business.logo?.imageUrl || Image_default}
                         alt={`${business.businessName} Logo`}
                         className="rounded-circle me-3"
                         width="60"
@@ -108,8 +117,8 @@ const AllBusinesses = () => {
                       </h5>
                     </div>
                     <div className="d-flex align-items-center mb-3">
-                      <Button className="btn-sm btn-secondary">
-                        <i class="bi bi-eye"></i>
+                      <Button className="btn-sm btn-secondary" onClick={() => viewProfile(business.businessId)}>
+                        <i className="bi bi-eye"></i>
                       </Button>
                     </div>
                   </div>
