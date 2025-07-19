@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Modal, Button } from "react-bootstrap";
 import { toast } from "react-toastify";
+import moment from "moment";
 
 const partyList = [
   { id: 1, name: "SK Steels", contact: "9876543210", tag: "supplier" },
@@ -24,6 +25,7 @@ const EditTransactionModal = ({ show, handleClose, transaction }) => {
     date: "",
     entryBy: "",
     updatedBy: "Kirithik",
+    updatedOn: moment().format("DD-MM-YYYY"),
     products: [],
   });
 
@@ -154,6 +156,10 @@ const EditTransactionModal = ({ show, handleClose, transaction }) => {
           <div className="col-md-6">
             <label>Updated By</label>
             <input className="form-control" value={form.updatedBy} disabled />
+          </div>
+                    <div className="col-md-6">
+            <label>Updated On</label>
+            <input className="form-control" value={form.updatedOn} disabled />
           </div>
         </div>
 

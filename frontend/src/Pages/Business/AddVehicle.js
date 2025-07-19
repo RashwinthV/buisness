@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
 import Image_default from "../../Assets/Images/Default.png"; // Replace with your default image path
+import moment from "moment";
+
 const AddVehicle = () => {
   const [formData, setFormData] = useState({
     image: null,
@@ -12,8 +14,8 @@ const AddVehicle = () => {
     rtoDetails: "",
     registrationDate: "",
     ownership: "",
-    insuranceValidTill: "",
-    fcValidTill: "",
+    insuranceValidTill: moment().format("YYYY-MM-DD"),
+    fcValidTill: moment().format("YYYY-MM-DD"),
   });
 
   const handleChange = (e) => {

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Image_default from "../../Assets/Images/Default.png"; // Replace with your actual image path
+import moment from "moment";
 
 const AddEmployee = () => {
   const navigate = useNavigate();
@@ -11,8 +12,8 @@ const AddEmployee = () => {
     name: "",
     contact: "",
     workField: "",
-    dob: "",
-    doj: "",
+    dob:  moment().format("YYYY-MM-DD"),
+    doj: moment().format("YYYY-MM-DD"),
     salary: "",
     addressLine1: "",
     addressLine2: "",
@@ -157,7 +158,7 @@ const AddEmployee = () => {
             type="date"
             name="dob"
             className="form-control"
-            value={formData.dob}
+            value={formData.dob }
             onChange={handleChange}
           />
         </div>

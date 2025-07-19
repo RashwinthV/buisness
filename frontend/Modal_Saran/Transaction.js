@@ -47,7 +47,7 @@ const TransactionSchema = new mongoose.Schema(
     updatedOn: {
       type: Date,
       required: true,
-      default: Date.now, // auto-set on update
+      default: "N/A", // auto-set on update
     },
   },
   {

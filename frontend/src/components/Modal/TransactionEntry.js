@@ -13,7 +13,7 @@ const TransactionEntry = ({ show, onHide, type, products, employees, onSubmit })
   const [form, setForm] = useState({
     partyName: "",
     partyContact: "",
-    date: moment().format("YYYY-MM-DD"),
+    date: moment().format("DD-MM-YYYY"),
     entryBy: "",
     products: [],
   });
