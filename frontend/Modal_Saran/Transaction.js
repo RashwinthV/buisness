@@ -39,6 +39,16 @@ const TransactionSchema = new mongoose.Schema(
       type: Date,
       default: Date.now, // auto-set on creation
     },
+    updatedBy: {
+      type: String,
+      required: true,
+      default: "N/A",
+    },
+    updatedOn: {
+      type: Date,
+      required: true,
+      default: Date.now, // auto-set on update
+    },
   },
   {
     timestamps: true, // adds createdAt and updatedAt
