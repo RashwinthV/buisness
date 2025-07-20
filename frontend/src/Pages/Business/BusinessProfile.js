@@ -528,7 +528,6 @@ import { useUser } from "../../context/userContext.js";
 import { toast } from "react-toastify";
 import { useBusinessImageUpload } from "../../Utils/BussinessImageUploader.js";
 import { useParams, useLocation } from "react-router-dom";
-import { useProduct } from "../../context/ProductContext.js";
 
 const cleanValue = (val) => (val === "Unknown" ? "" : val);
 
@@ -545,7 +544,6 @@ const BusinessProfile = () => {
   const [verifyValue, setVerifyValue] = useState("");
   const submittedRef = useRef(false);
 
-  const { products } = useProduct();
 
   const [business, setBusiness] = useState({
     _id: "",
@@ -734,7 +732,7 @@ const BusinessProfile = () => {
         [name]: value,
       },
     }));
-  };
+  };  
 
   return (
     <Container className="py-4">
@@ -1045,7 +1043,7 @@ const BusinessProfile = () => {
         <>
           {/* Private / Editable View */}
           <div className="d-flex justify-content-end align-items-center mb-4">
-            {currentUserId === business.ownedBy && (
+            {currentUserId === business.ownerId && (
               <>
                 <Button
                   variant="outline-primary"
