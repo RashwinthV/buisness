@@ -528,7 +528,6 @@ import { useUser } from "../../context/userContext.js";
 import { toast } from "react-toastify";
 import { useBusinessImageUpload } from "../../Utils/BussinessImageUploader.js";
 import { useParams, useLocation } from "react-router-dom";
-import { useProduct } from "../../context/ProductContext.js";
 
 const cleanValue = (val) => (val === "Unknown" ? "" : val);
 
@@ -545,7 +544,6 @@ const BusinessProfile = () => {
   const [verifyValue, setVerifyValue] = useState("");
   const submittedRef = useRef(false);
 
-  const { products } = useProduct();
 
   const [business, setBusiness] = useState({
     _id: "",
