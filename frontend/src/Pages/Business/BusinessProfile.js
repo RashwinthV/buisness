@@ -516,7 +516,7 @@
 
 // export default BusinessProfile;
 
-import React, { useEffect, useRef, useState } from "react";
+import  { useEffect, useRef, useState } from "react";
 import { Container, Row, Col, Button, Card } from "react-bootstrap";
 import Image_default from "../../Assets/Images/Default.png";
 import {
@@ -805,7 +805,7 @@ const BusinessProfile = () => {
             >
               <h4 className="mb-2">{business.businessName || "-"}</h4>
               <p className="mb-1">
-                <i className="bi bi-envelope-fill me-2" />
+                <i className="bi bi-envelope-fill me-1" />
                 {business.businessEmail || "N/A"}
               </p>
               {business.googleMapLink && (
