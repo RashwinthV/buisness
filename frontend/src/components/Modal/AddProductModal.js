@@ -1,16 +1,16 @@
 import { useState } from "react";
+import { Modal, Button } from "react-bootstrap";
 import { toast } from "react-toastify";
 import Image_default from "../../Assets/Images/Default.png";
-import { useProductImageUpload } from "../../Utils/BussinessImageUploader"; // adjust path as needed
+import { useProductImageUpload } from "../../Utils/BussinessImageUploader";
 import { useUser } from "../../context/userContext";
 import { useBusiness } from "../../context/BussinessContext";
 
-const AddProduct = () => {
+const AddProductModal = ({ show, handleClose }) => {
   const baseUrl = process.env.REACT_APP_BACKEND_URI;
-
-  // TODO: Replace with actual user data from auth
   const { user, token } = useUser();
   const userId = user?.id;
+
   const { businesses, selectedBusinessId } = useBusiness();
   const businessId = selectedBusinessId;
   const selectedbusiness = businesses.find(
@@ -92,9 +92,8 @@ const AddProduct = () => {
 
       if (res.ok) {
         toast.success("Product added successfully!");
-        setTimeout(() => {
-          window.location.reload();
-        }, 2000);
+        handleClose();
+        setTimeout(() => window.location.reload(), 1500);
       } else {
         toast.error(result.message || "Failed to add product.");
       }
@@ -105,12 +104,12 @@ const AddProduct = () => {
   };
 
   return (
-    <div className="container py-2">
-      <h4 className="mb-2 text-center">Add New Product</h4>
-
-      {/* Image Upload & Preview */}
-      <div className="row mb-4 justify-content-center">
-        <div className="col-12 text-center mb-3">
+    <Modal show={show} onHide={handleClose} size="lg" centered scrollable>
+      <Modal.Header closeButton>
+        <Modal.Title>Add New Product</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <div className="text-center mb-4">
           <div
             style={{
               width: "120px",
@@ -139,65 +138,67 @@ const AddProduct = () => {
             />
           </div>
         </div>
-      </div>
 
-      <h6 className="text-danger">Product Information</h6>
-      <div className="row gy-3">
-        <div className="col-md-6">
-          <label>Product Name *</label>
-          <input
-            type="text"
-            name="name"
-            className="form-control"
-            value={formData.name}
-            onChange={handleChange}
-          />
+        <h6 className="text-danger">Product Information</h6>
+        <div className="row gy-3">
+          <div className="col-md-6">
+            <label>Product Name *</label>
+            <input
+              type="text"
+              name="name"
+              className="form-control"
+              value={formData.name}
+              onChange={handleChange}
+            />
+          </div>
+
+          <div className="col-md-6">
+            <label>Product Type *</label>
+            <select
+              className="form-select"
+              name="type"
+              value={formData.type}
+              onChange={handleChange}
+            >
+              <option value="">Choose</option>
+              <option value="raw_material">Raw Material</option>
+              <option value="finished_product">Finished Product</option>
+            </select>
+          </div>
+
+          <div className="col-md-6">
+            <label>Rate (Optional)</label>
+            <input
+              type="number"
+              name="rate"
+              className="form-control"
+              value={formData.rate}
+              onChange={handleChange}
+            />
+          </div>
+
+          <div className="col-md-12">
+            <label>Description *</label>
+            <textarea
+              name="description"
+              className="form-control"
+              rows={3}
+              value={formData.description}
+              onChange={handleChange}
+            ></textarea>
+          </div>
         </div>
-
-        <div className="col-md-6">
-          <label>Product Type *</label>
-          <select
-            className="form-select"
-            name="type"
-            value={formData.type}
-            onChange={handleChange}
-          >
-            <option value="">Choose</option>
-            <option value="raw_material">Raw Material</option>
-            <option value="finished_product">Finished Product</option>
-          </select>
-        </div>
-
-        <div className="col-md-6">
-          <label>Rate (Optional)</label>
-          <input
-            type="number"
-            name="rate"
-            className="form-control"
-            value={formData.rate}
-            onChange={handleChange}
-          />
-        </div>
-
-        <div className="col-md-12">
-          <label>Description *</label>
-          <textarea
-            name="description"
-            className="form-control"
-            rows={4}
-            value={formData.description}
-            onChange={handleChange}
-          ></textarea>
-        </div>
-      </div>
-
-      <div className="text-end mt-4">
-        <button className="btn btn-success" onClick={handleSubmit}>
+      </Modal.Body>
+      <Modal.Footer>
+        <Button variant="secondary" onClick={handleClose}>
+          Cancel
+        </Button>
+        <Button variant="success" onClick={handleSubmit}>
           Add Product
-        </button>
-      </div>
-    </div>
+        </Button>
+      </Modal.Footer>
+    </Modal>
   );
 };
 
-export default AddProduct;
+export default AddProductModal;

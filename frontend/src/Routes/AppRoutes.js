@@ -10,10 +10,10 @@ import RegisterForm from "../Pages/Auth/Register";
 
 import BusinessRegister from "../Pages/Business/BusinessRegister";
 import BusinessProfile from "../Pages/Business/BusinessProfile";
-import AddProduct from "../Pages/Business/AddProduct";
-import AddEmployee from "../Pages/Business/AddEmployee";
-import AddVehicle from "../Pages/Business/AddVehicle";
-import AddTradeParty from "../Pages/Business/AddTradeParty";
+import ManageProduct from "../Pages/Business/Manage/ManageProduct";
+import ManageEmployee from "../Pages/Business/Manage/ManageEmployee";
+import ManageVehicle from "../Pages/Business/Manage/ManageVehicle";
+import ManageTradeParty from "../Pages/Business/Manage/ManageTradeParty";
 
 import BusinessDashboard from "../Pages/Dashboard/BusinessDashboard";
 import ManageBusiness from "../Pages/Dashboard/ManageBusiness";
@@ -44,10 +44,10 @@ const appRoutes = [
 
       { path: "businessregister", element: <BusinessRegister /> },
       { path: "businessprofile", element: <BusinessProfile /> },
-      { path: "addproduct", element: <AddProduct /> },
-      { path: "addemployee", element: <AddEmployee /> },
-      { path: "addvehicle", element: <AddVehicle /> },
-      { path: "addtradeparty", element: <AddTradeParty /> },
+      { path: "manageproduct", element: <ManageProduct /> },
+      { path: "manageaddemployee", element: <ManageEmployee /> },
+      { path: "manageaddvehicle", element: <ManageVehicle /> },
+      { path: "manageaddtradeparty", element: <ManageTradeParty /> },
 
       {
         path: "businessdashboard/:businessId",

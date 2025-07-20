@@ -129,28 +129,26 @@
 
 // export default ManageBusiness;
 import { useState } from "react";
-import AddProduct from "../Business/AddProduct";
-import AddEmployee from "../Business/AddEmployee";
-import AddTradeParty from "../Business/AddTradeParty";
-import AddVehicle from "../Business/AddVehicle";
+import ManageProduct from "../Business/Manage/ManageProduct";
+import ManageEmployee from "../Business/Manage/ManageEmployee";
+import ManageTradeParty from "../Business/Manage/ManageTradeParty";
+import ManageVehicle from "../Business/Manage/ManageVehicle";
 import BusinessProfile from "../Business/BusinessProfile";
 import { useBusiness } from "../../context/BussinessContext";
 import Image_default from "../../Assets/Images/Default.png";
-
 const ManageBusiness = () => {
   const { selectedBusinessId, businesses } = useBusiness();
   const selectedBusiness = businesses?.find(
     (b) => b.businessId === selectedBusinessId
   );
-
-  const [activeTab, setActiveTab] = useState("Edit Business");
+  const [activeTab, setActiveTab] = useState("Manage Business");
 
   const tabs = [
-    { label: "Edit Business", component: <BusinessProfile /> },
-    { label: "Add Product", component: <AddProduct /> },
-    { label: "Add Employee", component: <AddEmployee /> },
-    { label: "Add Vehicle", component: <AddVehicle /> },
-    { label: "Add Trade Party", component: <AddTradeParty /> },
+    { label: "Manage Business", component: <BusinessProfile /> },
+    { label: "Manage Products", component: <ManageProduct /> },
+    { label: "Manage Employees", component: <ManageEmployee /> },
+    { label: "Manage Vehicles", component: <ManageVehicle /> },
+    { label: "Manage Trade Partys", component: <ManageTradeParty /> },
   ];
 
   const renderTabContent = () => {
@@ -192,6 +190,7 @@ const ManageBusiness = () => {
               {tab.label}
             </button>
           ))}
+          
         </div>
 
         {/* Tab Content Area */}
