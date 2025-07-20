@@ -2,10 +2,9 @@ import { useState } from "react";
 import moment from "moment";
 import { useBusiness } from "../../context/BussinessContext";
 import { Button } from "react-bootstrap";
-import Image_default from "../../Assets/Images/Default.png";
 import TransactionEntry from "../../components/Modal/TransactionEntry";
 import EditTransactionModal from "../../components/Modal/EditTransactionModal";
-
+import BusinessBanner from "../../Utils/BusinessBanner";
 // Sample placeholder data
 const dummyProducts = [
   { id: 1, name: "Iron Rod", tag: "Raw Material", rate: 100 },
@@ -90,8 +89,9 @@ const Entry = () => {
   return (
     <div className="container py-2">
       <div className="card shadow-sm border-0 mb-4">
+        <BusinessBanner business={selectedBusiness} />
         <div className="card-body text-center">
-          <img
+          {/* <img
             src={
               selectedBusiness?.bussinessLogo ||
               selectedBusiness?.logo.imageUrl ||
@@ -106,7 +106,7 @@ const Entry = () => {
           />
           <h4 className="text-center mb-3">
             <strong>{selectedBusiness?.name} </strong>
-          </h4>
+          </h4> */}
 
           <div className="text-center mb-4 d-flex gap-3 justify-content-center flex-wrap">
             <button
