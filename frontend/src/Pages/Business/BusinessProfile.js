@@ -734,7 +734,7 @@ const BusinessProfile = () => {
         [name]: value,
       },
     }));
-  };
+  };  
 
   return (
     <Container className="py-4">
@@ -1045,7 +1045,7 @@ const BusinessProfile = () => {
         <>
           {/* Private / Editable View */}
           <div className="d-flex justify-content-end align-items-center mb-4">
-            {currentUserId === business.ownedBy && (
+            {currentUserId === business.ownerId && (
               <>
                 <Button
                   variant="outline-primary"
