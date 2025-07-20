@@ -1,9 +1,10 @@
-import React, { useState } from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
-import AddEmployeeModal from "../../../components/Modal/AddEmployeeModal"; // Adjust path as needed
-import Image_default from "../../../Assets/Images/Default.png"; // Adjust path as needed
+import { useNavigate, useLocation, useParams } from "react-router-dom";
+import Image_default from "../../../Assets/Images/Default.png";
+
 const ManageEmployee = () => {
-  const [showModal, setShowModal] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { businessId } = useParams();
 
   const employeeList = [
     {
@@ -29,13 +30,18 @@ const ManageEmployee = () => {
     },
   ];
 
+  const openAddModal = () => {
+    navigate(`/managebusiness/${businessId}/manageemployees/Add_Employee`, {
+      state: { backgroundLocation: location },
+    });
+  };
+
   return (
     <div className="container py-2">
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h4 className="mb-0">Employees</h4>
         <button
-          className="btn btn-success"
-          onClick={() => setShowModal(true)}
+          className="btn btn-success" onClick={openAddModal}
         >
           + Add Employee
         </button>
@@ -45,11 +51,9 @@ const ManageEmployee = () => {
         {employeeList.map((emp, index) => (
           <div className="col-md-4" key={index}>
             <div className="card h-100 shadow-sm position-relative">
-              {/* Edit Button */}
               <button
                 className="btn btn-sm btn-outline-primary position-absolute top-0 end-0 m-2"
-                title="Edit Employee"
-                onClick={() => alert(`Edit ${emp.name}`)} // replace with modal logic
+                onClick={() => alert(`Edit ${emp.name}`)}
               >
                 <i className="bi bi-pencil-square"></i>
               </button>
@@ -59,11 +63,7 @@ const ManageEmployee = () => {
                   src={emp.image}
                   alt={emp.name}
                   className="rounded-circle mb-3"
-                  style={{
-                    width: "100px",
-                    height: "100px",
-                    objectFit: "cover",
-                  }}
+                  style={{ width: "100px", height: "100px", objectFit: "cover" }}
                 />
                 <h5 className="card-title">{emp.name}</h5>
                 <p className="card-text">
@@ -76,9 +76,6 @@ const ManageEmployee = () => {
           </div>
         ))}
       </div>
-
-      {/* Add Employee Modal */}
-      <AddEmployeeModal show={showModal} handleClose={() => setShowModal(false)} />
     </div>
   );
 };

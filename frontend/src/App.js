@@ -44,7 +44,7 @@
 // function App() {
 //   const {isloggedin}=useUser()
 //   console.log(isloggedin);
-  
+
 //   return (
 //     <AppProviders>
 //       <ToastContainer />
@@ -193,23 +193,105 @@
 // // export default App;
 
 // App.js
-import "./App.css";
-import { useRoutes } from "react-router-dom";
+
+// import "./App.css";
+// import { useRoutes } from "react-router-dom";
+// import { ToastContainer } from "react-toastify";
+// import { AppProviders } from "./context/AppProviders";
+// import ScrollToTop from "./components/Layout/scroll";
+// import appRoutes from "./Routes/AppRoutes";
+
+// function App() {
+
+//   const routes = useRoutes(appRoutes);
+
+//   return (
+//     <AppProviders>
+//       <ToastContainer />
+//       <ScrollToTop />
+//       {routes}
+//     </AppProviders>
+//   );
+// }
+
+// export default App;
+
+import {
+  Routes,
+  Route,
+  useLocation,
+  useRoutes,
+  useNavigate,
+} from "react-router-dom";
 import { ToastContainer } from "react-toastify";
+import appRoutes from "./Routes/AppRoutes";
 import { AppProviders } from "./context/AppProviders";
 import ScrollToTop from "./components/Layout/scroll";
-import appRoutes from "./Routes/AppRoutes";
+
+// Modals
+import ModalWrapper from "./Utils/ModalWrapper";
+import AddEmployeeModal from "./components/Modal/AddEmployeeModal";
+import AddProductModal from "./components/Modal/AddProductModal";
+import AddVehicleModal from "./components/Modal/AddVehicleModal";
+import AddTradePartyModal from "./components/Modal/AddTradePartyModal";
 
 function App() {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const state = location.state;
+  const backgroundLocation = state?.backgroundLocation;
 
-  const routes = useRoutes(appRoutes);
-  
+  const element = useRoutes(appRoutes, backgroundLocation || location);
 
   return (
     <AppProviders>
       <ToastContainer />
       <ScrollToTop />
-      {routes}
+      {element}
+
+      {/* Modal Overlays - these are NOT in appRoutes */}
+      {backgroundLocation && (
+        <Routes>
+          <Route
+            path="/managebusiness/:businessId/manageproducts/Add_Product"
+            element={
+              <ModalWrapper>
+                <AddProductModal show={true} handleClose={() => navigate(-1)} />
+              </ModalWrapper>
+            }
+          />
+          <Route
+            path="/managebusiness/:businessId/manageemployees/Add_Employee"
+            element={
+              <ModalWrapper>
+                <AddEmployeeModal
+                  show={true}
+                  handleClose={() => navigate(-1)} // go back to previous screen
+                />{" "}
+              </ModalWrapper>
+            }
+          />
+          <Route
+            path="/managebusiness/:businessId/managevehicles/Add_Vechile"
+            element={
+              <ModalWrapper>
+                <AddVehicleModal show={true} handleClose={() => navigate(-1)} />
+              </ModalWrapper>
+            }
+          />
+          <Route
+            path="/managebusiness/:businessId/managetradeparties/Add_Trader"
+            element={
+              <ModalWrapper>
+                <AddTradePartyModal
+                  show={true}
+                  handleClose={() => navigate(-1)}
+                />
+              </ModalWrapper>
+            }
+          />
+        </Routes>
+      )}
     </AppProviders>
   );
 }

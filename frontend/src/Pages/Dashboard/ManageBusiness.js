@@ -128,76 +128,138 @@
 // };
 
 // export default ManageBusiness;
-import { useState } from "react";
-import ManageProduct from "../Business/Manage/ManageProduct";
-import ManageEmployee from "../Business/Manage/ManageEmployee";
-import ManageTradeParty from "../Business/Manage/ManageTradeParty";
-import ManageVehicle from "../Business/Manage/ManageVehicle";
-import BusinessProfile from "../Business/BusinessProfile";
+
+//base
+
+// import { useState } from "react";
+// import ManageProduct from "../Business/Manage/ManageProduct";
+// import ManageEmployee from "../Business/Manage/ManageEmployee";
+// import ManageTradeParty from "../Business/Manage/ManageTradeParty";
+// import ManageVehicle from "../Business/Manage/ManageVehicle";
+// import BusinessProfile from "../Business/BusinessProfile";
+// import { useBusiness } from "../../context/BussinessContext";
+// import BusinessBanner from "../../Utils/BusinessBanner";
+// const ManageBusiness = () => {
+//   const { selectedBusinessId, businesses } = useBusiness();
+//   const selectedBusiness = businesses?.find(
+//     (b) => b.businessId === selectedBusinessId
+//   );
+//   const [activeTab, setActiveTab] = useState("Manage Business");
+
+//   const tabs = [
+//     { label: "Manage Business", component: <BusinessProfile /> },
+//     { label: "Manage Products", component: <ManageProduct /> },
+//     { label: "Manage Employees", component: <ManageEmployee /> },
+//     { label: "Manage Vehicles", component: <ManageVehicle /> },
+//     { label: "Manage Trade Partys", component: <ManageTradeParty /> },
+//   ];
+
+//   const renderTabContent = () => {
+//     const selected = tabs.find((tab) => tab.label === activeTab);
+//     return selected ? selected.component : null;
+//   };
+
+//   return (
+//     <div className="container-fluid py-2">
+//       {/* Business Info */}
+//       <div className="card shadow-sm border-0 mb-4">
+        
+//           {/* <img
+//             src={selectedBusiness.logo?.imageUrl || Image_default}
+//             alt="Business Logo"
+//             className="mb-2 img-fluid"
+//             style={{ maxHeight: "80px", objectFit: "contain" }}
+//           />
+//           <h4 className="text-center mb-2 fw-bold text-primary">
+//             {selectedBusiness?.businessName}
+//           </h4>
+//           <small className="text-muted">
+//             Manage business operations using the tabs below
+//           </small> */}
+//           <BusinessBanner business={selectedBusiness} />
+          
+
+//       </div>
+
+//       {/* Tab Buttons */}
+//       <div className="container mt-3">
+//         <div className="d-flex flex-wrap gap-2 mb-3 ">
+//           {tabs.map((tab) => (
+//             <button
+//               key={tab.label}
+//               className={`btn ${
+//                 activeTab === tab.label ? "btn-primary" : "btn-outline-primary"
+//               }`}
+//               onClick={() => setActiveTab(tab.label)}
+//             >
+//               {tab.label}
+//             </button>
+//           ))}
+          
+//         </div>
+
+//         {/* Tab Content Area */}
+//         <div className="container p-3 rounded shadow-sm bg-white">
+//           {renderTabContent()}
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default ManageBusiness;
+
+
+
+import React from "react";
+import { Outlet, useNavigate, useParams, useLocation } from "react-router-dom";
 import { useBusiness } from "../../context/BussinessContext";
 import BusinessBanner from "../../Utils/BusinessBanner";
+
 const ManageBusiness = () => {
-  const { selectedBusinessId, businesses } = useBusiness();
-  const selectedBusiness = businesses?.find(
-    (b) => b.businessId === selectedBusinessId
-  );
-  const [activeTab, setActiveTab] = useState("Manage Business");
+  const { businessId } = useParams();
+  const { businesses } = useBusiness();
+  const selectedBusiness = businesses?.find(b => b.businessId === businessId);
+  const navigate = useNavigate();
+  const location = useLocation();
 
+  const basePath = `/managebusiness/${businessId}`;
   const tabs = [
-    { label: "Manage Business", component: <BusinessProfile /> },
-    { label: "Manage Products", component: <ManageProduct /> },
-    { label: "Manage Employees", component: <ManageEmployee /> },
-    { label: "Manage Vehicles", component: <ManageVehicle /> },
-    { label: "Manage Trade Partys", component: <ManageTradeParty /> },
+    { label: "Manage Business", path: "" },
+    { label: "Manage Products", path: "manageproducts" },
+    { label: "Manage Employees", path: "manageemployees" },
+    { label: "Manage Vehicles", path: "managevehicles" },
+    { label: "Manage Trade Parties", path: "managetradeparties" },
   ];
-
-  const renderTabContent = () => {
-    const selected = tabs.find((tab) => tab.label === activeTab);
-    return selected ? selected.component : null;
-  };
 
   return (
     <div className="container-fluid py-2">
-      {/* Business Info */}
-      <div className="card shadow-sm border-0 mb-4">
-        
-          {/* <img
-            src={selectedBusiness.logo?.imageUrl || Image_default}
-            alt="Business Logo"
-            className="mb-2 img-fluid"
-            style={{ maxHeight: "80px", objectFit: "contain" }}
-          />
-          <h4 className="text-center mb-2 fw-bold text-primary">
-            {selectedBusiness?.businessName}
-          </h4>
-          <small className="text-muted">
-            Manage business operations using the tabs below
-          </small> */}
-          <BusinessBanner business={selectedBusiness} />
-          
-
+      <div className="card shadow-sm mb-4">
+        <BusinessBanner business={selectedBusiness} />
       </div>
-
-      {/* Tab Buttons */}
       <div className="container mt-3">
-        <div className="d-flex flex-wrap gap-2 mb-3 ">
-          {tabs.map((tab) => (
-            <button
-              key={tab.label}
-              className={`btn ${
-                activeTab === tab.label ? "btn-primary" : "btn-outline-primary"
-              }`}
-              onClick={() => setActiveTab(tab.label)}
-            >
-              {tab.label}
-            </button>
-          ))}
-          
-        </div>
+        <div className="d-flex flex-wrap gap-2 mb-3">
+          {tabs.map(tab => {
+            const fullPath = `${basePath}/${tab.path}`;
+            const isActive =
+              location.pathname === fullPath ||
+              (tab.path === "" && location.pathname === basePath);
 
-        {/* Tab Content Area */}
-        <div className="container p-3 rounded shadow-sm bg-white">
-          {renderTabContent()}
+            return (
+              <button
+                key={tab.label}
+                className={`btn ${isActive ? "btn-primary" : "btn-outline-primary"}`}
+                onClick={() =>
+                  navigate(tab.path, { state: { background: location } })
+                }
+              >
+                {tab.label}
+              </button>
+            );
+          })}
+        </div>
+        <div className="bg-white shadow p-3 rounded">
+          <Outlet />
         </div>
       </div>
     </div>

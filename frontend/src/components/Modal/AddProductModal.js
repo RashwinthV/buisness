@@ -103,6 +103,8 @@ const AddProductModal = ({ show, handleClose }) => {
     }
   };
 
+  
+
   return (
     <Modal show={show} onHide={handleClose} size="lg" centered scrollable>
       <Modal.Header closeButton>

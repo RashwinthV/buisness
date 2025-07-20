@@ -1,98 +1,98 @@
 const mongoose = require("mongoose");
 
 const EmployeeSchema = new mongoose.Schema({
-  // Name :
+  // Name
   name: {
     type: String,
     required: true,
   },
 
-  // Contact :
+  // Contact
   contact: {
     type: String,
     required: true,
   },
 
-  // Field of Work :
+  // Field of Work
   fieldOfWork: {
     type: String,
     required: true,
   },
 
-  // Date of Birth :
+  // Date of Birth
   dateOfBirth: {
     type: Date,
     required: true,
   },
 
-  // Date of Joining :
+  // Date of Joining
   dateOfJoining: {
     type: Date,
     required: true,
   },
 
-  // Salary :
+  // Salary
   salary: {
     type: Number,
     required: true,
   },
 
-  // Address Line 1 :
+  // Address Line 1
   addressLine1: {
     type: String,
     required: true,
   },
 
-  // Address Line 2 (Optional) :
+  // Address Line 2 (Optional)
   addressLine2: {
     type: String,
     default: "",
   },
 
-  // City :
+  // City
   city: {
     type: String,
     required: true,
   },
 
-  // District :
+  // District
   district: {
     type: String,
     required: true,
   },
 
-  // Pincode :
+  // Pincode
   pincode: {
     type: String,
     required: true,
   },
 
-  // ID Proof (e.g., Aadhar, PAN) :
+  // ID Proof (e.g., Aadhar, PAN)
   idProof: {
     type: String,
     required: true,
   },
 
-  // ID Number :
+  // ID Number
   idNumber: {
     type: String,
     required: true,
   },
 
-  // Photo (Optional) :
-  photo: {
-    type: String,
-    default: "",
+  // Profile Picture (Optional)
+  profilepic: {
+    imageUrl: { type: String, default: null },
+    publicId: { type: String, default: null },
   },
 
-  // Business ID :
+  // Business ID
   businessId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "business",
     required: true,
   },
 
-  // Created On :
+  // Created On
   createdOn: {
     type: Date,
     default: Date.now,

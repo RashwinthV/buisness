@@ -1,9 +1,13 @@
 import React, { useState } from "react";
 import Image_default from "../../../Assets/Images/Default.png";
 import AddVehicleModal from "../../../components/Modal/AddVehicleModal";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 const ManageVehicle = () => {
   const [showModal, setShowModal] = useState(false);
+    const navigate = useNavigate();
+  const location = useLocation();
+  const { businessId } = useParams();
 
   const vehicleList = [
     {
@@ -26,11 +30,17 @@ const ManageVehicle = () => {
     },
   ];
 
+   const openAddModal = () => {
+    navigate(`/managebusiness/${businessId}/managevehicles/Add_Vechile`, {
+      state: { backgroundLocation: location },
+    });
+  };
+
   return (
     <div className="container py-2">
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h4 className="mb-0">Vehicles</h4>
-        <button className="btn btn-success" onClick={() => setShowModal(true)}>
+        <button className="btn btn-success" onClick={openAddModal}>
           + Register Vehicle
         </button>
       </div>

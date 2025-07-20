@@ -37,9 +37,9 @@ export const ProductProvider = ({ children }) => {
         if (response.ok) {
           setProduct(data.products || []);
           settotalproducts(data.totalProducts)
-        } else {
-          toast.error(data?.message || "Failed to fetch products");
-        }
+         } //else {
+        //   toast.error(data?.message || "Failed to fetch products");
+        // }
       } catch (error) {
         toast.error("Error fetching products");
         console.error(error);

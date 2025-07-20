@@ -2,11 +2,15 @@ import  { useEffect, useState } from "react";
 import Image_default from "../../../Assets/Images/Default.png";
 import { useProduct } from "../../../context/ProductContext";
 import AddProductModal from "../../../components/Modal/AddProductModal";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 const ManageProduct = () => {
   const { product } = useProduct();
   const [productList, setProductList] = useState([]);
   const [showProductModal, setShowProductModal] = useState(false);
+    const navigate = useNavigate();
+    const location = useLocation();
+    const { businessId } = useParams();
 
   useEffect(() => {
     if (product && Array.isArray(product)) {
@@ -14,13 +18,19 @@ const ManageProduct = () => {
     }
   }, [product]);
 
+   const openAddModal = () => {
+    navigate(`/managebusiness/${businessId}/manageproducts/Add_Product`, {
+      state: { backgroundLocation: location },
+    });
+  };
+
   return (
     <div className="container py-2">
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h4 className="mb-0">Your Products</h4>
         <button
           className="btn btn-success"
-          onClick={() => setShowProductModal(true)}
+          onClick={openAddModal}
         >
           <i className="bi bi-plus-circle me-1"></i> Add Product
         </button>

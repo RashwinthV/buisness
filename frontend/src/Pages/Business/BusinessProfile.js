@@ -1126,7 +1126,7 @@ const BusinessProfile = () => {
                 </Col>
 
                 {/* Business Name & Email */}
-                <Col md={6}>
+                <Col md={6} >
                   <label>Name</label>
                   {editMode ? (
                     <input
@@ -1145,7 +1145,7 @@ const BusinessProfile = () => {
                 <Col md={6}>
                   <label>
                     Email{" "}
-                    {currentUserId === business.ownedBy &&
+                    {currentUserId === business.ownerId &&
                       getVerificationStatus(
                         business.emailVerified,
                         "email",
@@ -1305,7 +1305,7 @@ const BusinessProfile = () => {
                 <Col md={6}>
                   <label>
                     Contact (Owner){" "}
-                    {currentUserId === business.ownedBy &&
+                    {currentUserId === business.ownerId &&
                       getVerificationStatus(
                         business.numberVerified,
                         "phone",

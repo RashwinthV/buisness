@@ -1,9 +1,13 @@
 import React, { useState } from "react";
 import Image_default from "../../../Assets/Images/Default.png";
 import AddTradePartyModal from "../../../components/Modal/AddTradePartyModal";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 const ManageTradeParty = () => {
   const [showModal, setShowModal] = useState(false);
+    const navigate = useNavigate();
+  const location = useLocation();
+  const { businessId } = useParams();
 
   const partyList = [
     {
@@ -38,11 +42,17 @@ const ManageTradeParty = () => {
     return "Buyer & Supplier";
   };
 
+   const openAddModal = () => {
+    navigate(`/managebusiness/${businessId}/managetradeparties/Add_Trader`, {
+      state: { backgroundLocation: location },
+    });
+  };
+
   return (
     <div className="container py-2">
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h4 className="mb-0">Trade Parties</h4>
-        <button className="btn btn-success" onClick={() => setShowModal(true)}>
+        <button className="btn btn-success" onClick={openAddModal}>
           + Add Trade Party
         </button>
       </div>
