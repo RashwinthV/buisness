@@ -220,8 +220,9 @@ const ManageBusiness = () => {
   const { businessId } = useParams();
   const { businesses } = useBusiness();
   const[activeTab,setActiveTab]=useState()
-  const selectedBusiness = businesses?.find(b => b.businessId === businessId);
+  const selectedBusiness = businesses?.find(b => String(b.businessId) === businessId);
   const navigate = useNavigate();
+  
 
   const basePath = `/managebusiness/${businessId}`;
   const tabs = [
