@@ -159,7 +159,7 @@ const ManageBusiness = () => {
   return (
     <div className="container-fluid py-2">
       {/* Business Info */}
-      <div className="card shadow-sm border-0 mb-4">
+      <div>
         
           {/* <img
             src={selectedBusiness.logo?.imageUrl || Image_default}
@@ -180,7 +180,7 @@ const ManageBusiness = () => {
 
       {/* Tab Buttons */}
       <div className="container mt-3">
-        <div className="d-flex flex-wrap gap-2 mb-3 ">
+        <div className="d-flex flex-wrap gap-2 mb-3  align-items-center justify-content-center">
           {tabs.map((tab) => (
             <button
               key={tab.label}
