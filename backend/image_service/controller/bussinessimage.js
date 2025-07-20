@@ -1,6 +1,7 @@
-const path = require('path');
-const fs = require('fs/promises');
-const cloudinary = require('cloudinary').v2;
+const path = require("path");
+const fs = require("fs/promises");
+const buissnessModel = require("../Models/buissnessModel");
+const cloudinary = require("cloudinary").v2;
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -8,14 +9,13 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-
 exports.uploadImage = async (req, res) => {
-  const inputPath = path.join(__dirname, '..', req.file.path);
+  const inputPath = path.join(__dirname, "..", req.file.path);
 
   try {
     // Upload original image directly to Cloudinary
     const result = await cloudinary.uploader.upload(inputPath, {
-      folder: 'business-logo',
+      folder: "business-logo",
       use_filename: true,
       unique_filename: false,
       overwrite: true,
@@ -34,40 +34,74 @@ exports.uploadImage = async (req, res) => {
       public_id: result.public_id,
     });
   } catch (error) {
-    console.error('Cloudinary Upload Error:', error.message);
-    return res.status(500).json({ success: false, error: 'Image upload failed' });
+    console.error("Cloudinary Upload Error:", error.message);
+    return res
+      .status(500)
+      .json({ success: false, error: "Image upload failed" });
   }
 };
-
 
 exports.deleteImage = async (req, res) => {
   try {
     const { public_id } = req.body;
 
     if (!public_id) {
-      return res.status(400).json({ success: false, message: 'Missing public_id' });
+      return res.status(400).json({
+        success: false,
+        message: "Missing public_id",
+      });
     }
 
+    // Step 1: Delete image from Cloudinary
     const result = await cloudinary.uploader.destroy(public_id);
 
-    if (result.result !== 'ok') {
-      return res.status(400).json({ success: false, message: 'Image not found or already deleted' });
+    if (result.result !== "ok") {
+      return res.status(400).json({
+        success: false,
+        message: "Image not found or already deleted on Cloudinary",
+      });
     }
 
-    return res.status(200).json({ success: true, message: 'Image deleted successfully' });
+    // Step 2: Remove logo from business document
+    const updatedBusiness = await buissnessModel.findOneAndUpdate(
+      { "logo.publicId": public_id },
+      {
+        $set: {
+          "logo.imageUrl": "",
+          "logo.publicId": "",
+        },
+      },
+      { new: true }
+    );
+
+    if (!updatedBusiness) {
+      return res.status(404).json({
+        success: true,
+        message:
+          "Image deleted from Cloudinary, but no matching business logo found.",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message:
+        "Image deleted from Cloudinary and business logo cleared successfully",
+      updatedBusiness,
+    });
   } catch (error) {
-    console.error('Delete error:', error.message);
-    return res.status(500).json({ success: false, message: 'Failed to delete image' });
+    console.error("Delete error:", error.message);
+    return res.status(500).json({
+      success: false,
+      message: "Failed to delete image",
+    });
   }
 };
-
-
 
 exports.getImages = async (req, res) => {
   try {
     const images = await Image.find().sort({ uploadedAt: -1 });
     res.json(images);
   } catch (err) {
-    res.status(500).json({ error: 'Failed to fetch images' });
+    res.status(500).json({ error: "Failed to fetch images" });
   }
 };

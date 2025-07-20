@@ -528,6 +528,7 @@ import { useUser } from "../../context/userContext.js";
 import { toast } from "react-toastify";
 import { useBusinessImageUpload } from "../../Utils/BussinessImageUploader.js";
 import { useParams, useLocation } from "react-router-dom";
+import { useProduct } from "../../context/ProductContext.js";
 
 const cleanValue = (val) => (val === "Unknown" ? "" : val);
 
@@ -543,6 +544,8 @@ const BusinessProfile = () => {
   const [verifyType, setVerifyType] = useState("");
   const [verifyValue, setVerifyValue] = useState("");
   const submittedRef = useRef(false);
+
+  const { products } = useProduct();
 
   const [business, setBusiness] = useState({
     _id: "",
@@ -565,6 +568,7 @@ const BusinessProfile = () => {
     officeContact: "",
     numberVerified: false,
     gstnumber: "",
+    totalProducts: 0,
     ownedBy: "",
     SocialLinks: {
       facebook: "",
@@ -612,6 +616,7 @@ const BusinessProfile = () => {
         numberVerified: selected.numberVerified || false,
         gstnumber: cleanValue(selected.gstnumber),
         ownedBy: selected.ownedBy || "",
+        totalProducts: selected.totalProducts,
         SocialLinks: {
           facebook: selected?.SocialLinks?.facebook || "",
           instagram: selected?.SocialLinks?.instagram || "",
@@ -770,20 +775,34 @@ const BusinessProfile = () => {
               style={{ zIndex: 2 }}
             >
               <img
-                src={business.logo?.imageUrl || Image_default}
+                src={business.ownedBy?.profilepic?.imageUrl || Image_default}
                 alt="Business Logo"
                 style={{
                   width: "100%",
                   maxWidth: "150px",
                   height: "150px",
                   objectFit: "contain",
-                  borderRadius: "100px",
+                  borderRadius: "10px",
                   border: "2px solid #ccc",
                   backgroundColor: "#fff",
                 }}
               />
             </Col>
-            <Col md={9} style={{ zIndex: 2 }}>
+            <Col
+              xs={12}
+              md={4}
+              className="text-center text-md-start mb-3 mb-md-5"
+              style={{ zIndex: 2 }}
+            >
+              <h4 className="mt-0">{business.ownedBy?.firstName || "-"}</h4>
+            </Col>
+
+            <Col
+              xs={12}
+              md={2}
+              className="text-center text-md-start"
+              style={{ zIndex: 2 }}
+            >
               <h4 className="mb-2">{business.businessName || "-"}</h4>
               <p className="mb-1">
                 <i className="bi bi-envelope-fill me-2" />
@@ -800,6 +819,26 @@ const BusinessProfile = () => {
                   View on Map
                 </a>
               )}
+            </Col>
+
+            <Col
+              md={3}
+              className="text-center mb-3 mt-3 mb-md-0"
+              style={{ zIndex: 2 }}
+            >
+              <img
+                src={business.logo?.imageUrl || Image_default}
+                alt="Business Logo"
+                style={{
+                  width: "100%",
+                  maxWidth: "150px",
+                  height: "150px",
+                  objectFit: "contain",
+                  borderRadius: "100px",
+                  border: "2px solid #ccc",
+                  backgroundColor: "#fff",
+                }}
+              />
             </Col>
           </Row>
 
@@ -924,6 +963,83 @@ const BusinessProfile = () => {
               </Row>
             </Card.Body>
           </Card>
+
+          {/* total counts */}
+         <Card className="shadow-sm border-0 mb-4">
+  <Card.Body>
+    <Row>
+      <Col xs={12} md={6} className="mb-3">
+        <Card className="shadow-sm bg-secondary bg-opacity-25 border-0 h-100">
+          <Card.Body>
+            <h6 className="fw-bold fs-4 d-flex align-items-center gap-2 text-primary">
+              <i className="bi bi-box-seam-fill"></i> Products
+            </h6>
+            <hr />
+            {business.totalProducts !== undefined && (
+              <div className="d-flex align-items-center gap-2">
+                <i className="bi bi-collection-fill text-success fs-5"></i>
+                <h6 className="mb-0">Total Products:</h6>
+                <span className="badge bg-danger ms-2">
+                  {business.totalProducts}
+                </span>
+              </div>
+            )}
+          </Card.Body>
+        </Card>
+      </Col>
+
+      <Col xs={12} md={6} className="mb-3">
+        <Card className="shadow-sm bg-secondary bg-opacity-25 border-0 h-100">
+          <Card.Body>
+            <h6 className="fw-bold fs-4 d-flex align-items-center gap-2 text-primary">
+              <i className="bi bi-person-badge-fill"></i> Employees
+
+            </h6>
+            <hr />
+            <div className="d-flex align-items-center gap-2">
+              <i className="bi bi-graph-up-arrow text-info fs-5"></i>
+              <h6 className="mb-0">Some Value:</h6>
+              <span className="badge bg-info ms-2">42</span>
+            </div>
+          </Card.Body>
+        </Card>
+      </Col>
+       <Col xs={12} md={6} className="mb-3">
+        <Card className="shadow-sm bg-secondary bg-opacity-25 border-0 h-100">
+          <Card.Body>
+            <h6 className="fw-bold fs-4 d-flex align-items-center gap-2 text-primary">
+              <i className="bi bi-people-fill"></i>  Traders
+
+            </h6>
+            <hr />
+            <div className="d-flex align-items-center gap-2">
+              <i className="bi bi-graph-up-arrow text-info fs-5"></i>
+              <h6 className="mb-0">Some Value:</h6>
+              <span className="badge bg-info ms-2">42</span>
+            </div>
+          </Card.Body>
+        </Card>
+      </Col>
+       <Col xs={12} md={6} className="mb-3">
+        <Card className="shadow-sm bg-secondary bg-opacity-25 border-0 h-100">
+          <Card.Body>
+            <h6 className="fw-bold fs-4 d-flex align-items-center gap-2 text-primary">
+             <i className="bi bi-truck-front-fill"></i>  Vechiles
+
+            </h6>
+            <hr />
+            <div className="d-flex align-items-center gap-2">
+              <i className="bi bi-graph-up-arrow text-info fs-5"></i>
+              <h6 className="mb-0">Some Value:</h6>
+              <span className="badge bg-info ms-2">42</span>
+            </div>
+          </Card.Body>
+        </Card>
+      </Col>
+    </Row>
+  </Card.Body>
+</Card>
+
         </>
       ) : (
         <>

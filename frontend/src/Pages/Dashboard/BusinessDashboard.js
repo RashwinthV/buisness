@@ -12,7 +12,6 @@ const BusinessDashboard = () => {
   const selectedBusiness = businesses?.find(
     (b) => b.businessId === selectedBusinessId
   );
-
   const [activeTab, setActiveTab] = useState("Analytics");
 
   const renderTabContent = () => {

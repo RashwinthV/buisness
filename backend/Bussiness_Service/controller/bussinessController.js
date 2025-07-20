@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const bussinessModel = require("../models/buissnessModel");
 const userModel = require("../models/userModel");
+const ProductModal = require("../models/ProductModal");
 
 exports.Getbussiness = async (req, res) => {
   try {
@@ -89,7 +90,7 @@ exports.RegisterBusiness = async (req, res) => {
       ownedBy: id, // 🔄 Use 'userId' as defined in schema
       businessName,
       businessEmail,
-      businessId:newBusinessId,
+      businessId: newBusinessId,
       description,
       addressLine1,
       addressLine2,
@@ -126,21 +127,38 @@ exports.RegisterBusiness = async (req, res) => {
 
 exports.GetAllbussiness = async (req, res) => {
   try {
-    const allbusinesses = await bussinessModel.find();
+    const allbusinesses = await bussinessModel.find().populate({
+      path: "ownedBy",
+      select: "firstName profilepic", // only these fields from User
+    });
+
     if (allbusinesses.length === 0) {
-      res.json({ message: "No bussiness  found" });
+      return res.json({ message: "No businesses found" });
     }
-    res.json(allbusinesses);
+
+    // For each business, add the totalProductCount field
+    const businessesWithProductCount = await Promise.all(
+      allbusinesses.map(async (business) => {
+        const totalProducts = await ProductModal.countDocuments({
+          businessId: business._id,
+        });
+        return {
+          ...business._doc,
+          totalProducts,
+        };
+      })
+    );
+
+    return res.status(200).json(businessesWithProductCount);
   } catch (error) {
-    console.error("Business registration error:", error.message);
+    console.error("Business fetch error:", error.message);
     return res
       .status(500)
       .json({ message: "Server error", error: error.message });
   }
 };
 
-
-exports.UpadateBussiness= async (req, res) => {
+exports.UpadateBussiness = async (req, res) => {
   const { businessId } = req.params;
   const userId = req.params.id;
   const updateData = req.body;
@@ -148,18 +166,30 @@ exports.UpadateBussiness= async (req, res) => {
   try {
     const business = await bussinessModel.findById(businessId);
     if (!business) {
-      return res.status(404).json({ success: false, message: "Business not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Business not found" });
     }
     if (String(business.ownedBy) !== String(userId)) {
-      return res.status(403).json({ success: false, message: "Not authorized to update this business" });
+      return res
+        .status(403)
+        .json({
+          success: false,
+          message: "Not authorized to update this business",
+        });
     }
-
 
     Object.assign(business, updateData);
 
     await business.save();
 
-    return res.status(200).json({ success: true, message: "Business updated successfully", business });
+    return res
+      .status(200)
+      .json({
+        success: true,
+        message: "Business updated successfully",
+        business,
+      });
   } catch (err) {
     console.error("Business update error:", err.message);
     return res.status(500).json({ success: false, message: "Server error" });

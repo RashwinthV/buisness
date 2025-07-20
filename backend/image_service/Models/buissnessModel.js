@@ -2,9 +2,21 @@ const mongoose = require("mongoose");
 
 const businessSchema = new mongoose.Schema(
   {
-    userId: {
+    ownedBy: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      ref: "user",
+      required: true,
+    },
+
+    // Managers :
+    managers: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "user",
+      },
+    ],
+    businessId: {
+      type: Number,
       required: true,
     },
     businessName: {
@@ -77,8 +89,30 @@ const businessSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    subscriptionStatus: {
+      type: String,
+      enum: ["Regular", "Prime"],
+      default: "Regular",
+    },
+
+    // Business Status :
+    businessStatus: {
+      type: String,
+      enum: ["Active", "Inactive"],
+      default: "Active",
+    },
+    SocialLinks: {
+      facebook: { type: String, default: null },
+      instagram: { type: String, default: null },
+      linkedin: { type: String, default: null },
+      twitter: { type: String, default: null },
+      website: { type: String, default: null },
+    },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+    collection: "business",
+  }
 );
 
-module.exports = mongoose.model("Business", businessSchema);
+module.exports = mongoose.model("business", businessSchema);

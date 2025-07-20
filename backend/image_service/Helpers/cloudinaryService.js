@@ -21,6 +21,20 @@ exports.uploadToCloudinary = async (filePath,) => {
 };
 
 
+exports.uploadProductToCloudinary = async (filePath,) => {
+  const result = await cloudinary.uploader.upload(filePath, {
+     folder: 'product_Images',
+    use_filename: true,
+    unique_filename: false,
+    overwrite: true,
+  });
+  return {
+    url: result.secure_url,
+    public_id: result.public_id,
+  };
+};
+
+
 exports.deleteFromCloudinary = async (publicId) => {
   const result = await cloudinary.uploader.destroy(publicId);
   return result;

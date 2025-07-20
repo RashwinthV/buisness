@@ -1,24 +1,52 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Image_default from "../../Assets/Images/Default.png";
+import { useProductImageUpload } from "../../Utils/BussinessImageUploader"; // adjust path as needed
+import { useUser } from "../../context/userContext";
+import { useBusiness } from "../../context/BussinessContext";
 
 const AddProduct = () => {
-  const navigate = useNavigate();
   const baseUrl = process.env.REACT_APP_BACKEND_URI;
+
+  // TODO: Replace with actual user data from auth
+  const { user, token } = useUser();
+  const userId = user?.id;
+  const { businesses, selectedBusinessId } = useBusiness();
+  const businessId = selectedBusinessId;
+  const selectedbusiness = businesses.find(
+    (b) => String(b.businessId) === String(businessId)
+  );
 
   const [formData, setFormData] = useState({
     name: "",
     description: "",
     rate: "",
     type: "",
-    image: null,
   });
 
-  const handleChange = (e) => {
+  const [imagePreview, setImagePreview] = useState(null);
+  const [imageData, setImageData] = useState({
+    imageUrl: "",
+    publicId: "",
+  });
+
+  const { handleImageUpload } = useProductImageUpload({
+    userId,
+    token,
+    publicId: imageData.publicId,
+    bussinessId: businessId,
+    setImageData,
+    baseUrl,
+  });
+
+  const handleChange = async (e) => {
     const { name, value, type, files } = e.target;
     if (type === "file") {
-      setFormData((prev) => ({ ...prev, [name]: files[0] }));
+      const file = files[0];
+      if (file) {
+        setImagePreview(URL.createObjectURL(file));
+        await handleImageUpload(file);
+      }
     } else {
       setFormData((prev) => ({ ...prev, [name]: value }));
     }
@@ -33,26 +61,46 @@ const AddProduct = () => {
       }
     }
 
-    const data = new FormData();
-    Object.entries(formData).forEach(([key, value]) => {
-      if (value) data.append(key, value);
-    });
+    if (!imageData.imageUrl || !imageData.publicId) {
+      toast.warning("Please upload a product image.");
+      return;
+    }
+
+    const payload = {
+      productName: formData.name,
+      description: formData.description,
+      productType: formData.type,
+      rate: formData.rate || 0,
+      imageUrl: imageData.imageUrl,
+      public_id: imageData.publicId,
+    };
 
     try {
-      const res = await fetch(`${baseUrl}/v1/products/add`, {
-        method: "POST",
-        body: data,
-      });
+      const res = await fetch(
+        `${baseUrl}/v2/bussiness/product/${userId}/registerProduct/${selectedbusiness._id}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(payload),
+        }
+      );
 
       const result = await res.json();
+
       if (res.ok) {
         toast.success("Product added successfully!");
-        navigate("/products");
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
       } else {
         toast.error(result.message || "Failed to add product.");
       }
     } catch (err) {
       toast.error("Server error. Try again later.");
+      console.error(err);
     }
   };
 
@@ -74,11 +122,7 @@ const AddProduct = () => {
             }}
           >
             <img
-              src={
-                formData.image
-                  ? URL.createObjectURL(formData.image)
-                  : Image_default
-              }
+              src={imagePreview || Image_default}
               alt="Product"
               style={{ width: "100%", height: "100%", objectFit: "cover" }}
               onError={(e) => (e.target.src = Image_default)}

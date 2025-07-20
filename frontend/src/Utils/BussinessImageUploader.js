@@ -70,3 +70,47 @@ export const useBusinessImageUpload = ({
     handleImageUpload,
   };
 };
+
+
+
+export const useProductImageUpload = ({
+  userId,
+  token,
+  publicId,
+  bussinessId,
+  setImageData,
+  baseUrl,
+}) => {
+  const handleImageUpload = async (file) => {
+    if (!file || !userId || !token || !baseUrl) return;
+
+    const imageFormData = new FormData();
+    imageFormData.append("image", file);
+
+    try {
+      const res = await fetch(`${baseUrl}/v3/bussinessimage/product/upload/${userId}/${bussinessId}`, {
+        method: "POST",
+        body: imageFormData,
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      const result = await res.json();      
+
+      if (result.success && result.imageUrl) {
+        toast.success("Logo uploaded!");
+        setImageData({
+          imageUrl: result.imageUrl,
+          publicId: result.public_id,
+        });
+      } else {
+        toast.error(result?.error || "Image upload failed.");
+      }
+    } catch (err) {
+      toast.error("Server error during image upload.");
+      console.error("Image upload failed:", err);
+    }
+  };
+  return {
+    handleImageUpload,
+  };
+};
