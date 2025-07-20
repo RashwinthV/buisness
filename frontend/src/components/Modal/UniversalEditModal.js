@@ -44,9 +44,7 @@ const UniversalEditModal = ({
               <img
                 src={
                   formData.imagePreview ||
-                  (typeof formData.image === "string"
-                    ? formData.image
-                    : "")
+                  (typeof formData.image === "string" ? formData.image : "")
                 }
                 alt="Preview"
                 style={{

@@ -2,8 +2,12 @@ import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import AddEmployeeModal from "../../../components/Modal/AddEmployeeModal"; // Adjust path as needed
 import Image_default from "../../../Assets/Images/Default.png"; // Adjust path as needed
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 const ManageEmployee = () => {
   const [showModal, setShowModal] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { businessId } = useParams();
 
   const employeeList = [
     {
@@ -28,15 +32,16 @@ const ManageEmployee = () => {
       image: Image_default,
     },
   ];
-
+  const openAddModal = () => {
+    navigate(`/managebusiness/${businessId}/manageemployees/Add_Employee`, {
+      state: { backgroundLocation: location },
+    });
+  };
   return (
     <div className="container py-3">
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h4 className="fw-bold">Manage Employees</h4>
-        <button
-          className="btn btn-success"
-          onClick={() => setShowModal(true)}
-        >
+        <button className="btn btn-success" onClick={openAddModal}>
           <i className="bi bi-plus-circle me-2"></i> Add Employee
         </button>
       </div>
@@ -86,7 +91,10 @@ const ManageEmployee = () => {
       </div>
 
       {/* Add Employee Modal */}
-      <AddEmployeeModal show={showModal} handleClose={() => setShowModal(false)} />
+      <AddEmployeeModal
+        show={showModal}
+        handleClose={() => setShowModal(false)}
+      />
     </div>
   );
 };

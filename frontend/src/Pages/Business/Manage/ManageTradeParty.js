@@ -1,11 +1,14 @@
 import { useState } from "react";
 import Image_default from "../../../Assets/Images/Default.png";
 import AddTradePartyModal from "../../../components/Modal/AddTradePartyModal";
+import UniversalEditModal from "../../../components/Modal/UniversalEditModal"; // ✅ Import it
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 const ManageTradeParty = () => {
   const [showModal, setShowModal] = useState(false);
-
-  const partyList = [
+  const [showEditModal, setShowEditModal] = useState(false); // ✅ Modal visibility state
+  const [editData, setEditData] = useState(null);            // ✅ Data to edit
+  const [partyList, setPartyList] = useState([               // ✅ Data list
     {
       id: "TP001",
       name: "Kumar Agencies",
@@ -32,13 +35,17 @@ const ManageTradeParty = () => {
     },
   ]);
 
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { businessId } = useParams();
+
   const formatType = (type) => {
     if (type === "buyer") return "Buyer";
     if (type === "supplier") return "Supplier";
     return "Buyer & Supplier";
   };
 
-   const openAddModal = () => {
+  const openAddModal = () => {
     navigate(`/managebusiness/${businessId}/managetradeparties/Add_Trader`, {
       state: { backgroundLocation: location },
     });
@@ -66,11 +73,14 @@ const ManageTradeParty = () => {
       setPartyList(updated);
     }
   };
+
+  
+
   return (
     <div className="container py-2">
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h4 className="mb-0">Trade Parties</h4>
-        <button className="btn btn-success" onClick={() => setShowModal(true)}>
+        <button className="btn btn-success" onClick={openAddModal}>
           + Add Trade Party
         </button>
       </div>
@@ -85,23 +95,22 @@ const ManageTradeParty = () => {
                 className="card border-0 shadow-sm h-100 position-relative party-card hover-shadow rounded-4"
                 style={{ backgroundColor: "#51ff0021" }}
               >
- 
-                            <div className="position-absolute top-0 end-0 m-2 d-flex gap-2">
-               <button
-                  className="btn btn-light btn-sm shadow-sm rounded-circle"
-                  title="Edit"
-                  onClick={() => handleEdit(party)}
-                >
-                  <i className="bi bi-pencil-fill text-primary"></i>
-                </button>
-                <button
-                  className="btn btn-light btn-sm shadow-sm rounded-circle"
-                  title="Delete"
-                  onClick={() => handleDelete(party)}
-                >
-                  <i className="bi bi-trash-fill text-danger"></i>
-                </button>
-              </div>
+                <div className="position-absolute top-0 end-0 m-2 d-flex gap-2">
+                  <button
+                    className="btn btn-light btn-sm shadow-sm rounded-circle"
+                    title="Edit"
+                    onClick={() => handleEdit(party)}
+                  >
+                    <i className="bi bi-pencil-fill text-primary"></i>
+                  </button>
+                  <button
+                    className="btn btn-light btn-sm shadow-sm rounded-circle"
+                    title="Delete"
+                    onClick={() => handleDelete(party)}
+                  >
+                    <i className="bi bi-trash-fill text-danger"></i>
+                  </button>
+                </div>
                 <div className="card-body d-flex flex-column align-items-center text-center">
                   <img
                     src={party.image}
@@ -142,10 +151,7 @@ const ManageTradeParty = () => {
       )}
 
       {/* Add Modal */}
-      <AddTradePartyModal
-        show={showModal}
-        handleClose={() => setShowModal(false)}
-      />
+      <AddTradePartyModal show={showModal} handleClose={() => setShowModal(false)} />
 
       {/* Edit Modal */}
       <UniversalEditModal
@@ -163,7 +169,7 @@ const ManageTradeParty = () => {
           {
             label: "Party Type",
             name: "type",
-            type: "text", // You can change to select if needed
+            type: "text", // consider a select dropdown if you have fixed types
           },
         ]}
         includeImage={true}

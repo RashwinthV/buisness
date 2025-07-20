@@ -211,17 +211,17 @@
 
 
 
-import React from "react";
-import { Outlet, useNavigate, useParams, useLocation } from "react-router-dom";
+import { Outlet, useNavigate, useParams } from "react-router-dom";
 import { useBusiness } from "../../context/BussinessContext";
 import BusinessBanner from "../../Utils/BusinessBanner";
+import { useState } from "react";
 
 const ManageBusiness = () => {
   const { businessId } = useParams();
   const { businesses } = useBusiness();
+  const[activeTab,setActiveTab]=useState()
   const selectedBusiness = businesses?.find(b => b.businessId === businessId);
   const navigate = useNavigate();
-  const location = useLocation();
 
   const basePath = `/managebusiness/${businessId}`;
   const tabs = [
@@ -256,17 +256,20 @@ const ManageBusiness = () => {
       <div className="container mt-3">
         <div className="d-flex flex-wrap gap-2 mb-3 ">
           {tabs.map((tab) => (
-            <button
-              key={tab.label}
-              className={`btn ${
-                activeTab === tab.label ? "btn-primary" : "btn-outline-primary"
-              }`}
-              onClick={() => setActiveTab(tab.label)}
-            >
-              {tab.label}
-            </button>
-          ))}
-          
+  <button
+    key={tab.label}
+    className={`btn ${
+      activeTab === tab.label ? "btn-primary" : "btn-outline-primary"
+    }`}
+    onClick={() => {
+      setActiveTab(tab.label);
+      navigate(`${basePath}/${tab.path}`);
+    }}
+  >
+    {tab.label}
+  </button>
+))}
+
         </div>
         <div className="bg-white shadow p-3 rounded">
           <Outlet />

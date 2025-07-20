@@ -1,9 +1,16 @@
 import React, { useState } from "react";
 import Image_default from "../../../Assets/Images/Default.png";
 import AddVehicleModal from "../../../components/Modal/AddVehicleModal";
+import UniversalEditModal from "../../../components/Modal/UniversalEditModal"; // ✅ Import missing
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 const ManageVehicle = () => {
   const [showModal, setShowModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false); // ✅ Define state
+  const [editData, setEditData] = useState(null);             // ✅ Define state
+   const navigate = useNavigate();
+  const location = useLocation();
+  const { businessId } = useParams();
 
   const vehicleList = [
     {
@@ -29,11 +36,37 @@ const ManageVehicle = () => {
     },
   ];
 
+  // ✅ Handle Edit
+  const handleEdit = (vehicle) => {
+    setEditData(vehicle);
+    setShowEditModal(true);
+  };
+
+  // ✅ Handle Save (for demo)
+  const handleSaveEdit = () => {
+    console.log("Edited Data:", editData);
+    setShowEditModal(false);
+  };
+
+  // ✅ Handle Delete (for demo)
+  const handleDelete = (vehicle) => {
+    if (window.confirm(`Delete vehicle "${vehicle.name}"?`)) {
+      console.log("Deleted:", vehicle);
+      // delete logic here
+    }
+  };
+
+    const openAddModal = () => {
+    navigate(`/managebusiness/${businessId}/manageproducts/Add_Product`, {
+      state: { backgroundLocation: location },
+    });
+  };
+
   return (
     <div className="container py-2">
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h4 className="mb-0">Vehicles</h4>
-        <button className="btn btn-success" onClick={() => setShowModal(true)}>
+        <button className="btn btn-success" onClick={openAddModal}>
           + Register Vehicle
         </button>
       </div>
@@ -49,23 +82,21 @@ const ManageVehicle = () => {
                 style={{ backgroundColor: "#51ff0021" }}
               >
                 <div className="position-absolute top-0 end-0 m-2 d-flex gap-2">
-      <button
-        className="btn btn-light btn-sm shadow-sm rounded-circle"
-        title="Edit"
-        onClick={() => handleEdit(vehicle)}
-      >
-        <i className="bi bi-pencil-fill text-primary"></i>
-      </button>
-      <button
-        className="btn btn-light btn-sm shadow-sm rounded-circle"
-        title="Delete"
-        onClick={() => handleDelete(vehicle)}
-       
-      >
-        <i className="bi bi-trash-fill text-danger"></i>
-      </button>
-    </div>
-                
+                  <button
+                    className="btn btn-light btn-sm shadow-sm rounded-circle"
+                    title="Edit"
+                    onClick={() => handleEdit(vehicle)}
+                  >
+                    <i className="bi bi-pencil-fill text-primary"></i>
+                  </button>
+                  <button
+                    className="btn btn-light btn-sm shadow-sm rounded-circle"
+                    title="Delete"
+                    onClick={() => handleDelete(vehicle)}
+                  >
+                    <i className="bi bi-trash-fill text-danger"></i>
+                  </button>
+                </div>
 
                 <div className="card-body d-flex flex-column align-items-center text-center">
                   <img

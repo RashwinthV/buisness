@@ -2,14 +2,16 @@ import { useEffect, useState } from "react";
 import Image_default from "../../../Assets/Images/Default.png";
 import { useProduct } from "../../../context/ProductContext";
 import AddProductModal from "../../../components/Modal/AddProductModal";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import UniversalEditModal from "../../../components/Modal/UniversalEditModal";
 
 const ManageProduct = () => {
   const { product } = useProduct();
   const [productList, setProductList] = useState([]);
   const [showProductModal, setShowProductModal] = useState(false);
-    const navigate = useNavigate();
-    const location = useLocation();
-    const { businessId } = useParams();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { businessId } = useParams();
 
   useEffect(() => {
     if (product && Array.isArray(product)) {
@@ -17,7 +19,7 @@ const ManageProduct = () => {
     }
   }, [product]);
 
-   const openAddModal = () => {
+  const openAddModal = () => {
     navigate(`/managebusiness/${businessId}/manageproducts/Add_Product`, {
       state: { backgroundLocation: location },
     });
@@ -43,8 +45,14 @@ const ManageProduct = () => {
   };
 
   const handleDelete = (product) => {
-    if (window.confirm(`Are you sure you want to delete "${product.productName}"?`)) {
-      const updatedList = productList.filter((item) => item.productId !== product.productId);
+    if (
+      window.confirm(
+        `Are you sure you want to delete "${product.productName}"?`
+      )
+    ) {
+      const updatedList = productList.filter(
+        (item) => item.productId !== product.productId
+      );
       setProductList(updatedList);
     }
   };
@@ -54,7 +62,7 @@ const ManageProduct = () => {
         <h4 className="fw-bold">Manage Products</h4>
         <button
           className="btn btn-success"
-          onClick={() => setShowProductModal(true)}
+          onClick={openAddModal}
         >
           <i className="bi bi-plus-circle me-2"></i> Add Product
         </button>
@@ -70,24 +78,22 @@ const ManageProduct = () => {
                 className="card border-0 shadow-sm h-100 position-relative product-card hover-shadow rounded-4"
                 style={{ backgroundColor: "#51ff0021" }}
               >
- 
-
-                              <div className="position-absolute top-0 end-0 m-2 d-flex gap-2">
-               <button
-                  className="btn btn-light btn-sm shadow-sm rounded-circle"
-                  title="Edit"
-                  onClick={() => handleEdit(prod)}
-                >
-                  <i className="bi bi-pencil-fill text-primary"></i>
-                </button>
-                <button
-                  className="btn btn-light btn-sm shadow-sm rounded-circle"
-                  title="Delete"
-                  onClick={() => handleDelete(prod)}
-                >
-                  <i className="bi bi-trash-fill text-danger"></i>
-                </button>
-              </div>
+                <div className="position-absolute top-0 end-0 m-2 d-flex gap-2">
+                  <button
+                    className="btn btn-light btn-sm shadow-sm rounded-circle"
+                    title="Edit"
+                    onClick={() => handleEdit(prod)}
+                  >
+                    <i className="bi bi-pencil-fill text-primary"></i>
+                  </button>
+                  <button
+                    className="btn btn-light btn-sm shadow-sm rounded-circle"
+                    title="Delete"
+                    onClick={() => handleDelete(prod)}
+                  >
+                    <i className="bi bi-trash-fill text-danger"></i>
+                  </button>
+                </div>
                 <div className="card-body d-flex flex-column align-items-center text-center">
                   <img
                     src={prod?.image?.imageUrl || Image_default}
