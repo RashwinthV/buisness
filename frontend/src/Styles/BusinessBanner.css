@@ -1,0 +1,33 @@
+.business-banner {
+  height: 200px; /* default */
+}
+
+@media (min-width: 576px) {
+  .business-banner {
+    height: 300px; /* tablets */
+  }
+}
+
+@media (min-width: 768px) {
+  .business-banner {
+    height: 350px; /* small laptops */
+  }
+}
+
+@media (min-width: 992px) {
+  .business-banner {
+    height: 400px; /* large laptops */
+  }
+}
+
+@media (min-width: 1200px) {
+  .business-banner {
+    height: 450px; /* desktops */
+  }
+}
+
+@media (min-width: 1920px) {
+  .business-banner {
+    height: 500px; /* TVs or ultrawide */
+  }
+}

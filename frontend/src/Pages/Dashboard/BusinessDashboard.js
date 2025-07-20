@@ -1,12 +1,13 @@
 import { useState } from "react";
 
 import { useBusiness } from "../../context/BussinessContext";
-import Image_default from "../../Assets/Images/Default.png";
 import Analytics from "./Tabs/Analytics";
 import Products from "./Tabs/Product";
 import Employees from "./Tabs/Employee";
 import Vehicles from "./Tabs/Vehicle";
 import TradeParties from "./Tabs/TradeParty";
+import BusinessBanner from "../../Utils/BusinessBanner";
+
 const BusinessDashboard = () => {
   const { selectedBusinessId, businesses } = useBusiness();
   const selectedBusiness = businesses?.find(
@@ -42,7 +43,7 @@ const BusinessDashboard = () => {
   return (
     <div className="container-fluid py-2">
       <div className="card shadow-sm border-0 mb-4">
-        <div className="card-body text-center">
+        {/* <div className="card-body text-center">
           <img
             src={selectedBusiness?.logo.imageUrl || Image_default}
             alt="Business Logo"
@@ -55,7 +56,9 @@ const BusinessDashboard = () => {
           <h4 className="text-center mb-3">
             <strong>{selectedBusiness?.businessName} </strong>
           </h4>
-        </div>
+        </div> */}
+                  <BusinessBanner business={selectedBusiness} />
+
       </div>
 
       <div className="container mt-4">

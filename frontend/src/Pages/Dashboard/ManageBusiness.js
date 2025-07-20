@@ -135,7 +135,7 @@ import ManageTradeParty from "../Business/Manage/ManageTradeParty";
 import ManageVehicle from "../Business/Manage/ManageVehicle";
 import BusinessProfile from "../Business/BusinessProfile";
 import { useBusiness } from "../../context/BussinessContext";
-import Image_default from "../../Assets/Images/Default.png";
+import BusinessBanner from "../../Utils/BusinessBanner";
 const ManageBusiness = () => {
   const { selectedBusinessId, businesses } = useBusiness();
   const selectedBusiness = businesses?.find(
@@ -160,8 +160,8 @@ const ManageBusiness = () => {
     <div className="container-fluid py-2">
       {/* Business Info */}
       <div className="card shadow-sm border-0 mb-4">
-        <div className="card-body text-center">
-          <img
+        
+          {/* <img
             src={selectedBusiness.logo?.imageUrl || Image_default}
             alt="Business Logo"
             className="mb-2 img-fluid"
@@ -172,8 +172,10 @@ const ManageBusiness = () => {
           </h4>
           <small className="text-muted">
             Manage business operations using the tabs below
-          </small>
-        </div>
+          </small> */}
+          <BusinessBanner business={selectedBusiness} />
+          
+
       </div>
 
       {/* Tab Buttons */}
