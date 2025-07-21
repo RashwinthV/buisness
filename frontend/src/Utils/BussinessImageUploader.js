@@ -114,3 +114,53 @@ export const useProductImageUpload = ({
     handleImageUpload,
   };
 };
+
+
+export const userImageUpload = ({
+  userId,
+  token,
+  publicId,
+  setImageData, // ✅ You already pass this
+  baseUrl,
+}) => {
+  const handleImageUpload = async (file) => {
+    if (!file || !userId || !token || !baseUrl) return;
+
+    const formData = new FormData();
+    formData.append("image", file);
+
+    try {
+      const res = await fetch(`${baseUrl}/v3/userimage/upload/${userId}`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: formData,
+      });
+
+      const data = await res.json();
+
+      if (res.ok && data.success) {
+        const { image_url, public_id } = data;
+
+        // ✅ Corrected from setUserData to setImageData
+        setImageData({
+          imageUrl: image_url,
+          publicId: public_id,
+        });
+
+        toast.success("Image uploaded successfully!");
+      } else {
+        toast.error(data.error || "Upload failed");
+      }
+    } catch (err) {
+      console.error("Image Upload Error:", err);
+      toast.error("Error uploading image");
+    }
+  };
+
+  return {
+    handleImageUpload,
+  };
+};
+

@@ -1,6 +1,7 @@
 const { deleteImage } = require("../../image_service/controller/ProductImage");
 const businessModel = require("../models/buissnessModel");
 const ProductModel = require("../models/ProductModal");
+const mongoose = require("mongoose");
 
 exports.RegisterProduct = async (req, res) => {
   try {
@@ -90,7 +91,6 @@ exports.RegisterProduct = async (req, res) => {
 
 exports.UpdateProduct = async (req, res) => {};
 
-const mongoose = require("mongoose");
 
 exports.GetProducts = async (req, res) => {
   try {
@@ -103,15 +103,16 @@ exports.GetProducts = async (req, res) => {
     }
 
     const products = await ProductModel.find({ businessId });
-
+    const allproducts=await ProductModel.find()
     if (!products || products.length === 0) {
       return res
-        .status(404)
+        .status(400)
         .json({ message: "No products found for this business" });
     }
 return res.status(200).json({
   products,
-  totalProducts: products.length
+  totalbusinessProducts: products.length,
+  allproducts:allproducts.length
 });
   } catch (error) {
     console.error("Product fetching error:", error);

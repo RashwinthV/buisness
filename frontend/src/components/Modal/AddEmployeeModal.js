@@ -3,11 +3,32 @@ import { toast } from "react-toastify";
 import Image_default from "../../Assets/Images/Default.png";
 import moment from "moment";
 import { Modal, Button } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { userImageUpload } from "../../Utils/BussinessImageUploader";
+import { useUser } from "../../context/userContext";
+import { useBusiness } from "../../context/BussinessContext";
 
 const AddEmployeeModal = ({ show, handleClose }) => {
   const navigate = useNavigate();
   const baseUrl = process.env.REACT_APP_BACKEND_URI;
+  const { token, user } = useUser();
+  const { businesses } = useBusiness();
+  const userId = user?.id;
+  const { businessId } = useParams();
+  const selectedBusiness = businesses.find(
+    (b) => String(b.businessId) === businessId
+  );
+
+
+  const [imageData, setImageData] = useState({ imageUrl: "", publicId: "" });
+  //test ok
+  const { handleImageUpload } = userImageUpload({
+    userId,
+    token,
+    publicId: imageData.publicId,
+    setImageData,
+    baseUrl,
+  });
 
   const [formData, setFormData] = useState({
     name: "",
@@ -25,72 +46,117 @@ const AddEmployeeModal = ({ show, handleClose }) => {
     zipCode: "",
     idProof: "",
     idNumber: "",
-    photo: null,
+    photo: null, // raw file for preview
   });
 
   const handleChange = (e) => {
     const { name, value, type, files } = e.target;
-    if (type === "file") {
-      setFormData((prev) => ({ ...prev, [name]: files[0] }));
+    if (type === "file" && name === "photo") {
+      const file = files[0];
+      if (file) {
+        setFormData((prev) => ({ ...prev, photo: file }));
+        handleImageUpload(file);
+      }
     } else {
       setFormData((prev) => ({ ...prev, [name]: value }));
     }
   };
 
-  const handleSubmit = async () => {
-    const requiredFields = [
-      "name",
-      "contact",
-      "workField",
-      "dob",
-      "doj",
-      "salary",
-      "addressLine1",
-      "city",
-      "district",
-      "zipCode",
-      "idProof",
-      "idNumber",
-    ];
+const handleSubmit = async () => {
+  const requiredFields = [
+    "name",
+    "contact",
+    "workField",
+    "dob",
+    "doj",
+    "salary",
+    "addressLine1",
+    "city",
+    "district",
+    "zipCode",
+    "idProof",
+    "idNumber",
+  ];
 
-    for (const field of requiredFields) {
-      if (!formData[field]) {
-        toast.warning(`Please fill the ${field} field.`);
-        return;
-      }
-    }
-
-    if (
-      formData.workField === "driver" &&
-      formData.idProof !== "driving_license"
-    ) {
-      toast.error("For Drivers, the ID proof must be their Driving License.");
+  // Validate required fields
+  for (const field of requiredFields) {
+    if (!formData[field]) {
+      toast.warning(`Please fill the ${field} field.`);
       return;
     }
+  }
 
-    const data = new FormData();
-    Object.entries(formData).forEach(([key, value]) => {
-      if (value) data.append(key, value);
-    });
+  // Extra validation for driver
+  if (
+    formData.workField === "driver" &&
+    formData.idProof !== "driving_license"
+  ) {
+    toast.error("For Drivers, the ID proof must be their Driving License.");
+    return;
+  }
 
-    try {
-      const res = await fetch(`${baseUrl}/v1/employees/add`, {
-        method: "POST",
-        body: data,
-      });
-
-      const result = await res.json();
-      if (res.ok) {
-        toast.success("Employee added successfully!");
-        handleClose();
-        navigate("/employees");
-      } else {
-        toast.error(result.message || "Failed to add employee.");
-      }
-    } catch (err) {
-      toast.error("Server error. Try again later.");
-    }
+  // Map frontend keys to backend keys
+  const fieldMappings = {
+    dob: "dateOfBirth",
+    doj: "dateOfJoining",
+    workField: "fieldOfWork",
+    zipCode: "pincode",
   };
+
+  // Build plain JSON object
+  const data = {};
+
+  Object.entries(formData).forEach(([key, value]) => {
+    if (
+      key !== "photo" &&
+      value !== undefined &&
+      value !== null &&
+      value !== ""
+    ) {
+      const backendKey = fieldMappings[key] || key;
+      data[backendKey] = value;
+    }
+  });
+
+  // Attach image info from Cloudinary
+  if (imageData.imageUrl) {
+    data.profilepic = {
+      imageUrl: imageData.imageUrl,
+      publicId: imageData.publicId,
+    };
+  }
+
+  // Attach business ID
+  data.businessId = selectedBusiness?._id;
+
+
+
+  try {
+    const res = await fetch(
+      `${baseUrl}/v2/bussiness/employee/registeremployee/${userId}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json", // 🛠️ Required for JSON POST
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(data), // 👈 Now this is valid
+      }
+    );
+
+    const result = await res.json();
+    if (res.ok) {
+      toast.success("Employee added successfully!");
+      handleClose();
+      navigate("/employees");
+    } else {
+      toast.error(result.message || "Failed to add employee.");
+    }
+  } catch (err) {
+    toast.error("Server error. Try again later.");
+    console.error("Submission error:", err);
+  }
+};
 
   return (
     <Modal
@@ -122,7 +188,7 @@ const AddEmployeeModal = ({ show, handleClose }) => {
                   src={
                     formData.photo
                       ? URL.createObjectURL(formData.photo)
-                      : Image_default
+                      : imageData.imageUrl || Image_default
                   }
                   alt="Employee"
                   style={{ width: "100%", height: "100%", objectFit: "cover" }}
@@ -144,7 +210,7 @@ const AddEmployeeModal = ({ show, handleClose }) => {
 
           <h6 className="text-danger">Personal Details</h6>
           <div className="row gy-3">
-            {/* Personal Details */}
+            {/* Personal Fields */}
             <div className="col-md-4">
               <label>Name *</label>
               <input

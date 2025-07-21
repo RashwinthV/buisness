@@ -2,6 +2,7 @@ const express = require("express");
 const authMiddleware = require("../Middlewares/Authorize");
 const {   Getbussiness, RegisterBusiness, GetAllbussiness, UpadateBussiness } = require("../controller/bussinessController");
 const Productroute = require("./ProductRoute");
+const Employeeroute=require('./employeeRoutes')
 const router = express.Router();
 
 //get user's bussiness
@@ -13,7 +14,12 @@ router.post('/register/:id',authMiddleware,RegisterBusiness)
 
 router.post('/:id/updatebusiness/:businessId',authMiddleware,UpadateBussiness)
 
-router.use('/product',Productroute)
 
+
+
+
+//change routers
+router.use('/product',Productroute)
+router.use('/employee',Employeeroute)
 
 module.exports=router 
