@@ -21,7 +21,7 @@ const [employeeList, setemployeeList] = useState([]);
             <div className="card h-100 shadow-sm">
               <div className="card-body text-center">
                 <img
-                  src={emp.profilepic?.imageUrl}
+                  src={emp.profilepic?.imageUrl||Image_default}
                   alt={emp.name}
                   className="rounded-circle mb-3"
                   style={{

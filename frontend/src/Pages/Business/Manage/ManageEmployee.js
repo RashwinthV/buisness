@@ -47,7 +47,7 @@ const ManageEmployee = () => {
 
               <div className="card-body d-flex flex-column align-items-center text-center">
                 <img
-                  src={emp.profilepic?.imageUrl}
+                  src={emp.profilepic?.imageUrl||Image_default}
                   alt={emp.name}
                   className="rounded-circle mb-3"
                   style={{
