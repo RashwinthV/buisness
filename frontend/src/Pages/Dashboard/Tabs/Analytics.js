@@ -43,9 +43,11 @@ import React, { useEffect, useState } from "react";
 import { Row, Col, Card } from "react-bootstrap";
 import CountUp from "react-countup";
 import { useProduct } from "../../../context/ProductContext";
+import { useEmployee } from "../../../context/EmployeeContext";
 
 const Analytics = () => {
   const { product } = useProduct();
+  const {totalemployee}=useEmployee()
   const [productCount, setProductCount] = useState(0);
 
   useEffect(() => {
@@ -56,7 +58,7 @@ const Analytics = () => {
 
   const stats = [
     { title: "Total Products", count: productCount, color: "primary" },
-    { title: "Total Employees", count: 0, color: "success" },
+    { title: "Total Employees", count: totalemployee, color: "success" },
     { title: "Total Transactions", count: 0, color: "warning" },
   ];
 

@@ -97,11 +97,3 @@ exports.deleteImage = async (req, res) => {
   }
 };
 
-exports.getImages = async (req, res) => {
-  try {
-    const images = await Image.find().sort({ uploadedAt: -1 });
-    res.json(images);
-  } catch (err) {
-    res.status(500).json({ error: "Failed to fetch images" });
-  }
-};

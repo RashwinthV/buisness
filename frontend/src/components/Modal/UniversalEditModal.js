@@ -1,5 +1,6 @@
 import React from "react";
 import { Modal, Button, Form } from "react-bootstrap";
+import{FaEdit} from 'react-icons/fa'
 
 const UniversalEditModal = ({
   show,
@@ -40,28 +41,58 @@ const UniversalEditModal = ({
       <Modal.Body>
         <Form>
           {includeImage && (
-            <Form.Group className="mb-3 text-center">
-              <img
-                src={
-                  formData.imagePreview ||
-                  (typeof formData.image === "string" ? formData.image : "")
-                }
-                alt="Preview"
-                style={{
-                  width: "100px",
-                  height: "100px",
-                  borderRadius: "50%",
-                  objectFit: "cover",
-                  border: "2px solid #ccc",
-                }}
-              />
-              <Form.Control
-                type="file"
-                name="image"
-                className="mt-2"
-                onChange={handleChange}
-                accept="image/*"
-              />
+            <Form.Group
+              className="mb-3 text-center d-flex justify-content-center"
+              style={{ position: "relative", display: "inline-block" }}
+            >
+              {/* Image preview */}
+              <div style={{ position: "relative", display: "inline-block" }}>
+                <img
+                  src={
+                    formData.imagePreview ||
+                    (typeof formData.image?.imageUrl === "string"
+                      ? formData.image?.imageUrl
+                      : "")
+                  }
+                  alt="Preview"
+                  style={{
+                    width: "100px",
+                    height: "100px",
+                    borderRadius: "50%",
+                    objectFit: "contain",
+                    border: "5px solid #ccc",
+                  }}
+                />
+
+                {/* Hidden file input */}
+                <Form.Control
+                  type="file"
+                  name="image"
+                  onChange={handleChange}
+                  accept="image/*"
+                  style={{ display: "none" }}
+                  ref={(ref) => (window.imageUploadInput = ref)}
+                />
+
+                {/* Edit icon overlay */}
+                <div className="bg-secondary text-center d-flex justify-content-center"
+                  onClick={() => window.imageUploadInput?.click()}
+                  style={{
+                    position: "absolute",
+                    bottom: "70px",
+                    right: 0,
+                    backgroundColor: "#fff",
+                    borderRadius: "50%",
+                    padding: "6px",
+                    border: "1px solid #ccc",
+                    cursor: "pointer",
+                  }}
+                >
+                  <FaEdit className="text-white "/>
+                  {/* <i className="bi bi-pencil-fill text-white "></i>{" "} */}
+                  {/* Bootstrap Icons class */}
+                </div>
+              </div>
             </Form.Group>
           )}
 

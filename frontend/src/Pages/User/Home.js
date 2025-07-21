@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import CountUp from 'react-countup';
+import CountUp from "react-countup";
 import { Container, Row, Col, Card } from "react-bootstrap";
 import { Line, Bar } from "react-chartjs-2";
 import {
@@ -15,6 +15,9 @@ import {
 } from "chart.js";
 import { useContext } from "react";
 import { UserContext } from "../../context/userContext";
+import { useBusiness } from "../../context/BussinessContext";
+import { useEmployee } from "../../context/EmployeeContext";
+import { useProduct } from "../../context/ProductContext";
 ChartJS.register(
   LineElement,
   PointElement,
@@ -38,7 +41,11 @@ ChartJS.register(
 const Home = () => {
   // Sample site-wide stats
   const { user } = useContext(UserContext);
-  const users = 1200000;
+  const { businesscount } = useBusiness();
+  const { totalEmployeecount } = useEmployee();
+  const{totalproductcount}=useProduct()
+
+  // const users = 1200000;
   const businesses = [
     {
       id: 1,
@@ -52,8 +59,7 @@ const Home = () => {
     { id: 4, name: "DC", employees: 15, products: 100, transactions: 250 },
   ];
 
-  const totalBusinesses = businesses.length;
-  const totalProducts = businesses.reduce((sum, b) => sum + b.products, 0);
+  // const totalProducts = businesses.reduce((sum, b) => sum + b.products, 0);
 
   const totalSales = 1100;
   const totalPurchases = 650;
@@ -154,38 +160,74 @@ const Home = () => {
         </Col>
       </Row> */}
 
-<Row className="gx-3 gy-3">
-  <Col xs={12} sm={6} lg={4}>
-    <Card className="text-center shadow-sm h-100">
-      <Card.Body>
-        <Card.Title>Total Users</Card.Title>
-        <h4 className="text-primary">
-          <CountUp start={0} end={users} duration={1.5} separator="," />
-        </h4>
-      </Card.Body>
-    </Card>
-  </Col>
-  <Col xs={12} sm={6} lg={4}>
-    <Card className="text-center shadow-sm h-100">
-      <Card.Body>
-        <Card.Title>Total Businesses</Card.Title>
-        <h4 className="text-success">
-          <CountUp start={0} end={totalBusinesses} duration={1.5} separator="," />
-        </h4>
-      </Card.Body>
-    </Card>
-  </Col>
-  <Col xs={12} sm={12} lg={4}>
-    <Card className="text-center shadow-sm h-100">
-      <Card.Body>
-        <Card.Title>Total Products</Card.Title>
-        <h4 className="text-warning">
-          <CountUp start={0} end={totalProducts} duration={1.5} separator="," />
-        </h4>
-      </Card.Body>
-    </Card>
-  </Col>
-</Row>
+      <Row className="gx-3 gy-3">
+        <Col xs={12} sm={6} lg={4}>
+          <Card className="text-center shadow-sm h-100">
+            <Card.Body>
+              <Card.Title>Total Users</Card.Title>
+              <h4 className="text-primary">
+                {typeof totalEmployeecount === "number" ? (
+                  <CountUp
+                    start={0}
+                    end={totalEmployeecount}
+                    duration={1.5}
+                    separator=","
+                  />
+                ) : (
+                  <span>
+                    <div
+                      className="spinner-border text-primary"
+                      role="status"
+                      style={{ width: "1.5rem", height: "1.5rem" }}
+                    ></div>
+                  </span>
+                )}
+              </h4>
+            </Card.Body>
+          </Card>
+        </Col>
+        <Col xs={12} sm={6} lg={4}>
+          <Card className="text-center shadow-sm h-100">
+            <Card.Body>
+              <Card.Title>Total Businesses</Card.Title>
+              <h4 className="text-success">
+                <CountUp
+                  start={0}
+                  end={businesscount}
+                  duration={1.5}
+                  separator=","
+                />
+              </h4>
+            </Card.Body>
+          </Card>
+        </Col>
+        <Col xs={12} sm={12} lg={4}>
+          <Card className="text-center shadow-sm h-100">
+            <Card.Body>
+              <Card.Title>Total Products</Card.Title>
+              <h4 className="text-warning">
+                 {typeof totalproductcount === "number" ? (
+                  <CountUp
+                    start={0}
+                    end={totalproductcount}
+                    duration={1.5}
+                    separator=","
+                  />
+                ) : (
+                  <span>
+                    <div
+                      className="spinner-border text-warning"
+                      role="status"
+                      style={{ width: "1.5rem", height: "1.5rem" }}
+                    ></div>
+                  </span>
+                )}
+
+              </h4>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
       {/* Charts Section */}
       <Row className="gx-3 gy-4 mt-4">
         <Col xs={12} md={6}>

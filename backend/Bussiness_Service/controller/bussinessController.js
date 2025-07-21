@@ -2,6 +2,8 @@ const mongoose = require("mongoose");
 const bussinessModel = require("../models/buissnessModel");
 const userModel = require("../models/userModel");
 const ProductModal = require("../models/ProductModal");
+const vechileModel = require("../models/vechileModel");
+const EmployeeModal = require("../models/EmployeeModal");
 
 exports.Getbussiness = async (req, res) => {
   try {
@@ -129,7 +131,7 @@ exports.GetAllbussiness = async (req, res) => {
   try {
     const allbusinesses = await bussinessModel.find().populate({
       path: "ownedBy",
-      select: "firstName profilepic", // only these fields from User
+      select: "firstName profilepic",
     });
 
     if (allbusinesses.length === 0) {
@@ -137,19 +139,24 @@ exports.GetAllbussiness = async (req, res) => {
     }
 
     // For each business, add the totalProductCount field
-    const businessesWithProductCount = await Promise.all(
+    const businessesWithCounts = await Promise.all(
       allbusinesses.map(async (business) => {
-        const totalProducts = await ProductModal.countDocuments({
-          businessId: business._id,
-        });
+        const [totalProducts, totalVehicle, totalemloyee] = await Promise.all([
+          ProductModal.countDocuments({ businessId: business._id }),
+          vechileModel.countDocuments({ businessId: business._id }),
+          EmployeeModal.countDocuments({ businessId: business._id }),
+        ]);
+
         return {
           ...business._doc,
           totalProducts,
+          totalVehicle,
+          totalemloyee,
         };
       })
     );
 
-    return res.status(200).json(businessesWithProductCount);
+    return res.status(200).json(businessesWithCounts);
   } catch (error) {
     console.error("Business fetch error:", error.message);
     return res
@@ -171,25 +178,21 @@ exports.UpadateBussiness = async (req, res) => {
         .json({ success: false, message: "Business not found" });
     }
     if (String(business.ownedBy) !== String(userId)) {
-      return res
-        .status(403)
-        .json({
-          success: false,
-          message: "Not authorized to update this business",
-        });
+      return res.status(403).json({
+        success: false,
+        message: "Not authorized to update this business",
+      });
     }
 
     Object.assign(business, updateData);
 
     await business.save();
 
-    return res
-      .status(200)
-      .json({
-        success: true,
-        message: "Business updated successfully",
-        business,
-      });
+    return res.status(200).json({
+      success: true,
+      message: "Business updated successfully",
+      business,
+    });
   } catch (err) {
     console.error("Business update error:", err.message);
     return res.status(500).json({ success: false, message: "Server error" });

@@ -28,6 +28,8 @@ const AllBusinesses = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredBusinesses, setFilteredBusinesses] = useState([]);
   const { allbusinesses } = useBusiness();
+
+  
   const navigate=useNavigate()
 
   useEffect(() => {

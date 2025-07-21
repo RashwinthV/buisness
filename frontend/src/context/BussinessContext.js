@@ -67,7 +67,7 @@ export const BusinessProvider = ({ children }) => {
           setBusinesses(data || []);
         } else {
           toast.error(data?.message || "Failed to fetch businesses");
-          <Navigate to="/businessregister"/>
+          <Navigate to="/businessregister" />;
         }
       } catch (error) {
         toast.error("Error fetching businesses");
@@ -99,8 +99,7 @@ export const BusinessProvider = ({ children }) => {
       }
     };
 
-    
-    allbusinesses()
+    allbusinesses();
     fetchBusinesses();
   }, [user, baseUrl, token]);
 
@@ -132,6 +131,10 @@ export const BusinessProvider = ({ children }) => {
       localStorage.setItem("AccountId", selectedBusinessId);
     }
   }, [selectedBusinessId]);
+  const businesscount = allbusinesses.length;
+  console.log(allbusinesses);
+  
+
   return (
     <BusinessContext.Provider
       value={{
@@ -140,6 +143,7 @@ export const BusinessProvider = ({ children }) => {
         setBusinesses,
         selectedBusinessId,
         setSelectedBusinessId,
+        businesscount,
       }}
     >
       {children}

@@ -1,42 +1,52 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image_default from "../../../Assets/Images/Default.png";
 import AddVehicleModal from "../../../components/Modal/AddVehicleModal";
 import UniversalEditModal from "../../../components/Modal/UniversalEditModal"; // ✅ Import missing
 import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useVehicle } from "../../../context/vehicleContext";
 
 const ManageVehicle = () => {
   const [showModal, setShowModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false); // ✅ Define state
-  const [editData, setEditData] = useState(null);             // ✅ Define state
-   const navigate = useNavigate();
+  const [editData, setEditData] = useState(null); // ✅ Define state
+  const navigate = useNavigate();
   const location = useLocation();
   const { businessId } = useParams();
+  const { vehicle } = useVehicle();
 
-  const vehicleList = [
-    {
-      id: "VEH001",
-      name: "Eiecher Truck",
-      type: "Goods Transport",
-      registrationNumber: "TN 38 AA 1234",
-      image: Image_default,
-    },
-    {
-      id: "VEH002",
-      name: "Hyundai Creta",
-      type: "Office",
-      registrationNumber: "TN 66 BB 5678",
-      image: Image_default,
-    },
-    {
-      id: "VEH003",
-      name: "Force Traveller",
-      type: "Staff Transport",
-      registrationNumber: "TN 07 CC 9999",
-      image: Image_default,
-    },
-  ];
+  // const vehicleList = [
+  //   {
+  //     id: "VEH001",
+  //     name: "Eiecher Truck",
+  //     type: "Goods Transport",
+  //     registrationNumber: "TN 38 AA 1234",
+  //     image: Image_default,
+  //   },
+  //   {
+  //     id: "VEH002",
+  //     name: "Hyundai Creta",
+  //     type: "Office",
+  //     registrationNumber: "TN 66 BB 5678",
+  //     image: Image_default,
+  //   },
+  //   {
+  //     id: "VEH003",
+  //     name: "Force Traveller",
+  //     type: "Staff Transport",
+  //     registrationNumber: "TN 07 CC 9999",
+  //     image: Image_default,
+  //   },
+  // ];
 
   // ✅ Handle Edit
+
+  const [vehicleList, setvehicleList] = useState([]);
+  useEffect(() => {
+    if (vehicle && Array.isArray(vehicle)) {
+      setvehicleList(vehicle);
+    }
+  }, [setvehicleList, vehicle]);
+
   const handleEdit = (vehicle) => {
     setEditData(vehicle);
     setShowEditModal(true);
@@ -56,17 +66,17 @@ const ManageVehicle = () => {
     }
   };
 
-    const openAddModal = () => {
-    navigate(`/managebusiness/${businessId}/manageproducts/Add_Product`, {
+  const openAddModal = () => {
+    navigate(`/managebusiness/${businessId}/managevehicles/Add_Vechile`, {
       state: { backgroundLocation: location },
     });
   };
 
   return (
     <div className="container py-2">
-      <div className="d-flex justify-content-between align-items-center mb-3">
-        <h4 className="mb-0">Vehicles</h4>
-        <button className="btn btn-success" onClick={openAddModal}>
+      <div className="d-flex justify-content-between align-items-center mb-3 p-1 ">
+        <h4 className="mb-0 me-4">Vehicles</h4>
+        <button className="btn btn-success " onClick={openAddModal}>
           + Register Vehicle
         </button>
       </div>
@@ -100,13 +110,13 @@ const ManageVehicle = () => {
 
                 <div className="card-body d-flex flex-column align-items-center text-center">
                   <img
-                    src={vehicle.image}
+                    src={vehicle.image?.imageUrl || Image_default}
                     alt={vehicle.name}
                     className="mb-3"
                     style={{
                       width: "100px",
                       height: "100px",
-                      objectFit: "cover",
+                      objectFit: "contain",
                       borderRadius: "15px",
                       border: "2px solid #eee",
                     }}
@@ -118,13 +128,16 @@ const ManageVehicle = () => {
                     </span>
                   </p>
                   <p className="small text-muted mb-2">
-                    Vehicle ID: <span className="text-dark">{vehicle.id}</span>
+                    Vehicle ID:{" "}
+                    <span className="text-dark">{vehicle.vehicleId}</span>
                   </p>
 
                   <div className="w-100 border-top pt-2">
                     <p className="mb-2">
                       <strong>Reg. Number:</strong>{" "}
-                      <span className="text-muted">{vehicle.registrationNumber}</span>
+                      <span className="text-muted">
+                        {vehicle.registrationNumber}
+                      </span>
                     </p>
                   </div>
                 </div>
@@ -135,7 +148,10 @@ const ManageVehicle = () => {
       )}
 
       {/* Add Modal */}
-      <AddVehicleModal show={showModal} handleClose={() => setShowModal(false)} />
+      <AddVehicleModal
+        show={showModal}
+        handleClose={() => setShowModal(false)}
+      />
 
       {/* Edit Modal */}
       <UniversalEditModal
@@ -148,8 +164,11 @@ const ManageVehicle = () => {
         includeImage={true}
         fields={[
           { label: "Vehicle Name", name: "name" },
-          { label: "Vehicle ID", name: "id", readonly: true },
-          { label: "Vehicle Type", name: "type" },
+          { label: "Model", name: "model", readonly: true },
+          { label: "Brand Name", name: "brand" },
+          { label: "Owner", name: "registeredOwnerName" },
+          { label: "RTO Details", name: "rtoDetails" },
+
           { label: "Registration Number", name: "registrationNumber" },
         ]}
       />

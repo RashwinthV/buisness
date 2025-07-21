@@ -52,7 +52,7 @@ export const useBusinessImageUpload = ({
   //           body: JSON.stringify({ public_id: publicId }),
   //         });
   //         console.log("image deleted in image  unload");
-          
+
   //       } catch (err) {
   //         console.warn("Image cleanup failed:", err.message);
   //       }
@@ -71,8 +71,6 @@ export const useBusinessImageUpload = ({
   };
 };
 
-
-
 export const useProductImageUpload = ({
   userId,
   token,
@@ -88,13 +86,16 @@ export const useProductImageUpload = ({
     imageFormData.append("image", file);
 
     try {
-      const res = await fetch(`${baseUrl}/v3/bussinessimage/product/upload/${userId}/${bussinessId}`, {
-        method: "POST",
-        body: imageFormData,
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await fetch(
+        `${baseUrl}/v3/bussinessimage/product/upload/${userId}/${bussinessId}`,
+        {
+          method: "POST",
+          body: imageFormData,
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
 
-      const result = await res.json();      
+      const result = await res.json();
 
       if (result.success && result.imageUrl) {
         toast.success("Logo uploaded!");
@@ -114,7 +115,6 @@ export const useProductImageUpload = ({
     handleImageUpload,
   };
 };
-
 
 export const userImageUpload = ({
   userId,
@@ -164,3 +164,54 @@ export const userImageUpload = ({
   };
 };
 
+export const VechileImageUpload = ({
+  userId,
+  token,
+  publicId,
+  setImageData, // ✅ You already pass this
+  baseUrl,
+}) => {
+  const handleImageUpload = async (file) => {
+    if (!file || !userId || !token || !baseUrl) return;
+
+    const formData = new FormData();
+    formData.append("image", file);
+
+    try {
+      const res = await fetch(
+        `${baseUrl}/v3/bussinessimage/vechile/upload/${userId}`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: formData,
+        }
+      );
+
+      const data = await res.json();
+      console.log(data);
+
+      if (res.ok && data.success) {
+        const { imageUrl, public_id } = data;
+
+        // ✅ Corrected from setUserData to setImageData
+        setImageData({
+          imageUrl, // ✅ correct key
+          publicId: public_id, // ✅ camelCase mapping
+        });
+
+        toast.success("Image uploaded successfully!");
+      } else {
+        toast.error(data.error || "Upload failed");
+      }
+    } catch (err) {
+      console.error("Image Upload Error:", err);
+      toast.error("Error uploading image");
+    }
+  };
+
+  return {
+    handleImageUpload,
+  };
+};

@@ -1,12 +1,16 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { toast } from "react-toastify";
-import { Modal, Button } from "react-bootstrap";
+import { Modal, Button, Spinner } from "react-bootstrap";
 import Image_default from "../../Assets/Images/Default.png";
 import moment from "moment";
+import { VechileImageUpload } from "../../Utils/BussinessImageUploader";
+import { useUser } from "../../context/userContext";
+import { useBusiness } from "../../context/BussinessContext";
+import { useParams } from "react-router-dom";
 
 const AddVehicleModal = ({ show, handleClose }) => {
   const [formData, setFormData] = useState({
-    image: null,
+    image: { imageUrl: "", publicId: "" },
     name: "",
     model: "",
     brand: "",
@@ -18,17 +22,46 @@ const AddVehicleModal = ({ show, handleClose }) => {
     insuranceValidTill: moment().format("YYYY-MM-DD"),
     fcValidTill: moment().format("YYYY-MM-DD"),
   });
+  const { user, token } = useUser();
+  const { businesses } = useBusiness();
+  const { businessId } = useParams();
+  const SelectedBusiness = businesses.find(
+    (b) => String(b.businessId) === businessId
+  );
+  const selectedBusinessId = SelectedBusiness?._id;
+  const userId = user?.id;
+  const baseUrl = process.env.REACT_APP_BACKEND_URI;
+
+  const [imageUploading, setImageUploading] = useState(false);
+
+  const { handleImageUpload } = VechileImageUpload({
+    userId,
+    token,
+    publicId: formData.image.publicId,
+    setImageData: (img) =>
+      setFormData((prev) => ({
+        ...prev,
+        image: img, // ✅ imageUrl and publicId directly
+      })),
+    baseUrl,
+  });
 
   const handleChange = (e) => {
     const { name, value, type, files } = e.target;
     if (type === "file") {
-      setFormData((prev) => ({ ...prev, [name]: files[0] }));
+      const file = files[0];
+      if (!file) return;
+
+      setImageUploading(true);
+      handleImageUpload(file)
+        .catch(() => toast.error("Image upload failed"))
+        .finally(() => setImageUploading(false));
     } else {
       setFormData((prev) => ({ ...prev, [name]: value }));
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const requiredFields = [
       "name",
       "model",
@@ -47,8 +80,29 @@ const AddVehicleModal = ({ show, handleClose }) => {
       }
     }
 
-    toast.success("Vehicle registered successfully!");
-    handleClose();
+    try {
+      const response = await fetch(
+        `${baseUrl}/v2/bussiness/vechile/${userId}/registervechile/${selectedBusinessId}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ ...formData, businessId: selectedBusinessId }),
+        }
+      );
+if (!response.ok) {
+  const errorData = await response.json();
+  toast.error(errorData.message || "Vehicle registration failed");
+  return;
+}
+
+      toast.success("Vehicle registered successfully!");
+      handleClose();
+    } catch (err) {
+      toast.error(err.message || "Error occurred");
+    }
   };
 
   return (
@@ -69,18 +123,28 @@ const AddVehicleModal = ({ show, handleClose }) => {
             }}
           >
             <img
-              src={
-                formData.image
-                  ? URL.createObjectURL(formData.image)
-                  : Image_default
-              }
+              src={formData.image?.imageUrl || Image_default}
               alt="Vehicle"
-              style={{ width: "100%", height: "100%", objectFit: "cover" }}
+              style={{ width: "100%", height: "100%", objectFit: "contain" }}
               onError={(e) =>
                 (e.target.src = "https://via.placeholder.com/120?text=Vehicle")
               }
             />
           </div>
+          {imageUploading && (
+            <div
+              style={{
+                position: "absolute",
+                inset: 0,
+                background: "rgba(255,255,255,0.7)",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Spinner animation="border" variant="primary" size="md" />
+            </div>
+          )}
           <div className="mt-2">
             <input
               type="file"

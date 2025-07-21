@@ -3,13 +3,13 @@ import { useUser } from "./userContext";
 import { toast } from "react-toastify";
 import { useBusiness } from "./BussinessContext";
 
-const EmployeeContext = createContext();
-export const useEmployee = () => useContext(EmployeeContext);
+const VehicleContext = createContext();
+export const useVehicle = () => useContext(VehicleContext);
 
-export const EmployeeProvider = ({ children }) => {
-  const [Employee, setEmployee] = useState([]);
-  const [totalemployee, settotalemployee] = useState();
-  const [totalEmployeecount, settotalEmployeecount] = useState();
+export const VehicleProvider = ({ children }) => {
+  const [vehicle, setvehicle] = useState([]);
+  const [totalvehicle, settotalvehicle] = useState();
+  const [totalvehiclecount, settotalvehiclecount] = useState();
   const { businesses, selectedBusinessId } = useBusiness();
   const bussinessId = businesses.find(
     (b) => String(b.businessId) === String(selectedBusinessId)
@@ -20,12 +20,12 @@ export const EmployeeProvider = ({ children }) => {
   const token = localStorage.getItem("token");
 
   useEffect(() => {
-    const fetchEmployee = async () => {
+    const fetchVechile = async () => {
       if (!user?.id || !bussinessId?._id) return;
 
       try {
         const response = await fetch(
-          `${baseUrl}/v2/bussiness/employee/${user.id}/getemployee/${bussinessId?._id}`,
+          `${baseUrl}/v2/bussiness/vechile/${user.id}/getvehicle/${bussinessId?._id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -35,9 +35,9 @@ export const EmployeeProvider = ({ children }) => {
         const data = await response.json();
 
         if (response.ok) {
-          setEmployee(data.employee || []);
-          settotalemployee(data.totalbussinessEmployee);
-          settotalEmployeecount(data.allEmployee);
+          setvehicle(data.vechiles || []);
+          settotalvehicle(data.businessvehiclecount);
+          settotalvehiclecount(data.allvechilecount);
         }
       } catch (error) {
         toast.error("Error fetching products");
@@ -45,18 +45,18 @@ export const EmployeeProvider = ({ children }) => {
       }
     };
 
-    fetchEmployee();
+    fetchVechile();
   }, [user?.id, baseUrl, bussinessId, token]);
 
   return (
-    <EmployeeContext.Provider
+    <VehicleContext.Provider
       value={{
-        Employee,
-        totalemployee,
-        totalEmployeecount,
+        vehicle,
+        totalvehicle,
+        totalvehiclecount,
       }}
     >
       {children}
-    </EmployeeContext.Provider>
+    </VehicleContext.Provider>
   );
 };

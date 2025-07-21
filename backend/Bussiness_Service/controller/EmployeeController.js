@@ -1,5 +1,6 @@
 const Employee = require("../models/EmployeeModal");
 const mongoose = require("mongoose");
+const userModel = require("../models/userModel");
 
 // Helper function to calculate age from date of birth
 function calculateAge(dob) {
@@ -16,7 +17,6 @@ function calculateAge(dob) {
 
   return age;
 }
-
 
 exports.RegisterEmployee = async (req, res) => {
   try {
@@ -44,23 +44,21 @@ exports.RegisterEmployee = async (req, res) => {
     const publicId = profilepic?.publicId;
     const age = calculateAge(dateOfBirth);
 
-const latestEmployee = await Employee.findOne().sort({ createdAt: -1 });
-if(!latestEmployee){
-  return res.status(400)
-}
+    const latestEmployee = await Employee.findOne().sort({ createdAt: -1 });
+    if (!latestEmployee) {
+      return res.status(400);
+    }
 
+    let nextId = 1;
 
-let nextId = 1;
+    if (latestEmployee?.employeeId) {
+      const match = latestEmployee.employeeId.match(/EMP(\d+)/);
+      if (match) {
+        nextId = parseInt(match[1], 10) + 1;
+      }
+    }
 
-if (latestEmployee?.employeeId) {
-  const match = latestEmployee.employeeId.match(/EMP(\d+)/);
-  if (match) {
-    nextId = parseInt(match[1], 10) + 1;
-  }
-}
-
-const formattedId = `EMP${nextId.toString().padStart(3, "0")}`;
-
+    const formattedId = `EMP${nextId.toString().padStart(3, "0")}`;
 
     const newEmployee = new Employee({
       employeeId: formattedId,
@@ -69,7 +67,7 @@ const formattedId = `EMP${nextId.toString().padStart(3, "0")}`;
       fieldOfWork,
       dateOfBirth,
       dateOfJoining,
-      Age:age,
+      Age: age,
       salary,
       addressLine1,
       addressLine2,
@@ -95,7 +93,6 @@ const formattedId = `EMP${nextId.toString().padStart(3, "0")}`;
   }
 };
 
-
 exports.GetEmployee = async (req, res) => {
   try {
     const { businessId } = req.params;
@@ -108,6 +105,8 @@ exports.GetEmployee = async (req, res) => {
 
     const employee = await Employee.find({ businessId });
     const allemployee = await Employee.find();
+    const allusers = await userModel.find();
+    const count= allemployee.length + allusers.length
 
     if (!Employee || Employee.length === 0) {
       return res
@@ -117,7 +116,7 @@ exports.GetEmployee = async (req, res) => {
     return res.status(200).json({
       employee,
       totalbussinessEmployee: employee.length,
-      allEmployee: allemployee.length,
+      allEmployee:count,
     });
   } catch (error) {
     console.error("Product fetching error:", error);

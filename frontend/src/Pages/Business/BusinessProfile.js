@@ -516,7 +516,7 @@
 
 // export default BusinessProfile;
 
-import  { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Container, Row, Col, Button, Card } from "react-bootstrap";
 import Image_default from "../../Assets/Images/Default.png";
 import {
@@ -528,6 +528,7 @@ import { useUser } from "../../context/userContext.js";
 import { toast } from "react-toastify";
 import { useBusinessImageUpload } from "../../Utils/BussinessImageUploader.js";
 import { useParams, useLocation } from "react-router-dom";
+import { FaTruck, FaCoins } from "react-icons/fa";
 
 const cleanValue = (val) => (val === "Unknown" ? "" : val);
 
@@ -543,7 +544,6 @@ const BusinessProfile = () => {
   const [verifyType, setVerifyType] = useState("");
   const [verifyValue, setVerifyValue] = useState("");
   const submittedRef = useRef(false);
-
 
   const [business, setBusiness] = useState({
     _id: "",
@@ -567,6 +567,8 @@ const BusinessProfile = () => {
     numberVerified: false,
     gstnumber: "",
     totalProducts: 0,
+    totalemloyee: 0,
+    totalVehicle: 0,
     ownedBy: "",
     SocialLinks: {
       facebook: "",
@@ -615,6 +617,9 @@ const BusinessProfile = () => {
         gstnumber: cleanValue(selected.gstnumber),
         ownedBy: selected.ownedBy || "",
         totalProducts: selected.totalProducts,
+        totalemloyee: selected.totalemloyee,
+        totalVehicle: selected.totalVehicle,
+
         SocialLinks: {
           facebook: selected?.SocialLinks?.facebook || "",
           instagram: selected?.SocialLinks?.instagram || "",
@@ -732,7 +737,8 @@ const BusinessProfile = () => {
         [name]: value,
       },
     }));
-  };  
+  };
+  console.log(business);
 
   return (
     <Container className="py-4">
@@ -963,81 +969,81 @@ const BusinessProfile = () => {
           </Card>
 
           {/* total counts */}
-         <Card className="shadow-sm border-0 mb-4">
-  <Card.Body>
-    <Row>
-      <Col xs={12} md={6} className="mb-3">
-        <Card className="shadow-sm bg-secondary bg-opacity-25 border-0 h-100">
-          <Card.Body>
-            <h6 className="fw-bold fs-4 d-flex align-items-center gap-2 text-primary">
-              <i className="bi bi-box-seam-fill"></i> Products
-            </h6>
-            <hr />
-            {business.totalProducts !== undefined && (
-              <div className="d-flex align-items-center gap-2">
-                <i className="bi bi-collection-fill text-success fs-5"></i>
-                <h6 className="mb-0">Total Products:</h6>
-                <span className="badge bg-danger ms-2">
-                  {business.totalProducts}
-                </span>
-              </div>
-            )}
-          </Card.Body>
-        </Card>
-      </Col>
+          <Card className="shadow-sm border-0 mb-4">
+            <Card.Body>
+              <Row>
+                <Col xs={12} md={6} className="mb-3">
+                  <Card className="shadow-sm bg-secondary bg-opacity-25 border-0 h-100">
+                    <Card.Body>
+                      <h6 className="fw-bold fs-4 d-flex align-items-center gap-2 text-primary">
+                        <i className="bi bi-box-seam-fill"></i> Products
+                      </h6>
+                      <hr />
+                      {business.totalProducts !== undefined && (
+                        <div className="d-flex align-items-center gap-2">
+                          <i className="bi bi-collection-fill text-dark fs-5"></i>
+                          <h6 className="mb-0">Total Products:</h6>
+                          <span className="badge bg-dark ms-2">
+                            {business.totalProducts}
+                          </span>
+                        </div>
+                      )}
+                    </Card.Body>
+                  </Card>
+                </Col>
 
-      <Col xs={12} md={6} className="mb-3">
-        <Card className="shadow-sm bg-secondary bg-opacity-25 border-0 h-100">
-          <Card.Body>
-            <h6 className="fw-bold fs-4 d-flex align-items-center gap-2 text-primary">
-              <i className="bi bi-person-badge-fill"></i> Employees
-
-            </h6>
-            <hr />
-            <div className="d-flex align-items-center gap-2">
-              <i className="bi bi-graph-up-arrow text-info fs-5"></i>
-              <h6 className="mb-0">Some Value:</h6>
-              <span className="badge bg-info ms-2">42</span>
-            </div>
-          </Card.Body>
-        </Card>
-      </Col>
-       <Col xs={12} md={6} className="mb-3">
-        <Card className="shadow-sm bg-secondary bg-opacity-25 border-0 h-100">
-          <Card.Body>
-            <h6 className="fw-bold fs-4 d-flex align-items-center gap-2 text-primary">
-              <i className="bi bi-people-fill"></i>  Traders
-
-            </h6>
-            <hr />
-            <div className="d-flex align-items-center gap-2">
-              <i className="bi bi-graph-up-arrow text-info fs-5"></i>
-              <h6 className="mb-0">Some Value:</h6>
-              <span className="badge bg-info ms-2">42</span>
-            </div>
-          </Card.Body>
-        </Card>
-      </Col>
-       <Col xs={12} md={6} className="mb-3">
-        <Card className="shadow-sm bg-secondary bg-opacity-25 border-0 h-100">
-          <Card.Body>
-            <h6 className="fw-bold fs-4 d-flex align-items-center gap-2 text-primary">
-             <i className="bi bi-truck-front-fill"></i>  Vechiles
-
-            </h6>
-            <hr />
-            <div className="d-flex align-items-center gap-2">
-              <i className="bi bi-graph-up-arrow text-info fs-5"></i>
-              <h6 className="mb-0">Some Value:</h6>
-              <span className="badge bg-info ms-2">42</span>
-            </div>
-          </Card.Body>
-        </Card>
-      </Col>
-    </Row>
-  </Card.Body>
-</Card>
-
+                <Col xs={12} md={6} className="mb-3">
+                  <Card className="shadow-sm bg-secondary bg-opacity-25 border-0 h-100">
+                    <Card.Body>
+                      <h6 className="fw-bold fs-4 d-flex align-items-center gap-2 text-primary">
+                        <i className="bi bi-person-badge-fill"></i> Employees
+                      </h6>
+                      <hr />
+                      <div className="d-flex align-items-center gap-2">
+                        <i className="bi-person-workspace  fs-5"></i>
+                        <h6 className="mb-0">Total Employees:</h6>
+                        <span className="badge bg-dark ms-2">
+                          {business.totalemloyee}
+                        </span>
+                      </div>
+                    </Card.Body>
+                  </Card>
+                </Col>
+                <Col xs={12} md={6} className="mb-3">
+                  <Card className="shadow-sm bg-secondary bg-opacity-25 border-0 h-100">
+                    <Card.Body>
+                      <h6 className="fw-bold fs-4 d-flex align-items-center gap-2 text-primary">
+                        <i className="bi bi-people-fill"></i> Traders
+                      </h6>
+                      <hr />
+                      <div className="d-flex align-items-center gap-2">
+                        <FaCoins className="fs-3" />
+                        <h6 className="mb-0">Total Traders:</h6>
+                        <span className="badge bg-dark ms-2">42</span>
+                      </div>
+                    </Card.Body>
+                  </Card>
+                </Col>
+                <Col xs={12} md={6} className="mb-3">
+                  <Card className="shadow-sm bg-secondary bg-opacity-25 border-0 h-100">
+                    <Card.Body>
+                      <h6 className="fw-bold fs-4 d-flex align-items-center gap-2 text-primary">
+                        Vechiles
+                      </h6>
+                      <hr />
+                      <div className="d-flex align-items-center gap-2">
+                        <FaTruck className="fs-3" />
+                        <h6 className="mb-0">Total Vehicles :</h6>
+                        <span className="badge bg-dark ms-2">
+                          {business.totalVehicle}
+                        </span>
+                      </div>
+                    </Card.Body>
+                  </Card>
+                </Col>
+              </Row>
+            </Card.Body>
+          </Card>
         </>
       ) : (
         <>
@@ -1126,7 +1132,7 @@ const BusinessProfile = () => {
                 </Col>
 
                 {/* Business Name & Email */}
-                <Col md={6} >
+                <Col md={6}>
                   <label>Name</label>
                   {editMode ? (
                     <input
