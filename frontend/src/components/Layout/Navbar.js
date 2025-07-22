@@ -45,7 +45,7 @@ function NavbarComponent() {
                     </Link>
                   </li>
                   <li>
-                    <Link to="/settings" className="dropdown-item">
+                    <Link to="/settings/general" className="dropdown-item">
                       Settings
                     </Link>
                   </li>

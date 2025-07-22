@@ -125,14 +125,12 @@ export const BusinessProvider = ({ children }) => {
     }
   }, [businesses]);
 
-  // ✅ Keep localStorage in sync with selection
   useEffect(() => {
     if (selectedBusinessId) {
       localStorage.setItem("AccountId", selectedBusinessId);
     }
   }, [selectedBusinessId]);
   const businesscount = allbusinesses.length;
-  console.log(allbusinesses);
   
 
   return (

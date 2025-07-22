@@ -11,7 +11,7 @@ const upload = multer({ dest: 'uploads/' });
 
 // Routes
 router.post('/upload/:id',authMiddleware, upload.single('image'), uploadImage);
-router.post('/deleteimage/:id',authMiddleware,deleteImage)
+router.post('/:id/deleteimage/:businessId',authMiddleware,deleteImage)
 router.use('/product',productrouter)
 router.use('/vechile',VechileRoute)
 

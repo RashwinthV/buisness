@@ -210,68 +210,70 @@
 // export default ManageBusiness;
 
 
-
-import { Outlet, useNavigate, useParams } from "react-router-dom";
+import { Outlet, useNavigate, useParams, useLocation } from "react-router-dom";
 import { useBusiness } from "../../context/BussinessContext";
 import BusinessBanner from "../../Utils/BusinessBanner";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const ManageBusiness = () => {
   const { businessId } = useParams();
-  const { businesses } = useBusiness();
-  const[activeTab,setActiveTab]=useState()
-  const selectedBusiness = businesses?.find(b => String(b.businessId) === businessId);
+  const location = useLocation();
   const navigate = useNavigate();
-  
+  const { businesses } = useBusiness();
+
+  const selectedBusiness = businesses?.find(
+    (b) => String(b.businessId) === businessId
+  );
 
   const basePath = `/managebusiness/${businessId}`;
+
   const tabs = [
-    { label: "Manage Business", path: "" },
+    { label: "Manage Business", path: "businessProfile" },
     { label: "Manage Products", path: "manageproducts" },
     { label: "Manage Employees", path: "manageemployees" },
     { label: "Manage Vehicles", path: "managevehicles" },
     { label: "Manage Trade Parties", path: "managetradeparties" },
   ];
 
+  const [activeTab, setActiveTab] = useState("Manage Business");
+
+  // ✅ Update active tab on location change
+  useEffect(() => {
+    const currentPath = location.pathname;
+
+    const matchedTab = tabs.find((tab) =>
+      currentPath.endsWith(`/${tab.path}`) || currentPath === `${basePath}`
+    );
+
+    if (matchedTab) {
+      setActiveTab(matchedTab.label);
+    }
+  }, [location.pathname,basePath,tabs]);
+
   return (
     <div className="container-fluid py-2">
-      {/* Business Info */}
       <div className="card shadow-sm border-0 mb-4">
-        
-          {/* <img
-            src={selectedBusiness.logo?.imageUrl || Image_default}
-            alt="Business Logo"
-            className="mb-2 img-fluid"
-            style={{ maxHeight: "80px", objectFit: "contain" }}
-          />
-          <h4 className="text-center mb-2 fw-bold text-primary">
-            {selectedBusiness?.businessName}
-          </h4>
-          <small className="text-muted">
-            Manage business operations using the tabs below
-          </small> */}
-          <BusinessBanner business={selectedBusiness} />
-          
-
+        <BusinessBanner business={selectedBusiness} />
       </div>
-      <div className="container mt-3">
-        <div className="d-flex flex-wrap gap-2 mb-3 ">
-          {tabs.map((tab) => (
-  <button
-    key={tab.label}
-    className={`btn ${
-      activeTab === tab.label ? "btn-primary" : "btn-outline-primary"
-    }`}
-    onClick={() => {
-      setActiveTab(tab.label);
-      navigate(`${basePath}/${tab.path}`);
-    }}
-  >
-    {tab.label}
-  </button>
-))}
 
+      <div className="container mt-3">
+        <div className="d-flex flex-wrap gap-2 mb-3">
+          {tabs.map((tab) => (
+            <button
+              key={tab.label}
+              className={`btn ${
+                activeTab === tab.label ? "btn-primary" : "btn-outline-primary"
+              }`}
+              onClick={() => {
+                setActiveTab(tab.label);
+                navigate(`${basePath}/${tab.path}`);
+              }}
+            >
+              {tab.label}
+            </button>
+          ))}
         </div>
+
         <div className="bg-white shadow p-3 rounded">
           <Outlet />
         </div>

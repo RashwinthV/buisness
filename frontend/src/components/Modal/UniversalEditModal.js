@@ -1,6 +1,6 @@
 import React from "react";
 import { Modal, Button, Form } from "react-bootstrap";
-import{FaEdit} from 'react-icons/fa'
+import { FaEdit } from "react-icons/fa";
 
 const UniversalEditModal = ({
   show,
@@ -75,7 +75,8 @@ const UniversalEditModal = ({
                 />
 
                 {/* Edit icon overlay */}
-                <div className="bg-secondary text-center d-flex justify-content-center"
+                <div
+                  className="bg-secondary text-center d-flex justify-content-center"
                   onClick={() => window.imageUploadInput?.click()}
                   style={{
                     position: "absolute",
@@ -88,7 +89,7 @@ const UniversalEditModal = ({
                     cursor: "pointer",
                   }}
                 >
-                  <FaEdit className="text-white "/>
+                  <FaEdit className="text-white " />
                   {/* <i className="bi bi-pencil-fill text-white "></i>{" "} */}
                   {/* Bootstrap Icons class */}
                 </div>

@@ -31,7 +31,7 @@ exports.uploadImage = async (req, res) => {
 
 exports.deleteImage = async (req, res) => {
   try {
-    const { public_id } = req.body;
+    const { public_id, newpublicId, newImageUrl } = req.body;
 
     if (!public_id) {
       return res
@@ -51,8 +51,8 @@ exports.deleteImage = async (req, res) => {
       { "logo.publicId": public_id },
       {
         $set: {
-          "logo.imageUrl": "",
-          "logo.publicId": "",
+          "logo.imageUrl": newImageUrl || "",
+          "logo.publicId": newpublicId || "",
         },
       },
       { new: true }

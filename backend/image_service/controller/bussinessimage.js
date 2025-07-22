@@ -11,17 +11,13 @@ cloudinary.config({
 
 exports.uploadImage = async (req, res) => {
   const inputPath = path.join(__dirname, "..", req.file.path);
-
   try {
-    // Upload original image directly to Cloudinary
     const result = await cloudinary.uploader.upload(inputPath, {
       folder: "business-logo",
       use_filename: true,
       unique_filename: false,
       overwrite: true,
     });
-
-    // Delete local uploaded file after upload
     try {
       await fs.unlink(inputPath);
     } catch (err) {
@@ -43,7 +39,7 @@ exports.uploadImage = async (req, res) => {
 
 exports.deleteImage = async (req, res) => {
   try {
-    const { public_id } = req.body;
+    const { public_id, newpublicId, newImageUrl } = req.body;
 
     if (!public_id) {
       return res.status(400).json({
@@ -52,7 +48,7 @@ exports.deleteImage = async (req, res) => {
       });
     }
 
-    // Step 1: Delete image from Cloudinary
+    // Step 1: Delete old image from Cloudinary
     const result = await cloudinary.uploader.destroy(public_id);
 
     if (result.result !== "ok") {
@@ -62,13 +58,13 @@ exports.deleteImage = async (req, res) => {
       });
     }
 
-    // Step 2: Remove logo from business document
+    // Step 2: Update DB with new logo (instead of clearing)
     const updatedBusiness = await buissnessModel.findOneAndUpdate(
       { "logo.publicId": public_id },
       {
         $set: {
-          "logo.imageUrl": "",
-          "logo.publicId": "",
+          "logo.imageUrl": newImageUrl || "",
+          "logo.publicId": newpublicId || "",
         },
       },
       { new: true }
@@ -78,22 +74,21 @@ exports.deleteImage = async (req, res) => {
       return res.status(404).json({
         success: true,
         message:
-          "Image deleted from Cloudinary, but no matching business logo found.",
+          "Old image deleted, but no matching business logo found for update.",
       });
     }
 
     return res.status(200).json({
       success: true,
       message:
-        "Image deleted from Cloudinary and business logo cleared successfully",
+        "Old image deleted and new logo updated successfully in the database.",
       updatedBusiness,
     });
   } catch (error) {
     console.error("Delete error:", error.message);
     return res.status(500).json({
       success: false,
-      message: "Failed to delete image",
+      message: "Failed to delete and update image",
     });
   }
 };
-

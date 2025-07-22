@@ -9,6 +9,7 @@ export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(defaultUser);
     const token = localStorage.getItem("token");
     const navigate=useNavigate()
+  const baseUrl = process.env.REACT_APP_BACKEND_URI;
 
 
   useEffect(() => {
@@ -38,7 +39,7 @@ export const UserProvider = ({ children }) => {
 
 
   return (
-    <UserContext.Provider value={{ user,isAuthenticated, login, logout, isloggedin,token }}>
+    <UserContext.Provider value={{ user,isAuthenticated, login, logout,baseUrl, isloggedin,token }}>
       {children}
     </UserContext.Provider>
   );

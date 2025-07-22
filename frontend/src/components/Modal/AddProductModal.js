@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Modal, Button } from "react-bootstrap";
 import { toast } from "react-toastify";
 import Image_default from "../../Assets/Images/Default.png";
-import { useProductImageUpload } from "../../Utils/BussinessImageUploader";
+import { useProductImageUpload } from "../../Utils/Image/ImageUploader";
 import { useUser } from "../../context/userContext";
 import { useBusiness } from "../../context/BussinessContext";
 

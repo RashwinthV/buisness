@@ -15,7 +15,7 @@ exports.Getbussiness = async (req, res) => {
 
     const userId = new mongoose.Types.ObjectId(id);
 
-    const businesses = await bussinessModel.find({ ownedBy: userId });
+    const businesses = await bussinessModel.find({ ownedBy: userId,businessStatus:"Active" });
 
     if (!businesses || businesses.length === 0) {
       return res.status(404);
@@ -129,7 +129,7 @@ exports.RegisterBusiness = async (req, res) => {
 
 exports.GetAllbussiness = async (req, res) => {
   try {
-    const allbusinesses = await bussinessModel.find().populate({
+    const allbusinesses = await bussinessModel.find({businessStatus:"Active"}).populate({
       path: "ownedBy",
       select: "firstName profilepic",
     });

@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import { Modal, Button, Spinner } from "react-bootstrap";
 import Image_default from "../../Assets/Images/Default.png";
 import moment from "moment";
-import { VechileImageUpload } from "../../Utils/BussinessImageUploader";
+import { VechileImageUpload } from "../../Utils/Image/ImageUploader";
 import { useUser } from "../../context/userContext";
 import { useBusiness } from "../../context/BussinessContext";
 import { useParams } from "react-router-dom";

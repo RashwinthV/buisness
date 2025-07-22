@@ -128,7 +128,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
 
           <li className="nav-item mb-3">
             <Link
-              to={`/managebusiness/${selectedBusinessId}`}
+              to={`/managebusiness/${selectedBusinessId}/businessProfile`}
               className="nav-link text-white d-flex align-items-center"
             >
               <i className="bi bi-gear me-2 fs-5"></i>

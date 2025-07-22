@@ -4,7 +4,7 @@ import Image_default from "../../Assets/Images/Default.png";
 import moment from "moment";
 import { Modal, Button } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
-import { userImageUpload } from "../../Utils/BussinessImageUploader";
+import { userImageUpload } from "../../Utils/Image/ImageUploader";
 import { useUser } from "../../context/userContext";
 import { useBusiness } from "../../context/BussinessContext";
 
