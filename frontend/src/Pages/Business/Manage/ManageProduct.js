@@ -37,6 +37,8 @@ const ManageProduct = () => {
   };
 
   const handleSaveEdit = () => {
+    console.log("yes");
+    
     const updatedList = productList.map((item) =>
       item.productId === editData.productId ? editData : item
     );

@@ -4,6 +4,7 @@ const {   Getbussiness, RegisterBusiness, GetAllbussiness, UpadateBussiness } = 
 const Productroute = require("./ProductRoute");
 const Employeeroute=require('./employeeRoutes');
 const Vechileroute = require("./vechileRoute");
+const Traderroute = require("./TraderRoute");
 const router = express.Router();
 
 //get user's bussiness
@@ -23,5 +24,7 @@ router.post('/:id/updatebusiness/:businessId',authMiddleware,UpadateBussiness)
 router.use('/product',Productroute)
 router.use('/employee',Employeeroute)
 router.use('/vechile',Vechileroute)
+router.use('/trader',Traderroute)
+
 
 module.exports=router 

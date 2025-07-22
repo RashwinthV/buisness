@@ -14,7 +14,7 @@ const BusinessBanner = ({ business }) => {
   const { user, token, baseUrl } = useUser();
 
   useEffect(() => {
-    if (business && location.pathname === `/managebusiness/${businessId}`) {
+    if (business && location.pathname === `/managebusiness/${businessId}/businessProfile`) {
       setEditLogo(true);
     }
   }, [business, location.pathname, businessId]);

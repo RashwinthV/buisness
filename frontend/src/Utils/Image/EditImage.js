@@ -8,8 +8,8 @@ export const BusinessImageEditor = ({
   baseUrl,
   businessId,
 }) => {
-  const [ setNewImageUrl] = useState(null);
-  const [ setpublicId] = useState(null);
+  // const [NewImageUrl, setNewImageUrl] = useState(null);
+  // const [ NewpublicId,setpublicId] = useState(null);
 
   const handleImageUpload = async (file) => {
     if (!file || !userId || !token || !baseUrl) return;
@@ -30,8 +30,8 @@ export const BusinessImageEditor = ({
         const uploadedImageUrl = result.imageUrl;
         const uploadedPublicId = result.public_id;
 
-        setNewImageUrl(uploadedImageUrl);
-        setpublicId(uploadedPublicId);
+        // setNewImageUrl(uploadedImageUrl);
+        // setpublicId(uploadedPublicId);
         const response = await fetch(
           `${baseUrl}/v3/bussinessimage/${userId}/deleteimage/${businessId}`,
           {

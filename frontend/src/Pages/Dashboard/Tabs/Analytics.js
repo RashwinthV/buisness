@@ -6,24 +6,39 @@ import { useEmployee } from "../../../context/EmployeeContext";
 
 const Analytics = () => {
   const { product } = useProduct();
-  const {totalemployee}=useEmployee()
+  const { totalemployee } = useEmployee();
   const [productCount, setProductCount] = useState(0);
 
   useEffect(() => {
-    if (product && Array.isArray(product)) {
+    if (Array.isArray(product)) {
       setProductCount(product.length);
     }
   }, [product]);
 
+  const safeNumber = (value) =>
+    typeof value === "number" && !isNaN(value) ? value : 0;
+
   const stats = [
-    { title: "Total Products", count: productCount, color: "primary" },
-    { title: "Total Employees", count: totalemployee, color: "success" },
-    { title: "Total Transactions", count: 0, color: "warning" },
+    {
+      title: "Total Products",
+      count: safeNumber(productCount),
+      color: "primary",
+    },
+    {
+      title: "Total Employees",
+      count: safeNumber(totalemployee),
+      color: "success",
+    },
+    {
+      title: "Total Transactions",
+      count: 0,
+      color: "warning",
+    },
   ];
 
   return (
     <div className="container py-2">
-      <h4 className="mb-4 text-center">Businesss Analytics</h4>
+      <h4 className="mb-4 text-center">Business Analytics</h4>
 
       <Row className="gx-3 gy-3">
         {stats.map((item, idx) => (

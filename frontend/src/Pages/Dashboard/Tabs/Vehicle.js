@@ -1,30 +1,20 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image_default from "../../../Assets/Images/Default.png"; // Replace with your path
+import { useVehicle } from "../../../context/vehicleContext";
 
 const Vehicle = () => {
-  const vehicleList = [
-    {
-      id: "VEH001",
-      name: "Honda Activa",
-      registrationNumber: "TN 38 AA 1234",
-      image: Image_default,
-    },
-    {
-      id: "VEH002",
-      name: "Hyundai Creta",
-      registrationNumber: "TN 66 BB 5678",
-      image: Image_default,
-    },
-    {
-      id: "VEH003",
-      name: "Bajaj Pulsar",
-      registrationNumber: "KL 07 CC 9999",
-      image: Image_default,
-    },
-  ];
+  const { vehicle } = useVehicle();
+  const [vehicleList,setvehicleList]=useState([])
+  useEffect(()=>{
+    if(vehicle&& Array.isArray(vehicle)){
+      setvehicleList(vehicle)
+    }
+  })
+ 
+  
 
   return (
-    <div className="container py-2">
+    <div className="container py-2 ">
       <h4 className="mb-4 text-center">Vehicles</h4>
       <div className="row g-4">
         {vehicleList.map((vehicle, index) => (
@@ -32,13 +22,13 @@ const Vehicle = () => {
             <div className="card h-100 shadow-sm">
               <div className="card-body text-center">
                 <img
-                  src={vehicle.image}
+                  src={vehicle?.image?.imageUrl}
                   alt={vehicle.name}
                   className="mb-3"
                   style={{
                     width: "100px",
                     height: "100px",
-                    objectFit: "cover",
+                    objectFit: "contain",
                     borderRadius: "10px",
                   }}
                 />
