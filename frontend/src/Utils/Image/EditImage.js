@@ -1,4 +1,4 @@
-import { useState } from "react";
+// import { useState } from "react";
 import { toast } from "react-toastify";
 
 export const BusinessImageEditor = ({
@@ -16,7 +16,7 @@ export const BusinessImageEditor = ({
 
     const imageFormData = new FormData();
     imageFormData.append("image", file);
-
+ 
     try {
       const res = await fetch(`${baseUrl}/v3/bussinessimage/upload/${userId}`, {
         method: "POST",
