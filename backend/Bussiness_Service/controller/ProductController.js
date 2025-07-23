@@ -89,7 +89,6 @@ exports.RegisterProduct = async (req, res) => {
   }
 };
 
-exports.UpdateProduct = async (req, res) => {};
 
 
 exports.GetProducts = async (req, res) => {
@@ -117,5 +116,50 @@ return res.status(200).json({
   } catch (error) {
     console.error("Product fetching error:", error);
     return res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+
+
+exports.UpdateProduct = async (req, res) => {
+  try {
+    const productId = req.params.productId;
+    const { productName, rate, productType } = req.body;
+
+    if (!productName || !productType) {
+      return res.status(400).json({
+        success: false,
+        message: "Product name and type are required.",
+      });
+    }
+
+    const updatedProduct = await ProductModel.findByIdAndUpdate(
+     { _id:productId},
+      {
+        productName,
+        rate,
+        productType,
+      },
+      { new: true }
+    );
+
+    if (!updatedProduct) {
+      return res.status(404).json({
+        success: false,
+        message: "Product not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Product updated successfully",
+      data: updatedProduct,
+    });
+  } catch (err) {
+    console.error("Error updating product details:", err);
+    res.status(500).json({
+      success: false,
+      message: "Failed to update product",
+    });
   }
 };

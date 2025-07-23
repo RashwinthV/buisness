@@ -1,7 +1,6 @@
 import React from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import { FaEdit } from "react-icons/fa";
-
 const UniversalEditModal = ({
   show,
   handleClose,
@@ -11,6 +10,7 @@ const UniversalEditModal = ({
   fields,
   title = "Edit Data",
   includeImage = true,
+  onImageChange, // ⬅️ receive prop
 }) => {
   const handleChange = (e) => {
     const { name, value, type, files } = e.target;
@@ -18,9 +18,14 @@ const UniversalEditModal = ({
     if (type === "file") {
       const file = files[0];
       if (file) {
+        // Call image upload logic from parent
+        if (onImageChange) {
+          onImageChange(file);
+        }
+
+        // Optional: Update preview immediately
         setFormData((prev) => ({
           ...prev,
-          image: file,
           imagePreview: URL.createObjectURL(file),
         }));
       }
@@ -45,7 +50,6 @@ const UniversalEditModal = ({
               className="mb-3 text-center d-flex justify-content-center"
               style={{ position: "relative", display: "inline-block" }}
             >
-              {/* Image preview */}
               <div style={{ position: "relative", display: "inline-block" }}>
                 <img
                   src={
@@ -64,7 +68,6 @@ const UniversalEditModal = ({
                   }}
                 />
 
-                {/* Hidden file input */}
                 <Form.Control
                   type="file"
                   name="image"
@@ -74,7 +77,6 @@ const UniversalEditModal = ({
                   ref={(ref) => (window.imageUploadInput = ref)}
                 />
 
-                {/* Edit icon overlay */}
                 <div
                   className="bg-secondary text-center d-flex justify-content-center"
                   onClick={() => window.imageUploadInput?.click()}
@@ -90,24 +92,25 @@ const UniversalEditModal = ({
                   }}
                 >
                   <FaEdit className="text-white " />
-                  {/* <i className="bi bi-pencil-fill text-white "></i>{" "} */}
-                  {/* Bootstrap Icons class */}
                 </div>
               </div>
             </Form.Group>
           )}
 
           {fields.map((field) => (
-            <Form.Group key={field.name} className="mb-3">
-              <Form.Label>{field.label}</Form.Label>
-              <Form.Control
+            <div key={field.name} className="mb-3">
+              <label className="form-label">{field.label}</label>
+              <input
                 type={field.type || "text"}
                 name={field.name}
                 value={formData[field.name] || ""}
-                onChange={handleChange}
-                placeholder={field.placeholder || ""}
+                onChange={(e) =>
+                  setFormData({ ...formData, [field.name]: e.target.value })
+                }
+                className="form-control"
+                disabled={field.disabled || false} // <- 🔑 DISABLE if flag is true
               />
-            </Form.Group>
+            </div>
           ))}
         </Form>
       </Modal.Body>

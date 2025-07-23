@@ -14,7 +14,7 @@ Productroute.post(
 );
 
 Productroute.put(
-  "/:id/udateProduct/:businessId",
+  "/:id/updateProduct/:businessId/:productId",
   authMiddleware,
   UpdateProduct
 );

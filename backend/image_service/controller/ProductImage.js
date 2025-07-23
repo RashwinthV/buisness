@@ -4,6 +4,12 @@ const cloudinaryService = require("../Helpers/cloudinaryService");
 const ProductModal = require("../Models/ProductModal");
 
 exports.uploadImage = async (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({
+      success: false,
+      message: "No file uploaded",
+    });
+  }
   const filePath = path.join(__dirname, "..", req.file.path);
 
   try {
@@ -28,7 +34,6 @@ exports.uploadImage = async (req, res) => {
   }
 };
 
-
 exports.deleteImage = async (req, res) => {
   try {
     const { public_id, newpublicId, newImageUrl } = req.body;
@@ -48,11 +53,11 @@ exports.deleteImage = async (req, res) => {
       });
     }
     const updatedProduct = await ProductModal.findOneAndUpdate(
-      { "logo.publicId": public_id },
+      { "image.publicId": public_id },
       {
         $set: {
-          "logo.imageUrl": newImageUrl || "",
-          "logo.publicId": newpublicId || "",
+          "image.imageUrl": newImageUrl || "",
+          "image.publicId": newpublicId || "",
         },
       },
       { new: true }

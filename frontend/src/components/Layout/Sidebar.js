@@ -44,7 +44,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
           <i className="bi bi-speedometer2 fs-4"></i>
         </Link>
         <Link
-          to={`/managebusiness/${selectedBusinessId}`}
+          to={`/managebusiness/${selectedBusinessId}/businessProfile`}
           className="text-white text-center"
         >
           <i className="bi bi-gear fs-4"></i>

@@ -4,6 +4,9 @@ import { useProduct } from "../../../context/ProductContext";
 import AddProductModal from "../../../components/Modal/AddProductModal";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import UniversalEditModal from "../../../components/Modal/UniversalEditModal";
+import { useUser } from "../../../context/userContext";
+import { toast } from "react-toastify";
+import { ProductImageEditor } from "../../../Utils/Image/EditImage";
 
 const ManageProduct = () => {
   const { product } = useProduct();
@@ -12,6 +15,8 @@ const ManageProduct = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { businessId } = useParams();
+
+  const { user, token, baseUrl } = useUser();
 
   useEffect(() => {
     if (product && Array.isArray(product)) {
@@ -28,6 +33,34 @@ const ManageProduct = () => {
   const [showEditModal, setShowEditModal] = useState(false);
   const [editData, setEditData] = useState(null);
 
+  const { handleImageUpload } = ProductImageEditor({
+    userId: user?.id,
+    token,
+    publicId: editData?.image?.publicId,
+    baseUrl,
+    businessId,
+  });
+
+  const handleImageChange = async (file) => {
+    try {
+      const result = await handleImageUpload(file);
+      console.log(result);
+
+      if (result) {
+        setEditData((prev) => ({
+          ...prev,
+          image: {
+            imageUrl: result.imageUrl,
+            publicId: result.publicId,
+          },
+          imagePreview: result.imageUrl,
+        }));
+      }
+    } catch (err) {
+      toast.error(err.message || "Image upload failed");
+    }
+  };
+
   const handleEdit = (product) => {
     setEditData({
       ...product,
@@ -36,14 +69,42 @@ const ManageProduct = () => {
     setShowEditModal(true);
   };
 
-  const handleSaveEdit = () => {
-    console.log("yes");
-    
-    const updatedList = productList.map((item) =>
-      item.productId === editData.productId ? editData : item
-    );
-    setProductList(updatedList);
-    setShowEditModal(false);
+  const handleSaveEdit = async () => {
+    try {
+      const payload = {
+        productName: editData.productName,
+        rate: editData.rate,
+        productType: editData.productType,
+      };
+
+      const res = await fetch(
+        `${baseUrl}/v2/bussiness/product/${user?.id}/updateProduct/${businessId}/${editData._id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(payload),
+        }
+      );
+
+      const result = await res.json();
+
+      if (res.ok) {
+        toast.success("Product updated successfully!");
+        const updatedList = productList.map((item) =>
+          item.productId === editData.productId ? editData : item
+        );
+        setProductList(updatedList);
+        setShowEditModal(false);
+      } else {
+        toast.error(result.message || "Update failed.");
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error("Server error during update.");
+    }
   };
 
   const handleDelete = (product) => {
@@ -58,14 +119,12 @@ const ManageProduct = () => {
       setProductList(updatedList);
     }
   };
+
   return (
     <div className="container py-3">
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h4 className="fw-bold">Manage Products</h4>
-        <button
-          className="btn btn-success"
-          onClick={openAddModal}
-        >
+        <button className="btn btn-success" onClick={openAddModal}>
           <i className="bi bi-plus-circle me-2"></i> Add Product
         </button>
       </div>
@@ -145,6 +204,7 @@ const ManageProduct = () => {
         handleClose={() => setShowProductModal(false)}
       />
 
+      {/* Edit Modal */}
       <UniversalEditModal
         show={showEditModal}
         handleClose={() => setShowEditModal(false)}
@@ -154,15 +214,21 @@ const ManageProduct = () => {
         title="Edit Product"
         fields={[
           { label: "Product Name", name: "productName" },
-          { label: "Product ID", name: "productId", type: "text" },
+          {
+            label: "Product ID",
+            name: "productId",
+            type: "text",
+            disabled: true,
+          }, // <- DISABLED
           { label: "Rate", name: "rate", type: "number" },
           {
             label: "Product Type",
             name: "productType",
-            type: "text", // or use a dropdown if needed
+            type: "text",
           },
         ]}
         includeImage={true}
+        onImageChange={handleImageChange}
       />
     </div>
   );

@@ -5,6 +5,7 @@ import Image_default from "../../Assets/Images/Default.png";
 import { useProductImageUpload } from "../../Utils/Image/ImageUploader";
 import { useUser } from "../../context/userContext";
 import { useBusiness } from "../../context/BussinessContext";
+import { FaEdit } from "react-icons/fa";
 
 const AddProductModal = ({ show, handleClose }) => {
   const baseUrl = process.env.REACT_APP_BACKEND_URI;
@@ -34,7 +35,7 @@ const AddProductModal = ({ show, handleClose }) => {
     userId,
     token,
     publicId: imageData.publicId,
-    bussinessId: businessId,
+    bussinessId: selectedbusiness?._id,
     setImageData,
     baseUrl,
   });
@@ -103,41 +104,82 @@ const AddProductModal = ({ show, handleClose }) => {
     }
   };
 
-  
-
   return (
     <Modal show={show} onHide={handleClose} size="lg" centered scrollable>
       <Modal.Header closeButton>
         <Modal.Title>Add New Product</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <div className="text-center mb-4">
+        <div className="text-center mb-4" style={{ position: "relative" }}>
+          {/* Image Container */}
           <div
             style={{
               width: "120px",
               height: "120px",
-              borderRadius: "12px",
+              borderRadius: "20%",
               overflow: "hidden",
               margin: "0 auto",
-              border: "2px solid #ddd",
+              border: "5px solid #ccc",
+              position: "relative",
+              cursor: "pointer",
             }}
+            onClick={() => window.imageUploadInput?.click()}
           >
+            {/* Preview Image */}
             <img
-              src={imagePreview || Image_default}
+              src={
+                imagePreview ||
+                (typeof formData?.image?.imageUrl === "string"
+                  ? formData.image.imageUrl
+                  : Image_default)
+              }
               alt="Product"
-              style={{ width: "100%", height: "100%", objectFit: "cover" }}
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "contain",
+              }}
               onError={(e) => (e.target.src = Image_default)}
+            />
+
+            {/* Hidden File Input */}
+            <input
+              type="file"
+              name="image"
+              accept="image/*"
+              onChange={(e) => {
+                const file = e.target.files[0];
+                if (file) {
+                  setImagePreview(URL.createObjectURL(file)); // update preview
+                  handleImageUpload(file); // pass actual file object
+                }
+              }}
+              style={{ display: "none" }}
+              ref={(ref) => (window.imageUploadInput = ref)}
             />
           </div>
 
-          <div className="mt-2">
-            <input
-              type="file"
-              accept="image/*"
-              className="form-control form-control-sm w-50 mx-auto"
-              name="image"
-              onChange={handleChange}
-            />
+          {/* FaEdit Icon Positioned Overlapping the Bottom-Right */}
+          <div
+            onClick={() => window.imageUploadInput?.click()}
+            style={{
+              position: "absolute",
+              bottom: "100px",
+              left: "51%",
+              transform: "translateX(30px)",
+              backgroundColor: "#ccc",
+              borderRadius: "50%",
+              padding: "6px",
+              border: "1px solid #ccc",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              boxShadow: "0 2px 4px rgba(0,0,0,0.2)",
+              zIndex: 10,
+            }}
+          >
+            <FaEdit style={{ color: "#333", fontSize: "14px" }} />
           </div>
         </div>
 
