@@ -40,7 +40,7 @@ exports.RegisterUser = async (req, res) => {
     const newUser = new userModel({
       firstName,
       lastName,
-      age,
+      dob,
       gender,
       email,
       phoneNo,

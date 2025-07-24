@@ -22,8 +22,8 @@ const UserSchema = new mongoose.Schema(
       enum: ["Owner", "Manager", "user"],
       default: "user",
     },
-    age: {
-      type: Number,
+    dob: {
+      type: Date,
       min: 0,
     },
     gender: {

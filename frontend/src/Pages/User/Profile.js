@@ -101,6 +101,17 @@ const Profile = () => {
     setPasswordsMatch(confirmPass === "" || newPass === confirmPass);
   }, [passwords.newPass, passwords.confirmNew]);
 
+const calculateAge = (dob) => {
+  if (!dob) return "-";
+  const birthDate = new Date(dob);
+  const today = new Date();
+  let age = today.getFullYear() - birthDate.getFullYear();
+  const m = today.getMonth() - birthDate.getMonth();
+  if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+    age--;
+  }
+  return age;
+};
 
   //test ok 
 
@@ -350,7 +361,6 @@ const Profile = () => {
               ["lastName", "Last Name"],
               ["email", "Email"],
               ["phoneNo", "Mobile Number"],
-              ["age", "Age"],
               ["gender", "Gender"],
             ].map(([field, label]) => (
               <Col md={4} key={field}>
@@ -361,6 +371,7 @@ const Profile = () => {
                       handleVerifyClick("email", userData.email)
                     )}
                 </label>
+                
                 {editMode ? (
                   <input
                     className="form-control"
@@ -372,9 +383,29 @@ const Profile = () => {
                 ) : (
                   <div>{userData?.[field] || "-"}</div>
                 )}
+
               </Col>
+              
             ))}
 
+            <Col md={4}>
+  <label>Date of Birth</label>
+  {editMode ? (
+    <input
+      className="form-control"
+      name="dob"
+      type="date"
+      value={userData?.dob || ""}
+      onChange={handleInputChange}
+    />
+  ) : (
+    <div>{userData?.dob ? new Date(userData.dob).toLocaleDateString() : "-"}</div>
+  )}
+</Col>
+                <Col md={4}>
+  <label>Age</label>
+  <div>{calculateAge(userData?.dob)}</div>
+</Col>
             {[
               ["line1", "Address Line 1"],
               ["line2", "Address Line 2"],

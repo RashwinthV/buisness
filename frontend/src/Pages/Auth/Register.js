@@ -11,7 +11,7 @@ function Register() {
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
-    age: "",
+    dob: "",
     gender: "",
     email: "",
     phoneNo: "",
@@ -223,12 +223,12 @@ function Register() {
                 {/* Age and gender */}
                 <div className="row">
                   <div className="mb-3 col-md-4">
-                    <label className="form-label">Age</label>
+                    <label className="form-label">Date Of Birth</label>
                     <input
-                      type="number"
+                      type="date"
                       className="form-control"
                       name="age"
-                      value={formData.age}
+                      value={formData.dob}
                       onChange={handleChange}
                     />
                   </div>
