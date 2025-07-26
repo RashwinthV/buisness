@@ -8,7 +8,7 @@ import {
 import { useBusiness } from "../../context/BussinessContext.js";
 import { useUser } from "../../context/userContext.js";
 import { toast } from "react-toastify";
-// import { useBusinessImageUpload } from "../../Utils/Image/ImageUploader.js";
+import { useBusinessImageUpload } from "../../Utils/Image/ImageUploader.js";
 import { useParams, useLocation } from "react-router-dom";
 import { FaTruck, FaCoins } from "react-icons/fa";
 
@@ -118,47 +118,47 @@ const BusinessProfile = () => {
     setBusiness((prev) => ({ ...prev, [name]: value }));
   };
 
-  // const handleLogoDelete = async () => {
-  //   try {
-  //     const res = await fetch(
-  //       `${baseUrl}/v3/bussinessimage/deleteimage/${user?.id}`,
-  //       {
-  //         method: "POST",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //         body: JSON.stringify({ public_id: business.logo?.publicId }),
-  //       }
-  //     );
+  const handleLogoDelete = async () => {
+    try {
+      const res = await fetch(
+        `${baseUrl}/v3/bussinessimage/deleteimage/${user?.id}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ public_id: business.logo?.publicId }),
+        }
+      );
 
-  //     if (res.ok) {
-  //       toast.success("Image deleted!");
-  //       setBusiness((prev) => ({ ...prev, logo: null }));
-  //     } else {
-  //       const result = await res.json();
-  //       toast.error(result.message || "Failed to delete image.");
-  //     }
-  //   } catch (error) {
-  //     console.error("Delete error:", error);
-  //     toast.error("Error deleting image.");
-  //   }
-  // };
+      if (res.ok) {
+        toast.success("Image deleted!");
+        setBusiness((prev) => ({ ...prev, logo: null }));
+      } else {
+        const result = await res.json();
+        toast.error(result.message || "Failed to delete image.");
+      }
+    } catch (error) {
+      console.error("Delete error:", error);
+      toast.error("Error deleting image.");
+    }
+  };
 
-  // const { handleImageUpload } = useBusinessImageUpload({
-  //   userId: user?.id,
-  //   token,
-  //   publicId: business.logo?.publicId,
-  //   submittedRef,
-  //   setImageData: (logo) => setBusiness((prev) => ({ ...prev, logo })),
-  //   baseUrl,
-  // });
+  const { handleImageUpload } = useBusinessImageUpload({
+    userId: user?.id,
+    token,
+    publicId: business.logo?.publicId,
+    submittedRef,
+    setImageData: (logo) => setBusiness((prev) => ({ ...prev, logo })),
+    baseUrl,
+  });
 
-  // const handleLogoChange = (e) => {
-  //   const file = e.target.files[0];
-  //   if (!file) return;
-  //   handleImageUpload(file);
-  // };
+  const handleLogoChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    handleImageUpload(file);
+  };
 
 
   const handleOpenVerify = (type, value) => {
@@ -575,7 +575,7 @@ const BusinessProfile = () => {
                   onError={(e) => (e.target.src = Image_default)}
                 />
               </div>
-              {/* {editMode && (
+              {editMode && (
                 <div className="mt-2">
                   <button
                     className="btn btn-sm btn-outline-danger mb-3"
@@ -590,7 +590,7 @@ const BusinessProfile = () => {
                     onChange={handleLogoChange}
                   />
                 </div>
-              )} */}
+              )}
             </Col>
 
             <Col xs={12} md={8}>
