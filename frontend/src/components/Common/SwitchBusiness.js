@@ -69,9 +69,10 @@ const SwitchBusiness = ({ show, onClose, onSwitch, onAddBusiness }) => {
                     src={biz.logo?.imageUrl || Image_default}
                     alt="Business Logo"
                     className="rounded-circle"
-                    width="32"
-                    height="32"
-                    style={{ objectFit: "fill" }}
+                    width="40"
+                    height="40"
+                    
+                    style={{ objectFit: 'contain' , backgroundColor :'white' }}
                   />
                   <span>{biz?.businessName}</span>
                 </div>
