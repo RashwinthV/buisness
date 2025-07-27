@@ -256,10 +256,24 @@ const TransactionEntry = ({ show, onHide, type, products, employees, onSubmit })
 
           <button className="btn btn-sm btn-outline-secondary mt-2" onClick={addProduct}>+ Add Product</button>
 
-          <div className="mt-3 d-flex justify-content-end align-items-center">
-            <label className="me-2 mb-0">Discount %</label>
-            <input type="number" className="form-control" style={{ width: "100px" }} value={form.commonDiscount} onChange={(e) => setForm({ ...form, commonDiscount: Number(e.target.value) })} />
-          </div>
+         <div className="mt-3 d-flex justify-content-end align-items-center">
+  <label className="me-2 mb-0">Discount %</label>
+  <input
+    type="number"
+    className="form-control"
+    style={{ width: "100px" }}
+    value={form.commonDiscount}
+    onChange={(e) => {
+      const value = Number(e.target.value);
+      if (value <= 100) {
+        setForm({ ...form, commonDiscount: value });
+      }
+    }}
+    max={100}
+    min={0} // optional: prevents negative values
+  />
+</div>
+
         </div>
 
         {/* Totals */}
