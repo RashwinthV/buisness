@@ -8,7 +8,7 @@ const upload = multer({ dest: 'uploads/' });
 
 
 VechileRoute.post('/upload/:id',authMiddleware, upload.single('image'), uploadImage)
-VechileRoute.post('/deleteimage/:id',authMiddleware,deleteImage)
+VechileRoute.post('/deleteVechileimage/:id',authMiddleware,deleteImage)
 
 
 module.exports = VechileRoute;

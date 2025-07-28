@@ -1,44 +1,22 @@
 import React, { useEffect, useState } from "react";
 import Image_default from "../../../Assets/Images/Default.png";
 import AddVehicleModal from "../../../components/Modal/AddVehicleModal";
-import UniversalEditModal from "../../../components/Modal/UniversalEditModal"; // ✅ Import missing
+import UniversalEditModal from "../../../components/Modal/UniversalEditModal";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useVehicle } from "../../../context/vehicleContext";
+import { useUser } from "../../../context/userContext";
+import { VechileImageEditor } from "../../../Utils/Image/EditImage";
 
 const ManageVehicle = () => {
   const [showModal, setShowModal] = useState(false);
-  const [showEditModal, setShowEditModal] = useState(false); // ✅ Define state
-  const [editData, setEditData] = useState(null); // ✅ Define state
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editData, setEditData] = useState(null);
+  const { user, token, baseUrl } = useUser();
+
   const navigate = useNavigate();
   const location = useLocation();
   const { businessId } = useParams();
   const { vehicle } = useVehicle();
-
-  // const vehicleList = [
-  //   {
-  //     id: "VEH001",
-  //     name: "Eiecher Truck",
-  //     type: "Goods Transport",
-  //     registrationNumber: "TN 38 AA 1234",
-  //     image: Image_default,
-  //   },
-  //   {
-  //     id: "VEH002",
-  //     name: "Hyundai Creta",
-  //     type: "Office",
-  //     registrationNumber: "TN 66 BB 5678",
-  //     image: Image_default,
-  //   },
-  //   {
-  //     id: "VEH003",
-  //     name: "Force Traveller",
-  //     type: "Staff Transport",
-  //     registrationNumber: "TN 07 CC 9999",
-  //     image: Image_default,
-  //   },
-  // ];
-
-  // ✅ Handle Edit
 
   const [vehicleList, setvehicleList] = useState([]);
   useEffect(() => {
@@ -52,10 +30,62 @@ const ManageVehicle = () => {
     setShowEditModal(true);
   };
 
+  const { handleImageUpload } = VechileImageEditor({
+    userId: user?.id,
+    token,
+    publicId: editData?.image?.publicId,
+    baseUrl,
+    businessId,
+  });
+
+  const handleImageChange = async (file) => {
+    const imageUrl = URL.createObjectURL(file); // For preview
+    setEditData((prevData) => ({
+      ...prevData,
+      imagePreview: imageUrl,
+    }));
+
+    const uploaded = await handleImageUpload(file);
+    if (uploaded?.imageUrl && uploaded?.publicId) {
+      setEditData((prevData) => ({
+        ...prevData,
+        image: {
+          imageUrl: uploaded.imageUrl,
+          publicId: uploaded.publicId,
+        },
+        imagePreview: uploaded.imageUrl,
+      }));
+    }
+  };
+
   // ✅ Handle Save (for demo)
-  const handleSaveEdit = () => {
-    console.log("Edited Data:", editData);
-    setShowEditModal(false);
+  const handleSaveEdit = async (editData) => {
+    try {
+      const res = await fetch(
+        `${baseUrl}/v2/bussiness/vechile/${user?.id}/updateVehicle/${editData._id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(editData),
+        }
+      );
+
+      const data = await res.json();
+      if (res.ok) {
+        const updatedList = vehicleList.map((v) =>
+          v._id === data._id ? data : v
+        );
+        setvehicleList(updatedList);
+        setShowEditModal(false);
+      } else {
+        console.error("Failed to update vehicle", data?.error);
+      }
+    } catch (err) {
+      console.error("Error updating vehicle", err);
+    }
   };
 
   // ✅ Handle Delete (for demo)
@@ -162,6 +192,7 @@ const ManageVehicle = () => {
         setFormData={setEditData}
         title="Edit Vehicle"
         includeImage={true}
+        onImageChange={handleImageChange}
         fields={[
           { label: "Vehicle Name", name: "name" },
           { label: "Model", name: "model", readonly: true },

@@ -48,11 +48,11 @@ exports.deleteImage = async (req, res) => {
       });
     }
     const updatedProduct = await vechileModel.findOneAndUpdate(
-      { "logo.publicId": public_id },
+      { "image.publicId": public_id },
       {
         $set: {
-          "logo.imageUrl": newImageUrl || "",
-          "logo.publicId": newpublicId || "",
+          "image.imageUrl": newImageUrl || "",
+          "image.publicId": newpublicId || "",
         },
       },
       { new: true }

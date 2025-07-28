@@ -1,28 +1,98 @@
 import React, { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import AddEmployeeModal from "../../../components/Modal/AddEmployeeModal"; // Adjust path as needed
-import Image_default from "../../../Assets/Images/Default.png"; // Adjust path as needed
+import AddEmployeeModal from "../../../components/Modal/AddEmployeeModal";
+import UniversalEditModal from "../../../components/Modal/UniversalEditModal";
+import Image_default from "../../../Assets/Images/Default.png";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useEmployee } from "../../../context/EmployeeContext";
+import { EmployeeImageEditor } from "../../../Utils/Image/EditImage";
+import { useUser } from "../../../context/userContext";
+
 const ManageEmployee = () => {
   const [showModal, setShowModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editData, setEditData] = useState(null);
+  const [employeeList, setEmployeeList] = useState([]);
+  const { user, token, baseUrl } = useUser();
   const navigate = useNavigate();
   const location = useLocation();
   const { businessId } = useParams();
-  const { Employee } = useEmployee()
+  const { Employee } = useEmployee();
 
-  const [employeeList, setemployeeList] = useState([]);
   useEffect(() => {
-    if (Employee && Array.isArray(Employee)) {
-      setemployeeList(Employee);
+    if (Array.isArray(Employee)) {
+      setEmployeeList(Employee);
     }
   }, [Employee]);
-  
+
   const openAddModal = () => {
     navigate(`/managebusiness/${businessId}/manageemployees/Add_Employee`, {
       state: { backgroundLocation: location },
     });
   };
+
+  const handleEditClick = (emp) => {
+    setEditData(emp);
+    setShowEditModal(true);
+  };
+
+const handleSaveEdit = async (updatedData) => {
+  try {
+    const res = await fetch(`${baseUrl}/v2/bussiness/employee/${user?.id}/UpdateEmployee/${updatedData._id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(updatedData),
+    });
+
+    const data = await res.json();
+    if (res.ok) {
+      const updatedList = employeeList.map((emp) =>
+        emp._id === data._id ? data : emp
+      );
+      setEmployeeList(updatedList);
+      setShowEditModal(false);
+    } else {
+      console.error("Failed to update employee", data?.error);
+    }
+  } catch (err) {
+    console.error("Error updating employee", err);
+  }
+};
+
+  
+
+  const { handleImageUpload } = EmployeeImageEditor({
+    userId: user?.id,
+    token,
+    publicId: editData?.profilepic?.publicId,
+    baseUrl,
+    businessId,
+  });
+
+  const handleImageChange = async (file) => {
+    const imageUrl = URL.createObjectURL(file); // For preview
+    setEditData((prevData) => ({
+      ...prevData,
+      imagePreview: imageUrl,
+    }));
+
+    const uploaded = await handleImageUpload(file); 
+    if (uploaded?.imageUrl && uploaded?.publicId) {
+      setEditData((prevData) => ({
+        ...prevData,
+        profilepic: {
+          imageUrl: uploaded.imageUrl,
+          publicId: uploaded.publicId,
+        },
+        imagePreview: uploaded.imageUrl,
+      }));
+    }
+  };
+
+
   return (
     <div className="container py-3">
       <div className="d-flex justify-content-between align-items-center mb-4">
@@ -36,18 +106,17 @@ const ManageEmployee = () => {
         {employeeList.map((emp, index) => (
           <div className="col-md-4" key={index}>
             <div className="card h-100 shadow-sm position-relative">
-              {/* Edit Button */}
               <button
                 className="btn btn-sm btn-outline-primary position-absolute top-0 end-0 m-2"
                 title="Edit Employee"
-                onClick={() => alert(`Edit ${emp.name}`)} 
+                onClick={() => handleEditClick(emp)}
               >
                 <i className="bi bi-pencil-square"></i>
               </button>
 
               <div className="card-body d-flex flex-column align-items-center text-center">
                 <img
-                  src={emp.profilepic?.imageUrl||Image_default}
+                  src={emp.profilepic?.imageUrl || Image_default}
                   alt={emp.name}
                   className="rounded-circle mb-3"
                   style={{
@@ -56,15 +125,15 @@ const ManageEmployee = () => {
                     objectFit: "cover",
                   }}
                 />
-
                 <h5 className="fw-semibold mb-1 text-dark">{emp.name}</h5>
                 <p className="mb-1">
                   <span className="badge bg-info-subtle text-dark">
                     {emp.field}
                   </span>
                 </p>
-                <p className="small text-muted mb-2">Employee ID: {emp.employeeId}</p>
-
+                <p className="small text-muted mb-2">
+                  Employee ID: {emp.employeeId}
+                </p>
                 <div className="w-100 border-top pt-2">
                   <p className="mb-1">
                     <strong>Age:</strong> {emp.Age}
@@ -76,10 +145,44 @@ const ManageEmployee = () => {
         ))}
       </div>
 
-      {/* Add Employee Modal */}
+      {/* Add Employee Modal (if used) */}
       <AddEmployeeModal
         show={showModal}
         handleClose={() => setShowModal(false)}
+      />
+
+      {/* Edit Employee Modal */}
+
+      <UniversalEditModal
+        show={showEditModal}
+        handleClose={() => setShowEditModal(false)}
+        handleSave={handleSaveEdit}
+        formData={editData || {}}
+        setFormData={setEditData}
+        title="Edit Employee"
+        fields={[
+          { label: "Name", name: "name" },
+          {
+            label: "Employee ID",
+            name: "employeeId",
+            type: "text",
+            disabled: true,
+          },
+          { label: "Contact", name: "contact" },
+          { label: "Salary", name: "salary", type: "number" },
+          { label: "Field of Work", name: "fieldOfWork" },
+          { label: "ID Proof Type", name: "idProof" },
+          { label: "ID Number", name: "idNumber" },
+          { label: "Date of Birth", name: "dateOfBirth", type: "date" },
+          { label: "Date of Joining", name: "dateOfJoining", type: "date" },
+          { label: "Address Line 1", name: "addressLine1" },
+          { label: "Address Line 2", name: "addressLine2" },
+          { label: "City", name: "city" },
+          { label: "District", name: "district" },
+          { label: "Pincode", name: "pincode", type: "number" },
+        ]}
+        includeImage={true}
+        onImageChange={handleImageChange}
       />
     </div>
   );

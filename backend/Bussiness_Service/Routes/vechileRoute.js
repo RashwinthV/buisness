@@ -1,6 +1,10 @@
 const express = require("express");
 const authMiddleware = require("../Middlewares/Authorize");
-const { RegisterVechile, GetbussinessVechile } = require("../controller/VechileController");
+const {
+  RegisterVechile,
+  GetbussinessVechile,
+  UpdateVehicle,
+} = require("../controller/VechileController");
 const Vechileroute = express.Router();
 
 Vechileroute.post(
@@ -15,6 +19,15 @@ Vechileroute.post(
 //   UpdateProduct
 // );
 
-Vechileroute.get('/:id/getvehicle/:businessId',authMiddleware,GetbussinessVechile)
+Vechileroute.get(
+  "/:id/getvehicle/:businessId",
+  authMiddleware,
+  GetbussinessVechile
+);
+Vechileroute.put(
+  "/:id/updateVehicle/:vehicleId",
+  authMiddleware,
+  UpdateVehicle
+);
 
 module.exports = Vechileroute;

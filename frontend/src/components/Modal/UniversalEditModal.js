@@ -1,6 +1,7 @@
 import React from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import { FaEdit } from "react-icons/fa";
+
 const UniversalEditModal = ({
   show,
   handleClose,
@@ -10,32 +11,61 @@ const UniversalEditModal = ({
   fields,
   title = "Edit Data",
   includeImage = true,
-  onImageChange, // ⬅️ receive prop
+  onImageChange,
 }) => {
-  const handleChange = (e) => {
-    const { name, value, type, files } = e.target;
+  // Format ISO or date string to YYYY-MM-DD
+  const formatDateForInput = (value) => {
+    if (!value) return "";
+    try {
+      return new Date(value).toISOString().split("T")[0];
+    } catch {
+      return "";
+    }
+  };
 
-    if (type === "file") {
-      const file = files[0];
-      if (file) {
-        // Call image upload logic from parent
-        if (onImageChange) {
-          onImageChange(file);
-        }
+const handleChange = (e) => {
+  const { name, value, type, files } = e.target;
 
-        // Optional: Update preview immediately
-        setFormData((prev) => ({
-          ...prev,
-          imagePreview: URL.createObjectURL(file),
-        }));
+  if (type === "file") {
+    const file = files[0];
+    if (file) {
+      if (onImageChange) {
+        onImageChange(file);
       }
+
+      setFormData((prev) => ({
+        ...prev,
+        imagePreview: URL.createObjectURL(file),
+      }));
+    }
+  } else {
+    // Auto-calculate Age when DOB changes
+    if (name === "dateOfBirth") {
+      const dob = new Date(value);
+      const today = new Date();
+      let age = today.getFullYear() - dob.getFullYear();
+      const m = today.getMonth() - dob.getMonth();
+      if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) {
+        age--;
+      }
+
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value,
+        Age: age < 0 ? 0 : age, // Prevent negative age
+      }));
     } else {
       setFormData((prev) => ({
         ...prev,
         [name]: value,
       }));
     }
-  };
+  }
+};
+
+
+  // Debug (optional)
+  // console.log(formData);
 
   return (
     <Modal show={show} onHide={handleClose} centered>
@@ -45,6 +75,7 @@ const UniversalEditModal = ({
 
       <Modal.Body>
         <Form>
+          {/* Image Upload Preview */}
           {includeImage && (
             <Form.Group
               className="mb-3 text-center d-flex justify-content-center"
@@ -54,16 +85,16 @@ const UniversalEditModal = ({
                 <img
                   src={
                     formData.imagePreview ||
-                    (typeof formData.image?.imageUrl === "string"
-                      ? formData.image?.imageUrl
-                      : "")
+                    formData.image?.imageUrl ||
+                    formData.profilepic?.imageUrl ||
+                    ""
                   }
                   alt="Preview"
                   style={{
                     width: "100px",
                     height: "100px",
                     borderRadius: "50%",
-                    objectFit: "contain",
+                    objectFit: "cover",
                     border: "5px solid #ccc",
                   }}
                 />
@@ -91,24 +122,27 @@ const UniversalEditModal = ({
                     cursor: "pointer",
                   }}
                 >
-                  <FaEdit className="text-white " />
+                  <FaEdit className="text-white" />
                 </div>
               </div>
             </Form.Group>
           )}
 
+          {/* Dynamic Input Fields */}
           {fields.map((field) => (
             <div key={field.name} className="mb-3">
               <label className="form-label">{field.label}</label>
               <input
                 type={field.type || "text"}
                 name={field.name}
-                value={formData[field.name] || ""}
-                onChange={(e) =>
-                  setFormData({ ...formData, [field.name]: e.target.value })
+                value={
+                  field.type === "date" && formData[field.name]
+                    ? formatDateForInput(formData[field.name])
+                    : formData[field.name] || ""
                 }
+                onChange={handleChange}
                 className="form-control"
-                disabled={field.disabled || false} // <- 🔑 DISABLE if flag is true
+                disabled={field.disabled || false}
               />
             </div>
           ))}
@@ -119,7 +153,7 @@ const UniversalEditModal = ({
         <Button variant="secondary" onClick={handleClose}>
           Cancel
         </Button>
-        <Button variant="primary" onClick={handleSave}>
+        <Button variant="primary" onClick={() => handleSave(formData)}>
           Save
         </Button>
       </Modal.Footer>

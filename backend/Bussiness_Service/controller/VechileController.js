@@ -94,15 +94,32 @@ exports.RegisterVechile = async (req, res) => {
 
 exports.GetbussinessVechile = async (req, res) => {
   try {
-    
     const { businessId } = req.params;
-    const vechiles=await Vehicle.find({businessId:businessId})
-    if(!vechiles || vechiles.length===0){
-        return res.json({message:"No vehicles found"})
-    }    
-    const businessvehiclecount=vechiles.length
-    const totvehicles=await Vehicle.find()
-    const allvechilecount=totvehicles.length
-    res.json({vechiles,businessvehiclecount,allvechilecount})
+    const vechiles = await Vehicle.find({ businessId: businessId });
+    if (!vechiles || vechiles.length === 0) {
+      return res.json({ message: "No vehicles found" });
+    }
+    const businessvehiclecount = vechiles.length;
+    const totvehicles = await Vehicle.find();
+    const allvechilecount = totvehicles.length;
+    res.json({ vechiles, businessvehiclecount, allvechilecount });
   } catch (error) {}
 };
+
+exports.UpdateVehicle = async (req, res) => {
+  try {
+    const { vehicleId } = req.params;
+    const updates = req.body;
+
+    const updated = await Vehicle.findByIdAndUpdate(vehicleId, updates, {
+      new: true,
+    });
+
+    if (!updated) return res.status(404).json({ error: "Vehicle not found" });
+
+    res.status(200).json(updated);
+  } catch (err) {
+    console.error("Update failed:", err);
+    res.status(500).json({ error: "Failed to update vehicle." });
+  }
+}

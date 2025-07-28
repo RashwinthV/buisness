@@ -106,7 +106,7 @@ exports.GetEmployee = async (req, res) => {
     const employee = await Employee.find({ businessId });
     const allemployee = await Employee.find();
     const allusers = await userModel.find();
-    const count= allemployee.length + allusers.length
+    const count = allemployee.length + allusers.length;
 
     if (!Employee || Employee.length === 0) {
       return res
@@ -116,10 +116,33 @@ exports.GetEmployee = async (req, res) => {
     return res.status(200).json({
       employee,
       totalbussinessEmployee: employee.length,
-      allEmployee:count,
+      allEmployee: count,
     });
   } catch (error) {
     console.error("Product fetching error:", error);
     return res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+exports.UpdateEmployee = async (req, res) => {
+  try {
+    const id = req.params.employeeId;
+
+    const updatedEmployee = await Employee.findByIdAndUpdate(
+      id,
+      {
+        $set: req.body,
+      },
+      { new: true }
+    );
+
+    if (!updatedEmployee) {
+      return res.status(404).json({ error: "Employee not found" });
+    }
+
+    res.status(200).json(updatedEmployee);
+  } catch (err) {
+    console.error("Error updating employee:", err);
+    res.status(500).json({ error: "Server error while updating employee" });
   }
 };

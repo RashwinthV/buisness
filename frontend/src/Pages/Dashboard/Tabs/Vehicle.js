@@ -9,7 +9,7 @@ const Vehicle = () => {
     if(vehicle&& Array.isArray(vehicle)){
       setvehicleList(vehicle)
     }
-  })
+  },[setvehicleList,vehicle])
  
   
 
@@ -22,7 +22,7 @@ const Vehicle = () => {
             <div className="card h-100 shadow-sm">
               <div className="card-body text-center">
                 <img
-                  src={vehicle?.image?.imageUrl}
+                  src={vehicle?.image?.imageUrl||Image_default}
                   alt={vehicle.name}
                   className="mb-3"
                   style={{
@@ -33,8 +33,9 @@ const Vehicle = () => {
                   }}
                 />
                 <h5 className="card-title">{vehicle.name}</h5>
+
                 <p className="card-text">
-                  <strong>Vehicle ID:</strong> {vehicle.id} <br />
+                  <strong>Vehicle ID:</strong> {vehicle?.vehicleId} <br />
                   <strong>Reg Number:</strong> {vehicle.registrationNumber}
                 </p>
               </div>

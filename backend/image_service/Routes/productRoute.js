@@ -6,11 +6,11 @@ const productrouter = express.Router();
 const upload = multer({ dest: "uploads/" });
 
 productrouter.post(
-  "/upload/:id/:businessId",
+  "/upload/:id",
   authMiddleware,
   upload.single("image"),
   uploadImage
 );
-productrouter.post("/deleteimage/:id", authMiddleware, deleteImage);
+productrouter.post("/deleteproductimage/:id", authMiddleware, deleteImage);
 
 module.exports = productrouter;
