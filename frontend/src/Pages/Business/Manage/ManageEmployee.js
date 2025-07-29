@@ -7,28 +7,41 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useEmployee } from "../../../context/EmployeeContext";
 import { EmployeeImageEditor } from "../../../Utils/Image/EditImage";
 import { useUser } from "../../../context/userContext";
+import ManageTagsModal from "../../../components/Modal/ManageTagsModal";
+
+// Constant array of default categories
+const DEFAULT_EMPLOYEE_CATEGORIES = ["Driver", "Technician", "Cleaner"];
 
 const ManageEmployee = () => {
-  const [showModal, setShowModal] = useState(false);
-  const [showEditModal, setShowEditModal] = useState(false);
-  const [editData, setEditData] = useState(null);
   const [employeeList, setEmployeeList] = useState([]);
+  const [employeeCategories, setEmployeeCategories] = useState([
+    ...DEFAULT_EMPLOYEE_CATEGORIES,
+  ]);
+
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showTagsModal, setShowTagsModal] = useState(false);
+
+  const [editData, setEditData] = useState(null);
+  const [modalTitle, setModalTitle] = useState("");
+  const [modalData, setModalData] = useState([]);
+
   const { user, token, baseUrl } = useUser();
   const navigate = useNavigate();
   const location = useLocation();
   const { businessId } = useParams();
   const { Employee } = useEmployee();
 
+  // Load employee list
   useEffect(() => {
     if (Array.isArray(Employee)) {
       setEmployeeList(Employee);
     }
   }, [Employee]);
 
+  // Open modals
   const openAddModal = () => {
-    navigate(`/managebusiness/${businessId}/manageemployees/Add_Employee`, {
-      state: { backgroundLocation: location },
-    });
+    setShowAddModal(true);
   };
 
   const handleEditClick = (emp) => {
@@ -36,33 +49,44 @@ const ManageEmployee = () => {
     setShowEditModal(true);
   };
 
-const handleSaveEdit = async (updatedData) => {
-  try {
-    const res = await fetch(`${baseUrl}/v2/bussiness/employee/${user?.id}/UpdateEmployee/${updatedData._id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(updatedData),
-    });
+  const openManageModal = (title) => {
+    setModalTitle(title);
+    setModalData(employeeCategories);
+    setShowTagsModal(true);
+  };
 
-    const data = await res.json();
-    if (res.ok) {
-      const updatedList = employeeList.map((emp) =>
-        emp._id === data._id ? data : emp
+  const handleSaveTags = (updatedTags) => {
+    setEmployeeCategories(updatedTags);
+  };
+
+  const handleSaveEdit = async (updatedData) => {
+    try {
+      const res = await fetch(
+        `${baseUrl}/v2/bussiness/employee/${user?.id}/UpdateEmployee/${updatedData._id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(updatedData),
+        }
       );
-      setEmployeeList(updatedList);
-      setShowEditModal(false);
-    } else {
-      console.error("Failed to update employee", data?.error);
-    }
-  } catch (err) {
-    console.error("Error updating employee", err);
-  }
-};
 
-  
+      const data = await res.json();
+      if (res.ok) {
+        const updatedList = employeeList.map((emp) =>
+          emp._id === data._id ? data : emp
+        );
+        setEmployeeList(updatedList);
+        setShowEditModal(false);
+      } else {
+        console.error("Failed to update employee", data?.error);
+      }
+    } catch (err) {
+      console.error("Error updating employee", err);
+    }
+  };
 
   const { handleImageUpload } = EmployeeImageEditor({
     userId: user?.id,
@@ -73,13 +97,13 @@ const handleSaveEdit = async (updatedData) => {
   });
 
   const handleImageChange = async (file) => {
-    const imageUrl = URL.createObjectURL(file); // For preview
+    const imageUrl = URL.createObjectURL(file);
     setEditData((prevData) => ({
       ...prevData,
       imagePreview: imageUrl,
     }));
 
-    const uploaded = await handleImageUpload(file); 
+    const uploaded = await handleImageUpload(file);
     if (uploaded?.imageUrl && uploaded?.publicId) {
       setEditData((prevData) => ({
         ...prevData,
@@ -92,14 +116,23 @@ const handleSaveEdit = async (updatedData) => {
     }
   };
 
-
   return (
     <div className="container py-3">
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h4 className="fw-bold">Manage Employees</h4>
-        <button className="btn btn-success" onClick={openAddModal}>
-          <i className="bi bi-plus-circle me-2"></i> Add Employee
-        </button>
+
+        <div className="d-flex gap-2">
+          <button
+            className="btn btn-primary"
+            onClick={() => openManageModal("Employee Categories")}
+          >
+            <i className="bi bi-pencil-square me-2"></i> Manage Categories
+          </button>
+
+          <button className="btn btn-success" onClick={openAddModal}>
+            <i className="bi bi-plus-circle me-2"></i> Add Employee
+          </button>
+        </div>
       </div>
 
       <div className="row g-4">
@@ -145,14 +178,13 @@ const handleSaveEdit = async (updatedData) => {
         ))}
       </div>
 
-      {/* Add Employee Modal (if used) */}
+      {/* Add Modal */}
       <AddEmployeeModal
-        show={showModal}
-        handleClose={() => setShowModal(false)}
+        show={showAddModal}
+        handleClose={() => setShowAddModal(false)}
       />
 
-      {/* Edit Employee Modal */}
-
+      {/* Edit Modal */}
       <UniversalEditModal
         show={showEditModal}
         handleClose={() => setShowEditModal(false)}
@@ -170,7 +202,12 @@ const handleSaveEdit = async (updatedData) => {
           },
           { label: "Contact", name: "contact" },
           { label: "Salary", name: "salary", type: "number" },
-          { label: "Field of Work", name: "fieldOfWork" },
+          {
+            label: "Field of Work",
+            name: "field",
+            type: "select",
+            options: employeeCategories,
+          },
           { label: "ID Proof Type", name: "idProof" },
           { label: "ID Number", name: "idNumber" },
           { label: "Date of Birth", name: "dateOfBirth", type: "date" },
@@ -183,6 +220,15 @@ const handleSaveEdit = async (updatedData) => {
         ]}
         includeImage={true}
         onImageChange={handleImageChange}
+      />
+
+      {/* Tag Edit Modal */}
+      <ManageTagsModal
+        show={showTagsModal}
+        onHide={() => setShowTagsModal(false)}
+        title={modalTitle}
+        initialTags={modalData}
+        onSave={handleSaveTags}
       />
     </div>
   );

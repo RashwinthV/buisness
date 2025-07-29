@@ -7,15 +7,26 @@ import UniversalEditModal from "../../../components/Modal/UniversalEditModal";
 import { useUser } from "../../../context/userContext";
 import { toast } from "react-toastify";
 import { ProductImageEditor } from "../../../Utils/Image/EditImage";
+import ManageTagsModal from "../../../components/Modal/ManageTagsModal";
+
+// Default product types
+const DEFAULT_PRODUCT_TYPES = ["raw_material", "finished_product", "retail_product"];
 
 const ManageProduct = () => {
   const { product } = useProduct();
   const [productList, setProductList] = useState([]);
   const [showProductModal, setShowProductModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editData, setEditData] = useState(null);
+
+  const [productTypes, setProductTypes] = useState([...DEFAULT_PRODUCT_TYPES]);
+  const [showTagsModal, setShowTagsModal] = useState(false);
+  const [modalTitle, setModalTitle] = useState("");
+  const [modalData, setModalData] = useState([]);
+
   const navigate = useNavigate();
   const location = useLocation();
   const { businessId } = useParams();
-
   const { user, token, baseUrl } = useUser();
 
   useEffect(() => {
@@ -30,8 +41,15 @@ const ManageProduct = () => {
     });
   };
 
-  const [showEditModal, setShowEditModal] = useState(false);
-  const [editData, setEditData] = useState(null);
+  const openManageModal = () => {
+    setModalTitle("Product Types");
+    setModalData(productTypes);
+    setShowTagsModal(true);
+  };
+
+  const handleSaveTags = (updatedTags) => {
+    setProductTypes(updatedTags);
+  };
 
   const { handleImageUpload } = ProductImageEditor({
     userId: user?.id,
@@ -44,8 +62,6 @@ const ManageProduct = () => {
   const handleImageChange = async (file) => {
     try {
       const result = await handleImageUpload(file);
-      console.log(result);
-
       if (result) {
         setEditData((prev) => ({
           ...prev,
@@ -124,9 +140,14 @@ const ManageProduct = () => {
     <div className="container py-3">
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h4 className="fw-bold">Manage Products</h4>
-        <button className="btn btn-success" onClick={openAddModal}>
-          <i className="bi bi-plus-circle me-2"></i> Add Product
-        </button>
+        <div className="d-flex gap-2">
+          <button className="btn btn-primary" onClick={openManageModal}>
+            <i className="bi bi-pencil-square me-2"></i> Manage Product Types
+          </button>
+          <button className="btn btn-success" onClick={openAddModal}>
+            <i className="bi bi-plus-circle me-2"></i> Add Product
+          </button>
+        </div>
       </div>
 
       {productList.length === 0 ? (
@@ -174,9 +195,7 @@ const ManageProduct = () => {
                   </h5>
                   <p className="mb-1">
                     <span className="badge bg-info-subtle text-dark">
-                      {prod?.productType === "raw_material"
-                        ? "Raw Material"
-                        : "Finished Product"}
+                      {prod?.productType}
                     </span>
                   </p>
                   <p className="small text-muted mb-2">
@@ -219,16 +238,26 @@ const ManageProduct = () => {
             name: "productId",
             type: "text",
             disabled: true,
-          }, // <- DISABLED
+          },
           { label: "Rate", name: "rate", type: "number" },
           {
             label: "Product Type",
             name: "productType",
-            type: "text",
+            type: "select",
+            options: productTypes,
           },
         ]}
         includeImage={true}
         onImageChange={handleImageChange}
+      />
+
+      {/* Manage Types Modal */}
+      <ManageTagsModal
+        show={showTagsModal}
+        onHide={() => setShowTagsModal(false)}
+        title={modalTitle}
+        initialTags={modalData}
+        onSave={handleSaveTags}
       />
     </div>
   );

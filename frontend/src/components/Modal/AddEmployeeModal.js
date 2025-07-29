@@ -7,6 +7,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { userImageUpload } from "../../Utils/Image/ImageUploader";
 import { useUser } from "../../context/userContext";
 import { useBusiness } from "../../context/BussinessContext";
+const DEFAULT_EMPLOYEE_CATEGORIES = ["Driver", "Technician", "Cleaner"];
 
 const AddEmployeeModal = ({ show, handleClose }) => {
   const navigate = useNavigate();
@@ -335,21 +336,11 @@ const handleSubmit = async () => {
                 value={formData.workField}
                 onChange={handleChange}
               >
-               <option value="">Select</option>
-<option value="driver">Driver</option>
-<option value="factory_worker">Factory Worker</option>
-<option value="machine_operator">Machine Operator</option>
-<option value="supervisor">Supervisor</option>
-<option value="technician">Technician</option>
-<option value="warehouse_staff">Warehouse Staff</option>
-<option value="quality_inspector">Quality Inspector</option>
-<option value="maintenance_staff">Maintenance Staff</option>
-<option value="packer">Packer</option>
-<option value="security_guard">Security Guard</option>
-<option value="cashier">Cashier</option>
-<option value="admin_staff">Admin Staff</option>
-<option value="others">Others</option>
-
+    <option value="">Choose</option>
+  {DEFAULT_EMPLOYEE_CATEGORIES.map((type, index) => (
+    <option key={index} value={type}>
+      {type.replace("_", " ").replace(/\b\w/g, c => c.toUpperCase())}
+    </option> ))}
               </select>
             </div>
 

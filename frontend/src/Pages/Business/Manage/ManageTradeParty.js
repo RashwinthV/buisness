@@ -1,14 +1,23 @@
 import { useState } from "react";
 import Image_default from "../../../Assets/Images/Default.png";
 import AddTradePartyModal from "../../../components/Modal/AddTradePartyModal";
-import UniversalEditModal from "../../../components/Modal/UniversalEditModal"; // ✅ Import it
+import UniversalEditModal from "../../../components/Modal/UniversalEditModal";
+import ManageTagsModal from "../../../components/Modal/ManageTagsModal";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
+
+const DEFAULT_PARTY_TYPES = ["buyer", "supplier", "both"];
 
 const ManageTradeParty = () => {
   const [showModal, setShowModal] = useState(false);
-  const [showEditModal, setShowEditModal] = useState(false); // ✅ Modal visibility state
-  const [editData, setEditData] = useState(null);            // ✅ Data to edit
-  const [partyList, setPartyList] = useState([               // ✅ Data list
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editData, setEditData] = useState(null);
+
+  const [partyTypes, setPartyTypes] = useState([...DEFAULT_PARTY_TYPES]);
+  const [showTagsModal, setShowTagsModal] = useState(false);
+  const [modalTitle, setModalTitle] = useState("");
+  const [modalData, setModalData] = useState([]);
+
+  const [partyList, setPartyList] = useState([
     {
       id: "TP001",
       name: "Kumar Agencies",
@@ -51,6 +60,16 @@ const ManageTradeParty = () => {
     });
   };
 
+  const openManageModal = () => {
+    setModalTitle("Party Types");
+    setModalData(partyTypes);
+    setShowTagsModal(true);
+  };
+
+  const handleSaveTags = (updated) => {
+    setPartyTypes(updated);
+  };
+
   const handleEdit = (party) => {
     setEditData({
       ...party,
@@ -74,15 +93,18 @@ const ManageTradeParty = () => {
     }
   };
 
-  
-
   return (
     <div className="container py-2">
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h4 className="mb-0">Trade Parties</h4>
-        <button className="btn btn-success" onClick={openAddModal}>
-          + Add Trade Party
-        </button>
+        <div className="d-flex gap-2">
+          <button className="btn btn-primary" onClick={openManageModal}>
+            <i className="bi bi-pencil-square me-2"></i> Manage Party Types
+          </button>
+          <button className="btn btn-success" onClick={openAddModal}>
+            + Add Trade Party
+          </button>
+        </div>
       </div>
 
       {partyList.length === 0 ? (
@@ -169,10 +191,20 @@ const ManageTradeParty = () => {
           {
             label: "Party Type",
             name: "type",
-            type: "text", // consider a select dropdown if you have fixed types
+            type: "select",
+            options: partyTypes,
           },
         ]}
         includeImage={true}
+      />
+
+      {/* Manage Party Type Modal */}
+      <ManageTagsModal
+        show={showTagsModal}
+        onHide={() => setShowTagsModal(false)}
+        title={modalTitle}
+        initialTags={modalData}
+        onSave={handleSaveTags}
       />
     </div>
   );

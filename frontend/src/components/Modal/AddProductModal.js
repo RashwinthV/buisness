@@ -6,7 +6,7 @@ import { useProductImageUpload } from "../../Utils/Image/ImageUploader";
 import { useUser } from "../../context/userContext";
 import { useBusiness } from "../../context/BussinessContext";
 import { FaEdit } from "react-icons/fa";
-
+const DEFAULT_PRODUCT_TYPES = ["raw_material", "finished_product", "retail_product"];
 const AddProductModal = ({ show, handleClose }) => {
   const baseUrl = process.env.REACT_APP_BACKEND_URI;
   const { user, token } = useUser();
@@ -198,25 +198,19 @@ const AddProductModal = ({ show, handleClose }) => {
 
           <div className="col-md-6">
             <label>Product Type *</label>
-            <select
-              className="form-select"
-              name="type"
-              value={formData.type}
-              onChange={handleChange}
-            >
-              <option value="">Choose</option>
-<option value="raw_material">Raw Material</option>
-<option value="semi_finished">Semi-Finished Product</option>
-<option value="finished_product">Finished Product</option>
-<option value="retail_product">Retail Product</option>
-<option value="packaging_material">Packaging Material</option>
-<option value="consumable">Consumable</option>
-<option value="spare_part">Spare Part</option>
-<option value="service">Service</option>
-<option value="tool">Tool</option>
-<option value="accessory">Accessory</option>
-
-            </select>
+<select
+  className="form-select"
+  name="type"
+  value={formData.type}
+  onChange={handleChange}
+>
+  <option value="">Choose</option>
+  {DEFAULT_PRODUCT_TYPES.map((type, index) => (
+    <option key={index} value={type}>
+      {type.replace("_", " ").replace(/\b\w/g, c => c.toUpperCase())}
+    </option>
+  ))}
+</select>
           </div>
 
           <div className="col-md-6">

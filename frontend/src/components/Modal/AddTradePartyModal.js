@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { toast } from "react-toastify";
 import Image_default from "../../Assets/Images/Default.png";
 import { Modal, Button } from "react-bootstrap";
-
+const DEFAULT_PARTY_TYPES = ["buyer", "supplier", "both"];
 const AddTradePartyModal = ({ show, handleClose }) => {
   const baseUrl = process.env.REACT_APP_BACKEND_URI;
 
@@ -132,15 +132,12 @@ const AddTradePartyModal = ({ show, handleClose }) => {
               value={formData.partyType}
               onChange={handleChange}
             >
-<option value="">Select</option>
-<option value="buyer">Customer</option>
-<option value="seller">Materials Supplier</option>
-<option value="both">Customer  / Supplier </option>
-<option value="distributor">Distributor</option>
-<option value="retailer">Retailer</option>
-<option value="wholesaler">Wholesaler</option>
-<option value="agent">Agent</option>
-<option value="broker">Broker</option>
+
+    <option value="">Choose</option>
+  {DEFAULT_PARTY_TYPES.map((type, index) => (
+    <option key={index} value={type}>
+      {type.replace("_", " ").replace(/\b\w/g, c => c.toUpperCase())}
+    </option> ))}
             </select>
           </div>
 

@@ -1,7 +1,9 @@
 import React from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import { FaEdit } from "react-icons/fa";
-
+const DEFAULT_PARTY_TYPES = ["buyer", "supplier", "both"];
+const DEFAULT_EMPLOYEE_CATEGORIES = ["Driver", "Technician", "Cleaner"];
+const DEFAULT_PRODUCT_TYPES = ["raw_material", "finished_product", "retail_product"];
 const UniversalEditModal = ({
   show,
   handleClose,
@@ -132,18 +134,41 @@ const handleChange = (e) => {
           {fields.map((field) => (
             <div key={field.name} className="mb-3">
               <label className="form-label">{field.label}</label>
-              <input
-                type={field.type || "text"}
-                name={field.name}
-                value={
-                  field.type === "date" && formData[field.name]
-                    ? formatDateForInput(formData[field.name])
-                    : formData[field.name] || ""
-                }
-                onChange={handleChange}
-                className="form-control"
-                disabled={field.disabled || false}
-              />
+{(field.name === "type" || field.name === "productType" || field.name === "workField") ? (
+  <select
+    name={field.name}
+    className="form-select"
+    value={formData[field.name] || ""}
+    onChange={handleChange}
+  >
+    <option value="">Choose</option>
+    {(
+      field.name === "type"
+        ? DEFAULT_PARTY_TYPES
+        : field.name === "productType"
+        ? DEFAULT_PRODUCT_TYPES
+        : DEFAULT_EMPLOYEE_CATEGORIES
+    ).map((option, index) => (
+      <option key={index} value={option}>
+        {option.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())}
+      </option>
+    ))}
+  </select>
+) : (
+  <input
+    type={field.type || "text"}
+    name={field.name}
+    value={
+      field.type === "date" && formData[field.name]
+        ? formatDateForInput(formData[field.name])
+        : formData[field.name] || ""
+    }
+    onChange={handleChange}
+    className="form-control"
+    disabled={field.disabled || false}
+  />
+)}
+
             </div>
           ))}
         </Form>
