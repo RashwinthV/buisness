@@ -80,7 +80,7 @@ const Plans = () => {
                     <li key={i}>✓ {feat}</li>
                   ))}
                 </ul>
-                <button className={`btn ${index === 2 ? "btn-primary" : "btn-outline-dark"} mt-auto`}>
+                <button className={`btn btn-sm ${index === 2 ? "btn-primary" : "btn-outline-dark"} mt-auto`}>
                   Choose {plan.planName}
                 </button>
               </div>

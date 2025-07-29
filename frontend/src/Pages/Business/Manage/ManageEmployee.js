@@ -115,27 +115,34 @@ const ManageEmployee = () => {
       }));
     }
   };
-
+  const handleDelete = (product) => {
+    
+      window.confirm(
+        `Are you sure you want to delete "${product.productName}"?`
+  )
+    
+  };
   return (
-    <div className="container py-3">
-      <div className="d-flex justify-content-between align-items-center mb-4">
-        <h4 className="fw-bold">Manage Employees</h4>
+    <div className="container rounded shadow-sm py-3">
+<div className="d-flex flex-wrap justify-content-between align-items-center mb-4">
+  <h4 className="fw-bold mb-2 mb-md-0 me-auto">Manage Employees</h4>
 
-        <div className="d-flex gap-2">
-          <button
-            className="btn btn-primary"
-            onClick={() => openManageModal("Employee Categories")}
-          >
-            <i className="bi bi-pencil-square me-2"></i> Manage Categories
-          </button>
+  <div className="d-flex flex-wrap align-items-center justify-content-center gap-2">
+    <button
+      className="btn btn-sm btn-primary"
+      onClick={() => openManageModal("Employee Categories")}
+    >
+      <i className="bi bi-pencil-square me-2"></i> Manage Categories
+    </button>
 
-          <button className="btn btn-success" onClick={openAddModal}>
-            <i className="bi bi-plus-circle me-2"></i> Add Employee
-          </button>
-        </div>
-      </div>
+    <button className="btn btn-sm btn-success" onClick={openAddModal}>
+      <i className="bi bi-plus-circle me-2"></i> Add Employee
+    </button>
+  </div>
+</div>
+<hr></hr>
 
-      <div className="row g-4">
+      {/* <div className="row g-4">
         {employeeList.map((emp, index) => (
           <div className="col-md-4" key={index}>
             <div className="card h-100 shadow-sm position-relative">
@@ -176,7 +183,61 @@ const ManageEmployee = () => {
             </div>
           </div>
         ))}
+      </div> */}
+      <div className="row g-4">
+  {employeeList.map((emp, index) => (
+    <div className="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3" key={index}>
+      <div className="card h-100 shadow-sm border-2 rounded-4 text-center p-3 d-flex flex-column">
+        <div className='justify-content-center'>
+        <img
+          src={emp.profilepic?.imageUrl || Image_default}
+          alt={emp.name}
+          className="img-fluid rounded-circle mb-3"
+          style={{ height: "130px", objectFit: "cover", width: "130px" }}
+        />
+</div>
+        <hr />
+
+        <h6 className="fw-bold mb-2">{emp.name}</h6>
+
+        <h6 className="text-success fw-semibold mb-2">
+          ID: {emp.employeeId || "N/A"}
+        </h6>
+
+        <div className="d-flex justify-content-center gap-2 mb-3">
+          <span className="badge bg-warning text-dark">
+            {emp.field || "No Field"}
+          </span>
+        </div>
+
+        <div className="d-flex justify-content-center gap-2 mb-3">
+          <span className="small text-muted">
+            <strong>Age:</strong> {emp.Age || "N/A"}
+          </span>
+        </div>
+
+        {/* Buttons at the bottom */}
+        <div className="d-flex justify-content-center gap-2 mt-auto">
+          <button
+            className="btn btn-outline-primary btn-sm rounded-pill"
+            onClick={() => handleEditClick(emp)}
+            title="Edit"
+          >
+            <i className="bi bi-pencil-fill"></i>
+          </button>
+          <button
+            className="btn btn-outline-danger btn-sm rounded-pill"
+            onClick={() => handleDelete(emp)}
+            title="Delete"
+          >
+            <i className="bi bi-trash-fill"></i>
+          </button>
+        </div>
       </div>
+    </div>
+  ))}
+</div>
+
 
       {/* Add Modal */}
       <AddEmployeeModal

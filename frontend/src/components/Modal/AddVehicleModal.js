@@ -7,11 +7,12 @@ import { VechileImageUpload } from "../../Utils/Image/ImageUploader";
 import { useUser } from "../../context/userContext";
 import { useBusiness } from "../../context/BussinessContext";
 import { useParams } from "react-router-dom";
-
+const DEFAULT_VEHICLE_TYPES = ["Transporter", "Office"];
 const AddVehicleModal = ({ show, handleClose }) => {
   const [formData, setFormData] = useState({
     image: { imageUrl: "", publicId: "" },
     name: "",
+    type:"",
     model: "",
     brand: "",
     registrationNumber: "",
@@ -166,6 +167,22 @@ if (!response.ok) {
               value={formData.name}
               onChange={handleChange}
             />
+          </div>
+                    <div className="col-md-4">
+            <label>Vehicle Type *</label>
+            <select
+              name="Vehicle Type"
+              className="form-select"
+              value={formData.type}
+              onChange={handleChange}
+            >
+
+    <option value="">Choose</option>
+  {DEFAULT_VEHICLE_TYPES.map((type, index) => (
+    <option key={index} value={type}>
+      {type.replace("_", " ").replace(/\b\w/g, c => c.toUpperCase())}
+    </option> ))}
+            </select>
           </div>
           <div className="col-md-4">
             <label>Model *</label>

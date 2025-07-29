@@ -13,34 +13,43 @@ const [employeeList, setemployeeList] = useState([]);
   }, [Employee]);
 
   return (
-    <div className="container py-2">
-      <h4 className="mb-4 text-center">Employees</h4>
-      <div className="row g-4">
-        {employeeList.map((emp, index) => (
-          <div className="col-md-4" key={index}>
-            <div className="card h-100 shadow-sm">
-              <div className="card-body text-center">
-                <img
-                  src={emp.profilepic?.imageUrl||Image_default}
-                  alt={emp.name}
-                  className="rounded-circle mb-3"
-                  style={{
-                    width: "100px",
-                    height: "100px",
-                    objectFit: "cover",
-                  }}
-                />
-                <h5 className="card-title">{emp.name}</h5>
-                <p className="card-text">
-                  <strong>Emp ID:</strong> {emp.employeeId} <br />
-                  <strong>Age:</strong> {emp.age} <br />
-                  <strong>Field of Work:</strong> {emp.field}
-                </p>
-              </div>
-            </div>
-          </div>
-        ))}
+    <div className="container">
+      <h4 className="mb-2 text-center">Employees</h4>
+
+<hr></hr>
+      <div className="row mt-2 g-4">
+  {employeeList.map((emp, index) => (
+    <div className="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3" key={index}>
+      <div className="card h-100 shadow-sm border-2 rounded-4 text-center p-3 d-flex flex-column">
+        <div className="justify-content-center">
+        <img
+          src={emp.profilepic?.imageUrl || Image_default}
+          alt={emp.name}
+          className="rounded-circle mb-3"
+          style={{
+            width: "100px",
+            height: "100px",
+            objectFit: "cover",
+          }}
+        /> </div>
+
+        <hr />
+
+        <h6 className="fw-bold mb-2">{emp.name}</h6>
+
+        <div className="small text-muted mb-3">
+          <p className="mb-1"><strong>Emp ID:</strong> {emp.employeeId || "N/A"}</p>
+          <p className="mb-1"><strong>Age:</strong> {emp.age || "N/A"}</p>
+          <p className="mb-0"><strong>Field of Work:</strong> {emp.field || "N/A"}</p>
+        </div>
+
+
+
       </div>
+    </div>
+  ))}
+</div>
+
     </div>
   );
 };

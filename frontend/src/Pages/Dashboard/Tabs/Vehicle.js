@@ -14,31 +14,48 @@ const Vehicle = () => {
   
 
   return (
-    <div className="container py-2 ">
-      <h4 className="mb-4 text-center">Vehicles</h4>
-      <div className="row g-4">
-        {vehicleList.map((vehicle, index) => (
-          <div className="col-md-4" key={index}>
-            <div className="card h-100 shadow-sm">
-              <div className="card-body text-center">
-                <img
-                  src={vehicle?.image?.imageUrl||Image_default}
-                  alt={vehicle.name}
-                  className="mb-3"
-                  style={{
-                    width: "100px",
-                    height: "100px",
-                    objectFit: "contain",
-                    borderRadius: "10px",
-                  }}
-                />
-                <h5 className="card-title">{vehicle.name}</h5>
+    <div className="container">
+      
+      <h4 className="mb-2 text-center">Vehicles</h4>
 
-                <p className="card-text">
-                  <strong>Vehicle ID:</strong> {vehicle?.vehicleId} <br />
-                  <strong>Reg Number:</strong> {vehicle.registrationNumber}
-                </p>
+<hr></hr>
+      <div className="row mt-2 g-4">
+        {vehicleList.map((vehicle, index) => (
+          <div className="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3" key={index}>
+            <div className="card h-100 shadow-sm border-2 rounded-4 text-center p-3 d-flex flex-column position-relative">
+              
+              <img
+                src={vehicle.image?.imageUrl || Image_default}
+                alt={vehicle.name}
+                className="img-fluid mb-3"
+                style={{
+                  height: "100%",
+                  objectFit: "contain",
+                  width: "100%",
+                  borderRadius: "12px",
+                  border: "2px solid #eee",
+                }}
+              />
+      
+              <hr />
+      
+              <h6 className="fw-bold mb-2">{vehicle.name}</h6>
+      
+              <h6 className="text-success fw-semibold mb-2">
+                Vehicle ID: {vehicle.vehicleId || "N/A"}
+              </h6>
+      
+              <div className="d-flex justify-content-center gap-2 mb-3">
+                <span className="badge bg-warning text-dark">
+                  {vehicle.type || "No Type"}
+                </span>
               </div>
+      
+              <div className="small text-muted mb-3">
+                <strong>Reg. Number:</strong>{" "}
+                {vehicle.registrationNumber || "N/A"}
+              </div>
+      
             </div>
           </div>
         ))}

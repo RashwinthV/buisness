@@ -115,7 +115,7 @@ const Entry = () => {
         <div className="card-body text-center">
           <div className="text-center mb-4 d-flex gap-3 justify-content-start flex-wrap">
             <button
-              className="btn btn-outline-primary"
+              className="btn btn-sm btn-outline-primary"
               onClick={() => {
                 setEntryType("sales");
                 setModalShow(true);
@@ -124,7 +124,7 @@ const Entry = () => {
               New Sales
             </button>
             <button
-              className="btn btn-outline-success"
+              className="btn btn-sm btn-outline-success"
               onClick={() => {
                 setEntryType("purchase");
                 setModalShow(true);
@@ -135,7 +135,7 @@ const Entry = () => {
                       {/* Sort Dropdown */}
           <div className="position-relative">
             <button
-              className="btn btn-outline-danger"
+              className="btn btn-sm btn-outline-danger"
               onClick={() => setShowSortOptions(!showSortOptions)}
             >
               <i className="bi bi-funnel me-1" />

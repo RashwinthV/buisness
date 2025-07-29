@@ -86,7 +86,7 @@ navigate(`/viewbusinessprofile/${businessId}`)
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
-            <button className="btn btn-primary" onClick={handleSearch}>
+            <button className="btn btn-sm btn-primary" onClick={handleSearch}>
               Search
             </button>
           </div>

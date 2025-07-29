@@ -40,7 +40,7 @@ const ManageBusiness = () => {
   }, [location.pathname, basePath, tabs]);
 
   return (
-    <div className="container-fluid py-2">
+    <div className="container ">
       <div className="card shadow-sm border-0 mb-4">
         <BusinessBanner business={selectedBusiness} />
       </div>
@@ -50,7 +50,7 @@ const ManageBusiness = () => {
           {tabs.map((tab) => (
             <button
               key={tab.label}
-              className={`btn ${
+              className={`btn btn-sm ${
                 activeTab === tab.label ? "btn-primary" : "btn-outline-primary"
               }`}
               onClick={() => {
@@ -63,7 +63,7 @@ const ManageBusiness = () => {
           ))}
         </div>
 
-        <div className="bg-white shadow p-3 rounded">
+        <div className="bg-white">
           <Outlet />
         </div>
       </div>

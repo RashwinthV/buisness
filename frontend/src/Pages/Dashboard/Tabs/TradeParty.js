@@ -37,30 +37,53 @@ const TradeParty = () => {
   };
 
   return (
-    <div className="container py-2">
-      <h4 className="mb-4 text-center">Trade Parties</h4>
-      <div className="row g-4">
-        {partyList.map((party, index) => (
-          <div className="col-md-4" key={index}>
-            <div className="card h-100 shadow-sm">
-              <div className="card-body text-center">
-                <img
-                  src={party.image}
-                  alt={party.name}
-                  className="rounded-circle mb-3"
-                  style={{ width: "100px", height: "100px", objectFit: "cover" }}
-                />
-                <h5 className="card-title">{party.name}</h5>
-                <p className="card-text">
-                  <strong>Party Type:</strong> {formatType(party.type)} <br />
-                  <strong>Contact:</strong> {party.contact} <br />
-                  <strong>City:</strong> {party.city}
-                </p>
-              </div>
-            </div>
-          </div>
-        ))}
+    <div className="container">
+      <h4 className="mb-2 text-center">Trade Parties</h4>
+<hr></hr>
+ <div className="row mt-2 g-4">
+  {partyList.map((party, index) => (
+    <div className="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3" key={index}>
+      <div className="card h-100 shadow-sm border-2 rounded-4 text-center p-3 d-flex flex-column position-relative">
+        <div className='justify-content-center'>
+        <img
+          src={party.image}
+          alt={party.name}
+          className="img-fluid mb-3"
+          style={{
+            height: "130px",
+            objectFit: "cover",
+            width: "130px",
+            borderRadius: "12px",
+            border: "2px solid #eee",
+          }}
+        />
+        </div>
+
+        <hr />
+
+        <h6 className="fw-bold mb-2">{party.name}</h6>
+
+        <h6 className="text-success fw-semibold mb-2">
+          ID: {party.id || "N/A"}
+        </h6>
+
+        <div className="d-flex justify-content-center gap-2 mb-3">
+          <span className="badge bg-warning text-dark">
+            {formatType(party.type) || "No Type"}
+          </span>
+        </div>
+
+        <div className="d-flex justify-content-center flex-column small text-muted mb-3">
+          <span><strong>Contact:</strong> {party.contact || "N/A"}</span>
+          <span><strong>City:</strong> {party.city || "N/A"}</span>
+        </div>
+
+
+        
       </div>
+    </div>
+  ))}
+</div>
     </div>
   );
 };

@@ -192,12 +192,12 @@ const BusinessBanner = ({ business }) => {
 
   return (
     <div
-      className="position-relative text-white rounded mb-4"
+      className="position-relative text-white rounded "
       style={{
         backgroundImage: `url(${business?.backgroundImageUrl || business?.logo?.imageUrl || Image_default})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
-        minHeight: "200px",
+        maxHeight: "200px",
         overflow: "hidden",
       }}
     >
@@ -218,7 +218,7 @@ const BusinessBanner = ({ business }) => {
       <Row className="align-items-center justify-content-between position-relative" style={{ zIndex: 2, padding: "1.5rem" }}>
         {/* Business Info */}
         <Col xs={12} md={8}>
-          <h1 className="fw-bold mb-2">{business.businessName || "-"}</h1>
+          <h2 className="fw-bold mb-2">{business.businessName || "-"}</h2>
           <p className="mb-1">
             <i className="bi bi-envelope-fill me-1" />
             {business.businessEmail || "N/A"}
@@ -241,8 +241,8 @@ const BusinessBanner = ({ business }) => {
   <div
     className="d-inline-flex justify-content-center align-items-center bg-white rounded-circle position-relative shadow"
     style={{
-      width: "130px",
-      height: "130px",
+      width: "100px",
+      height: "100px",
       overflow: "hidden",
     }}
   >

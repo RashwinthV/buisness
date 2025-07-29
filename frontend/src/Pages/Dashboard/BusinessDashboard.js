@@ -67,7 +67,7 @@ const BusinessDashboard = () => {
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`btn ${
+              className={`btn btn-sm ${
                 activeTab === tab ? "btn-primary" : "btn-outline-primary"
               }`}
             >

@@ -299,7 +299,7 @@ function BusinessRegister() {
       </div>
 
       <div className="text-end mt-4">
-        <button className="btn btn-success" onClick={handleSubmit}>
+        <button className="btn btn-sm btn-success" onClick={handleSubmit}>
           Register Business
         </button>
       </div>

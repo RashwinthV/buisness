@@ -131,7 +131,7 @@ const handleChange = (e) => {
           )}
 
           {/* Dynamic Input Fields */}
-          {fields.map((field) => (
+          {/* {fields.map((field) => (
             <div key={field.name} className="mb-3">
               <label className="form-label">{field.label}</label>
 {(field.name === "type" || field.name === "productType" || field.name === "workField") ? (
@@ -170,7 +170,56 @@ const handleChange = (e) => {
 )}
 
             </div>
-          ))}
+          ))} */}
+          {fields.reduce((rows, field, index) => {
+  if (index % 2 === 0) rows.push([field]);
+  else rows[rows.length - 1].push(field);
+  return rows;
+}, []).map((row, rowIndex) => (
+  <div className="row" key={rowIndex}>
+    {row.map((field) => (
+      <div className="col-md-6 mb-3" key={field.name}>
+        <label className="form-label">{field.label}</label>
+
+        {(field.name === "type" || field.name === "productType" || field.name === "workField") ? (
+          <select
+            name={field.name}
+            className="form-select"
+            value={formData[field.name] || ""}
+            onChange={handleChange}
+          >
+            <option value="">Choose</option>
+            {(
+              field.name === "type"
+                ? DEFAULT_PARTY_TYPES
+                : field.name === "productType"
+                ? DEFAULT_PRODUCT_TYPES
+                : DEFAULT_EMPLOYEE_CATEGORIES
+            ).map((option, index) => (
+              <option key={index} value={option}>
+                {option.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())}
+              </option>
+            ))}
+          </select>
+        ) : (
+          <input
+            type={field.type || "text"}
+            name={field.name}
+            value={
+              field.type === "date" && formData[field.name]
+                ? formatDateForInput(formData[field.name])
+                : formData[field.name] || ""
+            }
+            onChange={handleChange}
+            className="form-control"
+            disabled={field.disabled || false}
+          />
+        )}
+      </div>
+    ))}
+  </div>
+))}
+
         </Form>
       </Modal.Body>
 

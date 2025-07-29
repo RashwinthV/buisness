@@ -13,44 +13,43 @@ const Product = () => {
   }, [product]);
 
   return (
-    <div className="container py-2">
-      <h4 className="mb-4 text-center">Products</h4>
+    <div className="container">
+      <h4 className="mb-2 text-center">Products</h4>
 
+<hr></hr>
+      
       {productList.length === 0 ? (
         <p className="text-center">No products found.</p>
       ) : (
-        <div className="row g-4">
-          {productList.map((prod, index) => (
-            <div className="col-md-4" key={index}>
-              <div className="card h-100 shadow-sm">
-                <div className="card-body text-center">
-                  <img
-                    src={prod?.image?.imageUrl || Image_default} // ✅ corrected
-                    alt={prod?.productName || "Product"}
-                    className="mb-3"
-                    style={{
-                      width: "100px",
-                      height: "100px",
-                      objectFit: "cover",
-                      borderRadius: "10px",
-                    }}
-                  />
-                  <h5 className="card-title">{prod?.productName}</h5>
-                  <p className="card-text">
-                    <strong>ID:</strong> {prod?.productId} <br />
-                    <strong>Type:</strong>{" "}
-                    {prod?.productType === "raw_material"
-                      ? "Raw Material"
-                      : "Finished Product"}
-                    <br />
-                    <strong>Rate:</strong>{" "}
-                    {prod?.rate !== null ? `₹${prod.rate}` : "N/A"}
-                  </p>
-                </div>
-              </div>
-            </div>
-          ))}
+       <div className="row mt-2 g-4">
+  {productList.map((prod, index) => (
+    <div className="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3" key={index}>
+      <div className="card h-100 shadow-sm border-2 rounded-4 text-center p-3">
+        <img
+          src={prod?.image?.imageUrl || Image_default}
+          alt={prod?.productName || "Product"}
+          className="img-fluid rounded-4 mb-3"
+          style={{ height: "150px", objectFit: "contain", width: "100%" }}
+        />
+
+        <hr />
+
+        <h6 className="fw-bold mb-2">{prod?.productName}</h6>
+
+        <h6 className="text-success fw-semibold mb-2">
+          ₹{prod?.rate !== null ? prod.rate : "N/A"}
+        </h6>
+
+        <div className="d-flex justify-content-center gap-2 mb-3">
+          <span className="badge bg-warning text-dark">
+            {prod?.productType}
+          </span>
         </div>
+
+      </div>
+    </div>
+  ))}
+</div>
       )}
     </div>
   );
