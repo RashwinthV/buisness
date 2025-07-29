@@ -1,0 +1,13 @@
+.manage-cards img {
+  transition: transform 0.3s ease;
+}
+
+.manage-cards:hover img {
+  transform: scale(1.02);
+}
+
+.manage-cards:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Softer shadow */
+  transform: translateY(-2px); /* Slight lift */
+  transition: all 0.3s ease;
+}

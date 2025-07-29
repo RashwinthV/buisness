@@ -1,5 +1,6 @@
 import React from "react";
 import Image_default from "../../../Assets/Images/Default.png"; // Replace with actual path if different
+import '../../../Styles/ManageUi.css'
 
 const TradeParty = () => {
   const partyList = [
@@ -43,7 +44,7 @@ const TradeParty = () => {
  <div className="row mt-2 g-4">
   {partyList.map((party, index) => (
     <div className="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3" key={index}>
-      <div className="card h-100 shadow-sm border-2 rounded-4 text-center p-3 d-flex flex-column position-relative">
+      <div className="card manage-cards h-100 shadow-sm border-2 rounded-4 text-center p-3 d-flex flex-column position-relative">
         <div className='justify-content-center'>
         <img
           src={party.image}

@@ -4,6 +4,7 @@ import AddTradePartyModal from "../../../components/Modal/AddTradePartyModal";
 import UniversalEditModal from "../../../components/Modal/UniversalEditModal";
 import ManageTagsModal from "../../../components/Modal/ManageTagsModal";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
+import '../../../Styles/ManageUi.css'
 
 const DEFAULT_PARTY_TYPES = ["buyer", "supplier", "both"];
 
@@ -175,7 +176,7 @@ const ManageTradeParty = () => {
 <div className="row g-4">
   {partyList.map((party, index) => (
     <div className="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3" key={index}>
-      <div className="card h-100 shadow-sm border-2 rounded-4 text-center p-3 d-flex flex-column position-relative">
+      <div className="card manage-cards h-100 shadow-sm border-2 rounded-4 text-center p-3 d-flex flex-column position-relative">
         <div className='justify-content-center'>
         <img
           src={party.image}

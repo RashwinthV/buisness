@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Image_default from "../../../Assets/Images/Default.png"; // Replace with your path
 import { useVehicle } from "../../../context/vehicleContext";
+import '../../../Styles/ManageUi.css'
 
 const Vehicle = () => {
   const { vehicle } = useVehicle();
@@ -22,7 +23,7 @@ const Vehicle = () => {
       <div className="row mt-2 g-4">
         {vehicleList.map((vehicle, index) => (
           <div className="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3" key={index}>
-            <div className="card h-100 shadow-sm border-2 rounded-4 text-center p-3 d-flex flex-column position-relative">
+            <div className="card manage-cards h-100 shadow-sm border-2 rounded-4 text-center p-3 d-flex flex-column position-relative">
               
               <img
                 src={vehicle.image?.imageUrl || Image_default}

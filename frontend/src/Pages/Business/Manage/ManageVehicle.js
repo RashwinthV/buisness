@@ -221,7 +221,7 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useVehicle } from "../../../context/vehicleContext";
 import { useUser } from "../../../context/userContext";
 import { VechileImageEditor } from "../../../Utils/Image/EditImage";
-
+import '../../../Styles/ManageUi.css'
 const DEFAULT_VEHICLE_TYPES = ["OFFICE", "TRANSPORT"];
 
 const ManageVehicle = () => {
@@ -363,7 +363,7 @@ const ManageVehicle = () => {
               className="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3"
               key={index}
             >
-              <div className="card h-100 shadow-sm border-2 rounded-4 text-center p-3 d-flex flex-column position-relative">
+              <div className="card manage-cards h-100 shadow-sm border-2 rounded-4 text-center p-3 d-flex flex-column position-relative">
                 <img
                   src={vehicle.image?.imageUrl || Image_default}
                   alt={vehicle.name}

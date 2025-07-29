@@ -9,6 +9,7 @@ import { EmployeeImageEditor } from "../../../Utils/Image/EditImage";
 import { useUser } from "../../../context/userContext";
 import ManageTagsModal from "../../../components/Modal/ManageTagsModal";
 
+import '../../../Styles/ManageUi.css'
 // Constant array of default categories
 const DEFAULT_EMPLOYEE_CATEGORIES = ["Driver", "Technician", "Cleaner"];
 
@@ -187,7 +188,7 @@ const ManageEmployee = () => {
       <div className="row g-4">
   {employeeList.map((emp, index) => (
     <div className="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3" key={index}>
-      <div className="card h-100 shadow-sm border-2 rounded-4 text-center p-3 d-flex flex-column">
+      <div className="card manage-cards h-100 shadow-sm border-2 rounded-4 text-center p-3 d-flex flex-column">
         <div className='justify-content-center'>
         <img
           src={emp.profilepic?.imageUrl || Image_default}
@@ -265,7 +266,7 @@ const ManageEmployee = () => {
           { label: "Salary", name: "salary", type: "number" },
           {
             label: "Field of Work",
-            name: "field",
+            name: "workField",
             type: "select",
             options: employeeCategories,
           },

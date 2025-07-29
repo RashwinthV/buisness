@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Image_default from "../../../Assets/Images/Default.png";
 import { useProduct } from "../../../context/ProductContext";
+import '../../../Styles/ManageUi.css'
 
 const Product = () => {
   const { product } = useProduct();
@@ -24,7 +25,7 @@ const Product = () => {
        <div className="row mt-2 g-4">
   {productList.map((prod, index) => (
     <div className="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3" key={index}>
-      <div className="card h-100 shadow-sm border-2 rounded-4 text-center p-3">
+      <div className="card manage-cards h-100 shadow-sm border-2 rounded-4 text-center p-3">
         <img
           src={prod?.image?.imageUrl || Image_default}
           alt={prod?.productName || "Product"}

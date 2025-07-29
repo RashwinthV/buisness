@@ -2,6 +2,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Image_default from "../../../Assets/Images/Default.png";
 import { useEmployee } from "../../../context/EmployeeContext";
 import { useEffect, useState } from "react";
+import '../../../Styles/ManageUi.css'
+
 const Employee = () => {
   const { Employee } = useEmployee();
 
@@ -20,7 +22,7 @@ const [employeeList, setemployeeList] = useState([]);
       <div className="row mt-2 g-4">
   {employeeList.map((emp, index) => (
     <div className="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3" key={index}>
-      <div className="card h-100 shadow-sm border-2 rounded-4 text-center p-3 d-flex flex-column">
+      <div className="card manage-cards h-100 shadow-sm border-2 rounded-4 text-center p-3 d-flex flex-column">
         <div className="justify-content-center">
         <img
           src={emp.profilepic?.imageUrl || Image_default}
