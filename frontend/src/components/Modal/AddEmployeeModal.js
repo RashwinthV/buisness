@@ -335,10 +335,21 @@ const handleSubmit = async () => {
                 value={formData.workField}
                 onChange={handleChange}
               >
-                <option value="">Select</option>
-                <option value="driver">Driver</option>
-                <option value="factory_worker">Factory Worker</option>
-                <option value="others">Others</option>
+               <option value="">Select</option>
+<option value="driver">Driver</option>
+<option value="factory_worker">Factory Worker</option>
+<option value="machine_operator">Machine Operator</option>
+<option value="supervisor">Supervisor</option>
+<option value="technician">Technician</option>
+<option value="warehouse_staff">Warehouse Staff</option>
+<option value="quality_inspector">Quality Inspector</option>
+<option value="maintenance_staff">Maintenance Staff</option>
+<option value="packer">Packer</option>
+<option value="security_guard">Security Guard</option>
+<option value="cashier">Cashier</option>
+<option value="admin_staff">Admin Staff</option>
+<option value="others">Others</option>
+
               </select>
             </div>
 

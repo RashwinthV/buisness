@@ -132,10 +132,15 @@ const AddTradePartyModal = ({ show, handleClose }) => {
               value={formData.partyType}
               onChange={handleChange}
             >
-              <option value="">Choose</option>
-              <option value="buyer">Buyer</option>
-              <option value="seller">Seller</option>
-              <option value="both">Both</option>
+<option value="">Select</option>
+<option value="buyer">Customer</option>
+<option value="seller">Materials Supplier</option>
+<option value="both">Customer  / Supplier </option>
+<option value="distributor">Distributor</option>
+<option value="retailer">Retailer</option>
+<option value="wholesaler">Wholesaler</option>
+<option value="agent">Agent</option>
+<option value="broker">Broker</option>
             </select>
           </div>
 

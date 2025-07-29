@@ -205,8 +205,17 @@ const AddProductModal = ({ show, handleClose }) => {
               onChange={handleChange}
             >
               <option value="">Choose</option>
-              <option value="raw_material">Raw Material</option>
-              <option value="finished_product">Finished Product</option>
+<option value="raw_material">Raw Material</option>
+<option value="semi_finished">Semi-Finished Product</option>
+<option value="finished_product">Finished Product</option>
+<option value="retail_product">Retail Product</option>
+<option value="packaging_material">Packaging Material</option>
+<option value="consumable">Consumable</option>
+<option value="spare_part">Spare Part</option>
+<option value="service">Service</option>
+<option value="tool">Tool</option>
+<option value="accessory">Accessory</option>
+
             </select>
           </div>
 
