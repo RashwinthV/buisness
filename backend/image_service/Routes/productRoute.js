@@ -11,6 +11,12 @@ productrouter.post(
   upload.single("image"),
   uploadImage
 );
+productrouter.post(
+  "/upload/:id/:businessId",
+  authMiddleware,
+  upload.single("image"),
+  uploadImage
+);
 productrouter.post("/deleteproductimage/:id", authMiddleware, deleteImage);
 
 module.exports = productrouter;
