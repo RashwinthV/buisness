@@ -29,7 +29,6 @@ exports.AddCategory = async (req, res) => {
     const areSame =
       existingTags.length === tags.length &&
       existingTags.every((tag) => tags.includes(tag));
-      console.log(areSame);
       
 
     if (areSame) {
