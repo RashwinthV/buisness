@@ -108,6 +108,34 @@ const businessSchema = new mongoose.Schema(
       twitter: { type: String, default: null },
       website: { type: String, default: null },
     },
+     productCategories: [
+      {
+        type: String,
+        trim: true,
+        
+      },
+    ],
+
+    employeeFieldsOfWork: [
+      {
+        type: String,
+        trim: true,
+      },
+    ],
+
+    vehicleCategories: [
+      {
+        type: String,
+        trim: true,
+      },
+    ],
+
+    tradePartyTypes: [
+      {
+        type: String,
+        trim: true,
+      },
+    ],
   },
   {
     timestamps: true,

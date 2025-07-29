@@ -8,10 +8,15 @@ import { useUser } from "../../../context/userContext";
 import { toast } from "react-toastify";
 import { ProductImageEditor } from "../../../Utils/Image/EditImage";
 import ManageTagsModal from "../../../components/Modal/ManageTagsModal";
-import '../../../Styles/ManageUi.css'
+import "../../../Styles/ManageUi.css";
+import { useBusiness } from "../../../context/BussinessContext";
 
 // Default product types
-const DEFAULT_PRODUCT_TYPES = ["raw_material", "finished_product", "retail_product"];
+const DEFAULT_PRODUCT_TYPES = [
+  "raw_material",
+  "finished_product",
+  "retail_product",
+];
 
 const ManageProduct = () => {
   const { product } = useProduct();
@@ -19,22 +24,27 @@ const ManageProduct = () => {
   const [showProductModal, setShowProductModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [editData, setEditData] = useState(null);
-
-  const [productTypes, setProductTypes] = useState([...DEFAULT_PRODUCT_TYPES]);
+  const [productTypes, setProductTypes] = useState([]);
   const [showTagsModal, setShowTagsModal] = useState(false);
   const [modalTitle, setModalTitle] = useState("");
   const [modalData, setModalData] = useState([]);
-
   const navigate = useNavigate();
   const location = useLocation();
   const { businessId } = useParams();
   const { user, token, baseUrl } = useUser();
+  const { businesses } = useBusiness();
+  const selectedbusiness = businesses.find(
+    (b) => String(b.businessId) === businessId
+  );
 
   useEffect(() => {
     if (product && Array.isArray(product)) {
       setProductList(product);
+      setProductTypes(
+        selectedbusiness?.productCategories || [...DEFAULT_PRODUCT_TYPES]
+      );
     }
-  }, [product]);
+  }, [product,selectedbusiness?.productCategories]);
 
   const openAddModal = () => {
     navigate(`/managebusiness/${businessId}/manageproducts/Add_Product`, {
@@ -48,8 +58,31 @@ const ManageProduct = () => {
     setShowTagsModal(true);
   };
 
-  const handleSaveTags = (updatedTags) => {
-    setProductTypes(updatedTags);
+  const handleSaveTags = async (updatedTags) => {
+    const type = "product";
+    try {
+      const res = await fetch(
+        `${baseUrl}/v2/bussiness/${user?.id}/tags/${selectedbusiness?._id}/${type}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ tags: updatedTags }),
+        }
+      );
+
+      const data = await res.json();
+      if (res.ok) {
+        toast.success(data.message);
+        setProductTypes(data.tags || []);
+      } else {
+        console.error("Failed to update tags", data?.error);
+      }
+    } catch (err) {
+      console.error("Error updating tags", err);
+    }
   };
 
   const { handleImageUpload } = ProductImageEditor({
@@ -139,20 +172,20 @@ const ManageProduct = () => {
 
   return (
     <div className="container rounded shadow-sm py-3">
-<div className="d-flex flex-wrap justify-content-between align-items-center mb-4">
-  <h4 className="fw-bold mb-2 mb-md-0 me-auto">Manage Products</h4>
+      <div className="d-flex flex-wrap justify-content-between align-items-center mb-4">
+        <h4 className="fw-bold mb-2 mb-md-0 me-auto">Manage Products</h4>
 
-  <div className="d-flex flex-wrap align-items-center justify-content-center gap-2">
-    <button className="btn btn-sm btn-primary" onClick={openManageModal}>
-      <i className="bi bi-pencil-square me-2"></i> Manage Types
-    </button>
-    <button className="btn btn-sm btn-success" onClick={openAddModal}>
-      <i className="bi bi-plus-circle me-2"></i> Add Product
-    </button>
-  </div>
-</div>
-    
-<hr></hr>
+        <div className="d-flex flex-wrap align-items-center justify-content-center gap-2">
+          <button className="btn btn-sm btn-primary" onClick={openManageModal}>
+            <i className="bi bi-pencil-square me-2"></i> Manage Types
+          </button>
+          <button className="btn btn-sm btn-success" onClick={openAddModal}>
+            <i className="bi bi-plus-circle me-2"></i> Add Product
+          </button>
+        </div>
+      </div>
+
+      <hr></hr>
 
       {productList.length === 0 ? (
         <p className="text-center text-muted">No products found.</p>
@@ -220,51 +253,57 @@ const ManageProduct = () => {
         //   ))}
         // </div>/
         <div className="row g-4">
-  {productList.map((prod, index) => (
-    <div className="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3" key={index}>
-      <div className="card manage-cards h-100 shadow-sm border-2 rounded-4 text-center p-3">
-        <img
-          src={prod?.image?.imageUrl || Image_default}
-          alt={prod?.productName || "Product"}
-          className="img-fluid rounded-4 mb-3"
-          style={{ height: "150px", objectFit: "contain", width: "100%" }}
-        />
+          {productList.map((prod, index) => (
+            <div
+              className="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3"
+              key={index}
+            >
+              <div className="card manage-cards h-100 shadow-sm border-2 rounded-4 text-center p-3">
+                <img
+                  src={prod?.image?.imageUrl || Image_default}
+                  alt={prod?.productName || "Product"}
+                  className="img-fluid rounded-4 mb-3"
+                  style={{
+                    height: "150px",
+                    objectFit: "contain",
+                    width: "100%",
+                  }}
+                />
 
-        <hr />
+                <hr />
 
-        <h6 className="fw-bold mb-2">{prod?.productName}</h6>
+                <h6 className="fw-bold mb-2">{prod?.productName}</h6>
 
-        <h6 className="text-success fw-semibold mb-2">
-          ₹{prod?.rate !== null ? prod.rate : "N/A"}
-        </h6>
+                <h6 className="text-success fw-semibold mb-2">
+                  ₹{prod?.rate !== null ? prod.rate : "N/A"}
+                </h6>
 
-        <div className="d-flex justify-content-center gap-2 mb-3">
-          <span className="badge bg-warning text-dark">
-            {prod?.productType}
-          </span>
+                <div className="d-flex justify-content-center gap-2 mb-3">
+                  <span className="badge bg-warning text-dark">
+                    {prod?.productType}
+                  </span>
+                </div>
+
+                <div className="d-flex justify-content-center gap-2">
+                  <button
+                    className="btn btn-outline-primary btn-sm rounded-pill"
+                    onClick={() => handleEdit(prod)}
+                    title="Edit"
+                  >
+                    <i className="bi bi-pencil-fill"></i>
+                  </button>
+                  <button
+                    className="btn btn-outline-danger btn-sm rounded-pill"
+                    onClick={() => handleDelete(prod)}
+                    title="Delete"
+                  >
+                    <i className="bi bi-trash-fill"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
-
-        <div className="d-flex justify-content-center gap-2">
-          <button
-            className="btn btn-outline-primary btn-sm rounded-pill"
-            onClick={() => handleEdit(prod)}
-            title="Edit"
-          >
-            <i className="bi bi-pencil-fill"></i>
-          </button>
-          <button
-            className="btn btn-outline-danger btn-sm rounded-pill"
-            onClick={() => handleDelete(prod)}
-            title="Delete"
-          >
-            <i className="bi bi-trash-fill"></i>
-          </button>
-        </div>
-      </div>
-    </div>
-  ))}
-</div>
-
       )}
 
       {/* Add Product Modal */}

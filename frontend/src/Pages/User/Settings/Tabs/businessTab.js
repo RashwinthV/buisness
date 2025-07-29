@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Form, Spinner, Row, Col, Button } from "react-bootstrap";
+import {  Spinner, Row, Col, Button } from "react-bootstrap";
 import { toast } from "react-toastify";
 import { FaEdit } from "react-icons/fa";
 import { useBusiness } from "../../../../context/BussinessContext";
@@ -19,7 +19,7 @@ const BusinessTab = ({ businessId }) => {
   const activeBusinesses = settingsBusiness?.active || [];
   const inactiveBusinesses = settingsBusiness?.inactive || [];
 
-  const statusOptions = ["active", "inactive"];
+  // const statusOptions = ["active", "inactive"];
 
   useEffect(() => {
     if (selectedBusiness) {

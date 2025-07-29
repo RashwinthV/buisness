@@ -31,6 +31,7 @@ const ManageTagsModal = ({ show, onHide, title, initialTags, onSave }) => {
     onSave(tags);
     onHide();
   };
+  
 
   return (
     <Modal show={show} onHide={onHide} centered>

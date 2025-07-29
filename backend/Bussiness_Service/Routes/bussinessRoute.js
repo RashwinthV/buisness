@@ -5,6 +5,7 @@ const Productroute = require("./ProductRoute");
 const Employeeroute=require('./employeeRoutes');
 const Vechileroute = require("./vechileRoute");
 const Traderroute = require("./TraderRoute");
+const { AddCategory } = require("../controller/CategoryController");
 const router = express.Router();
 
 //get user's bussiness
@@ -19,6 +20,9 @@ router.post('/register/:id',authMiddleware,RegisterBusiness)
 router.post('/:id/updatebusiness/:businessId',authMiddleware,UpadateBussiness)
 router.delete('/:id/softDeletebusiness/:businessId',authMiddleware,SoftDeleteBusiness)
 router.put('/:id/status/:businessId',authMiddleware,ActivateBusiness)
+
+//category
+router.put('/:id/tags/:businessId/:type',authMiddleware,AddCategory)
 
 
 

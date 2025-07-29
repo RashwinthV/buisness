@@ -5,6 +5,10 @@ import UniversalEditModal from "../../../components/Modal/UniversalEditModal";
 import ManageTagsModal from "../../../components/Modal/ManageTagsModal";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import '../../../Styles/ManageUi.css'
+import { useUser } from "../../../context/userContext";
+import { useBusiness } from "../../../context/BussinessContext";
+import { toast } from "react-toastify";
+import { useEffect } from "react";
 
 const DEFAULT_PARTY_TYPES = ["buyer", "supplier", "both"];
 
@@ -17,6 +21,19 @@ const ManageTradeParty = () => {
   const [showTagsModal, setShowTagsModal] = useState(false);
   const [modalTitle, setModalTitle] = useState("");
   const [modalData, setModalData] = useState([]);
+    const { businessId } = useParams();
+
+    const { user, token, baseUrl } = useUser();
+    const { businesses } = useBusiness();
+    const selectedbusiness = businesses.find(
+      (b) => String(b.businessId) === businessId
+    );
+  
+    useEffect(()=>{
+    if (selectedbusiness) {
+      setPartyTypes(selectedbusiness?.tradePartyTypes || [...DEFAULT_PARTY_TYPES]);
+    }
+    },[selectedbusiness,selectedbusiness?.tradePartyTypes])
 
   const [partyList, setPartyList] = useState([
     {
@@ -47,7 +64,6 @@ const ManageTradeParty = () => {
 
   const navigate = useNavigate();
   const location = useLocation();
-  const { businessId } = useParams();
 
   const formatType = (type) => {
     if (type === "buyer") return "Buyer";
@@ -67,8 +83,31 @@ const ManageTradeParty = () => {
     setShowTagsModal(true);
   };
 
-  const handleSaveTags = (updated) => {
-    setPartyTypes(updated);
+ const handleSaveTags = async (updatedTags) => {
+    const type = "trade";
+    try {
+      const res = await fetch(
+        `${baseUrl}/v2/bussiness/${user?.id}/tags/${selectedbusiness?._id}/${type}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ tags: updatedTags }),
+        }
+      );
+
+      const data = await res.json();
+      if (res.ok) {
+        toast.success(data.message);
+        setPartyTypes(data.tags || []);
+      } else {
+        console.error("Failed to update tags", data?.error);
+      }
+    } catch (err) {
+      console.error("Error updating tags", err);
+    }
   };
 
   const handleEdit = (party) => {

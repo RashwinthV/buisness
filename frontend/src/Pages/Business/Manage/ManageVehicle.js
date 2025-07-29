@@ -124,7 +124,7 @@
 //   {vehicleList.map((vehicle, index) => (
 //     <div className="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3" key={index}>
 //       <div className="card h-100 shadow-sm border-2 rounded-4 text-center p-3 d-flex flex-column position-relative">
-        
+
 //         <img
 //           src={vehicle.image?.imageUrl || Image_default}
 //           alt={vehicle.name}
@@ -221,7 +221,9 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useVehicle } from "../../../context/vehicleContext";
 import { useUser } from "../../../context/userContext";
 import { VechileImageEditor } from "../../../Utils/Image/EditImage";
-import '../../../Styles/ManageUi.css'
+import "../../../Styles/ManageUi.css";
+import { useBusiness } from "../../../context/BussinessContext";
+import { toast } from "react-toastify";
 const DEFAULT_VEHICLE_TYPES = ["OFFICE", "TRANSPORT"];
 
 const ManageVehicle = () => {
@@ -229,7 +231,7 @@ const ManageVehicle = () => {
   const [showEditModal, setShowEditModal] = useState(false);
   const [editData, setEditData] = useState(null);
 
-  const [vehicleTypes, setVehicleTypes] = useState([...DEFAULT_VEHICLE_TYPES]);
+  const [vehicleTypes, setVehicleTypes] = useState([]);
   const [showTagsModal, setShowTagsModal] = useState(false);
   const [modalTitle, setModalTitle] = useState("");
   const [modalData, setModalData] = useState([]);
@@ -242,12 +244,19 @@ const ManageVehicle = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { businessId } = useParams();
+  const { businesses } = useBusiness();
+  const selectedbusiness = businesses.find(
+    (b) => String(b.businessId) === businessId
+  );
+
+
 
   useEffect(() => {
     if (vehicle && Array.isArray(vehicle)) {
       setVehicleList(vehicle);
+      setVehicleTypes(selectedbusiness?.vehicleCategories||[...DEFAULT_VEHICLE_TYPES])
     }
-  }, [vehicle]);
+  }, [vehicle,selectedbusiness?.vehicleCategories]);
 
   const openAddModal = () => {
     navigate(`/managebusiness/${businessId}/managevehicles/Add_Vechile`, {
@@ -261,9 +270,31 @@ const ManageVehicle = () => {
     setShowTagsModal(true);
   };
 
-  const handleSaveTags = (updatedTags) => {
-    setVehicleTypes(updatedTags);
-    setShowTagsModal(false);
+ const handleSaveTags = async (updatedTags) => {
+    const type = "vehicle";
+    try {
+      const res = await fetch(
+        `${baseUrl}/v2/bussiness/${user?.id}/tags/${selectedbusiness?._id}/${type}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ tags: updatedTags }),
+        }
+      );
+
+      const data = await res.json();
+      if (res.ok) {
+        toast.success(data.message);
+        setVehicleTypes(data.tags || []);
+      } else {
+        console.error("Failed to update tags", data?.error);
+      }
+    } catch (err) {
+      console.error("Error updating tags", err);
+    }
   };
 
   const handleEdit = (vehicle) => {
@@ -318,9 +349,7 @@ const ManageVehicle = () => {
 
       const data = await res.json();
       if (res.ok) {
-        const newList = vehicleList.map((v) =>
-          v._id === data._id ? data : v
-        );
+        const newList = vehicleList.map((v) => (v._id === data._id ? data : v));
         setVehicleList(newList);
         setShowEditModal(false);
       } else {
@@ -419,7 +448,10 @@ const ManageVehicle = () => {
       )}
 
       {/* Add Modal */}
-      <AddVehicleModal show={showModal} handleClose={() => setShowModal(false)} />
+      <AddVehicleModal
+        show={showModal}
+        handleClose={() => setShowModal(false)}
+      />
 
       {/* Edit Modal */}
       <UniversalEditModal
@@ -432,47 +464,46 @@ const ManageVehicle = () => {
         includeImage={true}
         onImageChange={handleImageChange}
         fields={[
-  { label: "Vehicle Name", name: "name" },
-  {
-    label: "Vehicle Type",
-    name: "type",
-    type: "select",
-    options: vehicleTypes, // assumed to be declared above
-  },
-  { label: "Vehicle ID", name: "vehicleId", readonly: true },
-  { label: "Brand", name: "brand" },
-  { label: "Model", name: "model" },
-  { label: "Registration Number", name: "registrationNumber" },
-  { label: "Registered Owner Name", name: "registeredOwnerName" },
-  { label: "RTO Details", name: "rtoDetails" },
-  {
-    label: "Registration Date",
-    name: "registrationDate",
-    type: "date",
-  },
-  {
-    label: "Ownership",
-    name: "ownership",
-    type: "select",
-    options: [
-      { label: "First", value: "first" },
-      { label: "Second", value: "second" },
-      { label: "Third", value: "third" },
-      { label: "Others", value: "others" },
-    ],
-  },
-  {
-    label: "Insurance Valid Till",
-    name: "insuranceValidTill",
-    type: "date",
-  },
-  {
-    label: "FC Valid Till",
-    name: "fcValidTill",
-    type: "date",
-  },
-]}
-
+          { label: "Vehicle Name", name: "name" },
+          {
+            label: "Vehicle Type",
+            name: "type",
+            type: "select",
+            options: vehicleTypes, // assumed to be declared above
+          },
+          { label: "Vehicle ID", name: "vehicleId", readonly: true },
+          { label: "Brand", name: "brand" },
+          { label: "Model", name: "model" },
+          { label: "Registration Number", name: "registrationNumber" },
+          { label: "Registered Owner Name", name: "registeredOwnerName" },
+          { label: "RTO Details", name: "rtoDetails" },
+          {
+            label: "Registration Date",
+            name: "registrationDate",
+            type: "date",
+          },
+          {
+            label: "Ownership",
+            name: "ownership",
+            type: "select",
+            options: [
+              { label: "First", value: "first" },
+              { label: "Second", value: "second" },
+              { label: "Third", value: "third" },
+              { label: "Others", value: "others" },
+            ],
+          },
+          {
+            label: "Insurance Valid Till",
+            name: "insuranceValidTill",
+            type: "date",
+          },
+          {
+            label: "FC Valid Till",
+            name: "fcValidTill",
+            type: "date",
+          },
+        ]}
       />
 
       {/* Manage Vehicle Types Modal */}
