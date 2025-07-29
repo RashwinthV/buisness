@@ -3,11 +3,11 @@
 }
 
 .manage-cards:hover img {
-  transform: scale(1.02);
+  transform: scale(1);
 }
 
 .manage-cards:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Softer shadow */
+box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
   transform: translateY(-2px); /* Slight lift */
   transition: all 0.3s ease;
 }
