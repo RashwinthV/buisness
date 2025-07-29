@@ -15,7 +15,10 @@ exports.Getbussiness = async (req, res) => {
 
     const userId = new mongoose.Types.ObjectId(id);
 
-    const businesses = await bussinessModel.find({ ownedBy: userId,businessStatus:"Active" });
+    const businesses = await bussinessModel.find({
+      ownedBy: userId,
+      businessStatus: "Active",
+    });
 
     if (!businesses || businesses.length === 0) {
       return res.status(404);
@@ -129,10 +132,12 @@ exports.RegisterBusiness = async (req, res) => {
 
 exports.GetAllbussiness = async (req, res) => {
   try {
-    const allbusinesses = await bussinessModel.find({businessStatus:"Active"}).populate({
-      path: "ownedBy",
-      select: "firstName profilepic",
-    });
+    const allbusinesses = await bussinessModel
+      .find({ businessStatus: "Active" })
+      .populate({
+        path: "ownedBy",
+        select: "firstName profilepic",
+      });
 
     if (allbusinesses.length === 0) {
       return res.json({ message: "No businesses found" });
@@ -196,5 +201,82 @@ exports.UpadateBussiness = async (req, res) => {
   } catch (err) {
     console.error("Business update error:", err.message);
     return res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+exports.SoftDeleteBusiness = async (req, res) => {
+  const { businessId } = req.params;
+  try {
+    const { id } = req.params;
+    if (!id | !businessId) {
+      return res.json({ message: "user Id or business id missing" });
+    }
+    const business = await bussinessModel.findOneAndUpdate(
+      { _id: businessId, ownedBy: id },
+      {
+        $set: {
+          businessStatus: "Inactive",
+        },
+      }
+    );
+    if (!business) {
+      return res.json({ message: "NO business found" });
+    }
+    res.json({ success: true, message: "business deleted successfully" });
+  } catch (error) {
+    console.log("deletion error", error);
+
+    return res.status(500).json({ message: "Internal server Error" });
+  }
+};
+
+exports.getActiveAndInactiveBusinesses = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const oneMonthAgo = new Date();
+oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+
+    const [activeBusinesses, inactiveBusinesses] = await Promise.all([
+      bussinessModel.find({ ownedBy: id, businessStatus: "Active" }),
+      bussinessModel.find({
+        ownedBy: id,
+        businessStatus: "Inactive",
+        updatedAt: { $gte: oneMonthAgo },
+      }),
+    ]);
+
+    res.json({
+      active: activeBusinesses,
+      inactive: inactiveBusinesses,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Server Error" });
+  }
+};
+
+exports.ActivateBusiness = async (req, res) => {
+  const { businessId } = req.params;
+  try {
+    const { id } = req.params;
+    if (!id | !businessId) {
+      return res.json({ message: "user Id or business id missing" });
+    }
+    const business = await bussinessModel.findOneAndUpdate(
+      { _id: businessId, ownedBy: id },
+      {
+        $set: {
+          businessStatus: "Active",
+        },
+      }
+    );
+    if (!business) {
+      return res.json({ message: "NO business found" });
+    }
+    res.json({ success: true, message: "business deleted successfully" });
+  } catch (error) {
+    console.log("deletion error", error);
+
+    return res.status(500).json({ message: "Internal server Error" });
   }
 };

@@ -1,36 +1,3 @@
-// import { createContext, useState, useContext } from "react";
-// const BusinessContext = createContext();
-// export const useBusiness = () => useContext(BusinessContext);
-
-// // Create provider
-// export const BusinessProvider = ({ children }) => {
-
-//     //change this values to get bussiness from db and store here using the user id
-//   const [businesses, setBusinesses] = useState([
-//     { id: 1, name: "India Cricket" },
-//     { id: 2, name: "Royal Challengers Bengaluru" },
-//   ]);
-
-//   const [selectedBusinessId, setSelectedBusinessId] = useState(null);
-
-//   if(selectedBusinessId){
-//     localStorage.setItem("AccountId",selectedBusinessId)
-//   }
-
-//   return (
-//     <BusinessContext.Provider
-//       value={{
-//         businesses,
-//         setBusinesses,
-//         selectedBusinessId,
-//         setSelectedBusinessId,
-
-//       }}
-//     >
-//       {children}
-//     </BusinessContext.Provider>
-//   );
-// };
 import { createContext, useState, useContext, useEffect } from "react";
 import { useUser } from "./userContext";
 import { toast } from "react-toastify";
@@ -43,6 +10,7 @@ export const BusinessProvider = ({ children }) => {
   const [businesses, setBusinesses] = useState([]);
   const [selectedBusinessId, setSelectedBusinessId] = useState(null);
   const [allbusinesses, setallBusinesses] = useState([]);
+  const [settingsBusiness, setsettingsBusiness] = useState([]);
 
   const baseUrl = process.env.REACT_APP_BACKEND_URI;
   const { user } = useUser();
@@ -98,9 +66,33 @@ export const BusinessProvider = ({ children }) => {
         console.error(error);
       }
     };
+    const settingsbusinesses = async () => {
+      if (!user?.id) return;
+
+      try {
+        const response = await fetch(
+          `${baseUrl}/v2/bussiness/bussinessstatus/${user.id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        const data = await response.json();
+        if (response.ok) {
+          setsettingsBusiness(data || []);
+        } else {
+          toast.error(data?.message || "Failed to fetch businesses");
+        }
+      } catch (error) {
+        toast.error("Error fetching businesses");
+        console.error(error);
+      }
+    };
 
     allbusinesses();
     fetchBusinesses();
+    settingsbusinesses();
   }, [user, baseUrl, token]);
 
   useEffect(() => {
@@ -131,12 +123,12 @@ export const BusinessProvider = ({ children }) => {
     }
   }, [selectedBusinessId]);
   const businesscount = allbusinesses.length;
-  
 
   return (
     <BusinessContext.Provider
       value={{
         businesses,
+        settingsBusiness,
         allbusinesses,
         setBusinesses,
         selectedBusinessId,

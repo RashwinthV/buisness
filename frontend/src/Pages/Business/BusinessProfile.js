@@ -9,7 +9,7 @@ import { useBusiness } from "../../context/BussinessContext.js";
 import { useUser } from "../../context/userContext.js";
 import { toast } from "react-toastify";
 import { useBusinessImageUpload } from "../../Utils/Image/ImageUploader.js";
-import { useParams, useLocation } from "react-router-dom";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
 import { FaTruck, FaCoins } from "react-icons/fa";
 
 const cleanValue = (val) => (val === "Unknown" ? "" : val);
@@ -20,6 +20,7 @@ const BusinessProfile = () => {
   const baseUrl = process.env.REACT_APP_BACKEND_URI;
   const currentUserId = user?.id;
   const { businessId: paramBusinessId } = useParams();
+  const navigate=useNavigate();
 
   const [editMode, setEditMode] = useState(false);
   const [showVerifyModal, setShowVerifyModal] = useState(false);
@@ -221,6 +222,34 @@ const BusinessProfile = () => {
       },
     }));
   };
+
+  const handelDelete=async()=>{
+    console.log(baseUrl,"     ", user?.id,"    ",business?._id);
+    
+    try {
+      const response=await fetch(`${baseUrl}/v2/bussiness/${user?.id}/softDeletebusiness/${business?._id}`,{
+        method:"DELETE",
+        headers:{
+          Authorization:`Bearer ${token}`,
+          "content-type":"application/json"
+        }
+      })
+      console.log(response);
+      
+      const result =await response.json()
+      if(result.success){
+        toast.success(result.message)
+        setTimeout(()=>{
+          toast.info("if you wish to recover your business, go to settings")
+          navigate('/home')
+        },5000)
+      }else{
+        toast.error(result.message)
+      }
+    } catch (error) {
+      toast.error("Error deleting business")
+    }
+  }
 
   return (
     <Container className="py-4">
@@ -544,7 +573,7 @@ const BusinessProfile = () => {
                 <Button
                   variant="outline-danger"
                   size="sm"
-                  onClick={() => "/home"}
+                  onClick={handelDelete}
                 >
                   <i className="bi bi-trash3-fill" />
                 </Button>
