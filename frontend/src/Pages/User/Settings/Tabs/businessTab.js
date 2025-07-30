@@ -318,19 +318,27 @@ navigate(`/viewbusinessprofile/${businessId}`)}
     
     <div className="container">
       <h4 className="mt-3 text-primary">Active Businesses</h4>
-      <div className="row g-4">
-        {activeBusinesses.map((business) => (
-          <div className="col-12 col-md-6 col-lg-4 d-flex" onClick={() => viewProfile(business.businessId)} key={business._id}>
-            <BusinessCard
-              business={business}
-              editLogo={business.businessId === selectedBusinessId}
-              handleImageUpload={handleImageUpload}
-              loading={loading}
-              onStatusChange={handleStatusChange}
-            />
-          </div>
-        ))}
+{activeBusinesses.length > 0 ? (
+  <div className="row g-4">
+    {activeBusinesses.map((business) => (
+      <div
+        className="col-12 col-md-6 col-lg-4 d-flex"
+        onClick={() => viewProfile(business.businessId)}
+        key={business._id}
+      >
+        <BusinessCard
+          business={business}
+          editLogo={business.businessId === selectedBusinessId}
+          handleImageUpload={handleImageUpload}
+          loading={loading}
+          onStatusChange={handleStatusChange}
+        />
       </div>
+    ))}
+  </div>
+) : (
+  <p className="text-muted mt-3">No Active Business Found</p>
+)}
 
       <h4 className="mt-5 text-primary">Inactive Businesses</h4>
       {inactiveBusinesses.length > 0 ? (
@@ -351,7 +359,7 @@ navigate(`/viewbusinessprofile/${businessId}`)}
         </div>
       ) : (
         <p className="text-muted mt-3">
-          If your business is not found here, please contact us through our email.
+          No In-Active Business Found
         </p>
       )}
 
