@@ -1,9 +1,6 @@
-import Giticon from "../../Assets/Icons/icons8-github-48.png";
-import Linkedin from "../../Assets/Icons/icons8-linkedin-48.png";
-import Instagram from "../../Assets/Icons/icons8-instagram-48.png";
 import Kirithik_pic from "../../Assets/Images/Kirithik-Profile.jpg";
 import Rashwinth_pic from "../../Assets/Images/Rashwinth-Profile.jpg";
-
+import "../../Styles/Dev.css";
 const calculateAge = (dob) => {
   const birthDate = new Date(dob);
   const today = new Date();
@@ -42,10 +39,70 @@ const developers = [
 ];
 const Developers = () => {
   return (
+    //     <div className="container-fluid py-5">
+    //       <h2 className="text-center mb-4">Meet Our Developers</h2>
+    //       <hr></hr>
+    //       <div className="row g-4 justify-content-center mt-3">
+    //         {developers.map((dev, index) => (
+    //           <div
+    //             className="col-sm-12 col-md-6 col-lg-4 d-flex justify-content-center"
+    //             key={index}
+    //           >
+    //             <div
+    //               className="card shadow-sm text-center p-3"
+    //               style={{ width: "18rem", borderRadius: "1rem" }}
+    //             >
+    //               <img
+    //                 src={dev.profilePic}
+    //                 alt={`${dev.name}'s Profile`}
+    //                 className="rounded-circle mx-auto"
+    //                 style={{
+    //                   width: "200px",
+    //                   height: "200px",
+    //                   objectFit: "cover",
+    //                   border: "2px solid #ddd",
+    //                   marginTop: "10px",
+    //                 }}
+    //               />
+    //               <div className="card-body">
+    //                 <h5 className="card-title fw-bold mb-2">{dev.name}</h5>
+    //                 <h6 className="card-title fw-bold mb-2">{dev.role}</h6>
+    //                 <div className="d-flex justify-content-center gap-3 mb-2 flex-wrap">
+    //                   <span className="card-text">
+    //                     <h6>Age: {calculateAge(dev.dob)}</h6>
+    //                   </span>
+    //                   <span className="card-text">
+    //                     <h6>Education: {dev.education}</h6>
+    //                   </span>
+    //                 </div>
+    //               </div>
+    //               <div className="d-flex justify-content-center gap-2 pb-2">
+    //                 <a href={dev.linkedIn} target="_blank" rel="noreferrer">
+    //   <i className="bi bi-linkedin custom-icon-dev"></i>
+    // </a>
+    // <a href={dev.instagram} target="_blank" rel="noreferrer">
+    //   <i className="bi bi-instagram custom-icon-dev"></i>
+    // </a>
+    // <a href={dev.github} target="_blank" rel="noreferrer">
+    //   <i className="bi bi-github custom-icon-dev"></i>
+    // </a>
 
-    <div className="container-fluid py-5">
-      <h2 className="text-center mb-4">Meet Our Developers</h2>
-      <hr></hr>
+    //               </div>
+    //             </div>
+    //           </div>
+    //         ))}
+    //       </div>
+    //     </div>
+
+    <div className="container-fluid">
+      <h2 className="text-center fw-bold text-dark mb-4">
+        Meet Our Developers
+      </h2>
+      <hr
+        className="mx-auto mb-4"
+        style={{ width: "200px", borderTop: "3px solid #0d6efd" }}
+      />
+
       <div className="row g-4 justify-content-center mt-3">
         {developers.map((dev, index) => (
           <div
@@ -53,43 +110,46 @@ const Developers = () => {
             key={index}
           >
             <div
-              className="card shadow-sm text-center p-3"
-              style={{ width: "18rem", borderRadius: "1rem" }}
+              className="card shadow-lg border-0 text-center"
+              style={{ width: "20rem", borderRadius: "1.5rem" }}
             >
-              <img
-                src={dev.profilePic}
-                alt={`${dev.name}'s Profile`}
-                className="rounded-circle mx-auto"
-                style={{
-                  width: "200px",
-                  height: "200px",
-                  objectFit: "cover",
-                  border: "2px solid #ddd",
-                  marginTop: "10px",
-                }}
-              />
               <div className="card-body">
-                <h5 className="card-title fw-bold mb-2">{dev.name}</h5>
-                <h6 className="card-title fw-bold mb-2">{dev.role}</h6>
-                <div className="d-flex justify-content-center gap-3 mb-2 flex-wrap">
-                  <span className="card-text">
-                    <h6>Age: {calculateAge(dev.dob)}</h6>
+                <img
+                  src={dev.profilePic}
+                  alt={`${dev.name}'s Profile`}
+                  className="rounded-circle border border-2 shadow-sm mb-3"
+                  style={{
+                    width: "140px",
+                    height: "140px",
+                    objectFit: "cover",
+                  }}
+                />
+
+                <h5 className="card-title fw-bold mb-1 text-primary">
+                  {dev.name}
+                </h5>
+                <h6 className="text-muted mb-3">{dev.role}</h6>
+                <div className="d-flex flex-column flex-sm-row justify-content-center align-items-center gap-3 text-muted mb-3">
+                  <span className="d-flex align-items-center">
+                    <i className="bi bi-person-circle me-2 fs-5" />
+                    Age: {calculateAge(dev.dob)}
                   </span>
-                  <span className="card-text">
-                    <h6>Education: {dev.education}</h6>
+                  <span className="d-flex align-items-center">
+                    <i className="bi bi-mortarboard-fill me-2 fs-5" />
+                    {dev.education}
                   </span>
                 </div>
-              </div>
-              <div className="d-flex justify-content-center gap-2 pb-2">
-                <a href={dev.linkedIn} target="_blank" rel="noreferrer">
-                  <img src={Linkedin} alt="Instagram" />
-                </a>
-                <a href={dev.instagram} target="_blank" rel="noreferrer">
-                  <img src={Instagram} alt="Instagram" />
-                </a>
-                <a href={dev.github} target="_blank" rel="noreferrer">
-                  <img src={Giticon} alt="GitHub" />
-                </a>
+                <div className="d-flex justify-content-center gap-3">
+                  <a href={dev.linkedIn} target="_blank" rel="noreferrer">
+                    <i className="bi bi-linkedin custom-icon-dev linkedin" />
+                  </a>
+                  <a href={dev.instagram} target="_blank" rel="noreferrer">
+                    <i className="bi bi-instagram custom-icon-dev instagram" />
+                  </a>
+                  <a href={dev.github} target="_blank" rel="noreferrer">
+                    <i className="bi bi-github custom-icon-dev github" />
+                  </a>
+                </div>
               </div>
             </div>
           </div>
