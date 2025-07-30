@@ -16,6 +16,7 @@ const ManageTradeParty = () => {
   const [showModal, setShowModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [editData, setEditData] = useState(null);
+const [selectedPartyType, setSelectedPartyType] = useState("");
 
   const [partyTypes, setPartyTypes] = useState([...DEFAULT_PARTY_TYPES]);
   const [showTagsModal, setShowTagsModal] = useState(false);
@@ -148,72 +149,32 @@ const ManageTradeParty = () => {
   </div>
 </div>
 
+
 <hr></hr>
+<div className="mb-4">
+  <select
+    className="form-select w-auto"
+    value={selectedPartyType}
+    onChange={(e) => setSelectedPartyType(e.target.value)}
+  >
+    <option value="">All Party Types</option>
+    {[...new Set(partyList.map((p) => p.type))].map((type, idx) => (
+      <option key={idx} value={type}>
+        {formatType(type)}
+      </option>
+    ))}
+  </select>
+</div>
       {partyList.length === 0 ? (
         <p className="text-center text-muted">No trade parties found.</p>
       ) : (
-        // <div className="row g-4">
-        //   {partyList.map((party, index) => (
-        //     <div className="col-md-6 col-lg-4" key={index}>
-        //       <div
-        //         className="card border-0 shadow-sm h-100 position-relative party-card hover-shadow rounded-4"
-        //         style={{ backgroundColor: "#51ff0021" }}
-        //       >
-        //         <div className="position-absolute top-0 end-0 m-2 d-flex gap-2">
-        //           <button
-        //             className="btn btn-light btn-sm shadow-sm rounded-circle"
-        //             title="Edit"
-        //             onClick={() => handleEdit(party)}
-        //           >
-        //             <i className="bi bi-pencil-fill text-primary"></i>
-        //           </button>
-        //           <button
-        //             className="btn btn-light btn-sm shadow-sm rounded-circle"
-        //             title="Delete"
-        //             onClick={() => handleDelete(party)}
-        //           >
-        //             <i className="bi bi-trash-fill text-danger"></i>
-        //           </button>
-        //         </div>
-        //         <div className="card-body d-flex flex-column align-items-center text-center">
-        //           <img
-        //             src={party.image}
-        //             alt={party.name}
-        //             className="mb-3"
-        //             style={{
-        //               width: "100px",
-        //               height: "100px",
-        //               objectFit: "cover",
-        //               borderRadius: "15px",
-        //               border: "2px solid #eee",
-        //             }}
-        //           />
-        //           <h5 className="fw-semibold mb-1 text-dark">{party.name}</h5>
-        //           <p className="mb-1">
-        //             <span className="badge bg-primary-subtle text-dark">
-        //               {formatType(party.type)}
-        //             </span>
-        //           </p>
-        //           <p className="small text-muted mb-2">
-        //             ID: <span className="text-dark">{party.id}</span>
-        //           </p>
-        //           <div className="w-100 border-top pt-2">
-        //             <p className="mb-1">
-        //               <strong>Contact:</strong>{" "}
-        //               <span className="text-muted">{party.contact}</span>
-        //             </p>
-        //             <p className="mb-0">
-        //               <strong>City:</strong>{" "}
-        //               <span className="text-muted">{party.city}</span>
-        //             </p>
-        //           </div>
-        //         </div>
-        //       </div>
-        //     </div>
-        //   ))}
-        // </div>
+        
 <div className="row g-4">
-  {partyList.map((party, index) => (
+  {partyList
+  .filter((party) =>
+    selectedPartyType ? party.type === selectedPartyType : true
+  )
+  .map((party, index) => (
     <div className="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3" key={index}>
       <div className="card manage-cards h-100 shadow-sm border-2 rounded-4 text-center p-3 d-flex flex-column position-relative">
         <div className='justify-content-center'>

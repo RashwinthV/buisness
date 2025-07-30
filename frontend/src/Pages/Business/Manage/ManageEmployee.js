@@ -12,12 +12,15 @@ import ManageTagsModal from "../../../components/Modal/ManageTagsModal";
 import "../../../Styles/ManageUi.css";
 import { useBusiness } from "../../../context/BussinessContext";
 import { toast } from "react-toastify";
+import { Form } from "react-bootstrap";
 
 // Constant array of default categories
 const DEFAULT_EMPLOYEE_CATEGORIES = ["Driver", "Technician", "Cleaner"];
 
 const ManageEmployee = () => {
   const [employeeList, setEmployeeList] = useState([]);
+  const [selectedField, setSelectedField] = useState("");
+
   const [employeeCategories, setEmployeeCategories] = useState([
     ...DEFAULT_EMPLOYEE_CATEGORIES,
   ]);
@@ -170,6 +173,18 @@ const ManageEmployee = () => {
         </div>
       </div>
       <hr></hr>
+<Form.Select
+  className="mb-4 w-auto"
+  value={selectedField}
+  onChange={(e) => setSelectedField(e.target.value)}
+>
+  <option value="">All Fields</option>
+  {[...new Set(employeeList.map((emp) => emp.field))].map((field, idx) => (
+    <option key={idx} value={field}>
+      {field}
+    </option>
+  ))}
+</Form.Select>
 
       {/* <div className="row g-4">
         {employeeList.map((emp, index) => (
@@ -214,7 +229,9 @@ const ManageEmployee = () => {
         ))}
       </div> */}
       <div className="row g-4">
-        {employeeList.map((emp, index) => (
+       {employeeList
+  .filter((emp) => (selectedField ? emp.field === selectedField : true))
+  .map((emp, index) => (
           <div
             className="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3"
             key={index}
