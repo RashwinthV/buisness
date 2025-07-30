@@ -70,4 +70,61 @@ box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
   color: #3a0ca3;
 }
 
+.card-analytics {
+  border: 1px solid transparent;
+  border-radius: 1rem;
+  background-image: 
+    linear-gradient(white, white), /* Content background */
+    linear-gradient(135deg, #00c9ff, #92fe9d); /* Cool Cyan to Mint Green */
+  background-origin: border-box;
+  background-clip: content-box, border-box;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+.card-emp {
+  border: 1px solid transparent;
+  border-radius: 1rem;
+  background-image: 
+    linear-gradient(white, white), 
+    linear-gradient(90deg, #fc466b, #3f5efb); /* Pink to Blue */
+  background-origin: border-box;
+  background-clip: content-box, border-box;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
 
+.card-product {
+  border: 1px solid transparent;
+  border-radius: 1rem;
+  background-image: 
+    linear-gradient(white, white),
+    linear-gradient(90deg, #ff512f, #dd2476); /* Orange to Hot Pink */
+  background-origin: border-box;
+  background-clip: content-box, border-box;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.card-Tradeparty {
+  border: 1px solid transparent;
+  border-radius: 1rem;
+  background-image: 
+    linear-gradient(white, white),
+    linear-gradient(90deg, #8e2de2, #4a00e0); /* Violet to Deep Purple */
+  background-origin: border-box;
+  background-clip: content-box, border-box;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.card-vehicle {
+  border: 1px solid transparent;
+  border-radius: 1rem;
+  background-image: 
+    linear-gradient(white, white),
+    linear-gradient(90deg, #00c9ff, #92fe9d); /* Cyan to Pale Blue (no green dominance) */
+  background-origin: border-box;
+  background-clip: content-box, border-box;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}

@@ -20,7 +20,9 @@ const [employeeList, setemployeeList] = useState([]);
       <div className="row  g-4">
   {employeeList.map((emp, index) => (
     <div className="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3" key={index}>
-      <div className="card manage-cards h-100 shadow-sm border-2 rounded-4 text-center p-3 d-flex flex-column">
+      <div className="card shadow-lg manage-cards  card-emp h-100   rounded-4 text-center d-flex flex-column">
+        
+        <div className="py-3">
         <div className="justify-content-center">
         <img
           src={emp.profilepic?.imageUrl || Image_default}
@@ -43,7 +45,7 @@ const [employeeList, setemployeeList] = useState([]);
           <p className="mb-0"><strong>Field of Work:</strong> {emp.field || "N/A"}</p>
         </div>
 
-
+</div>
 
       </div>
     </div>

@@ -43,7 +43,9 @@ const TradeParty = () => {
  <div className="row g-4">
   {partyList.map((party, index) => (
     <div className="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3" key={index}>
-      <div className="card manage-cards h-100 shadow-sm border-2 rounded-4 text-center p-3 d-flex flex-column position-relative">
+      <div className="card manage-cards card-Tradeparty h-100 shadow-lg rounded-4 text-center  d-flex flex-column position-relative">
+        
+        <div className="p-3"> 
         <div className='justify-content-center'>
         <img
           src={party.image}
@@ -78,7 +80,7 @@ const TradeParty = () => {
           <span><strong>City:</strong> {party.city || "N/A"}</span>
         </div>
 
-
+</div>
         
       </div>
     </div>

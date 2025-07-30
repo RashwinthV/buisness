@@ -23,7 +23,9 @@ const Product = () => {
        <div className="row g-4">
   {productList.map((prod, index) => (
     <div className="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3" key={index}>
-      <div className="card manage-cards h-100 shadow-sm border-2 rounded-4 text-center p-3">
+      <div className="card manage-cards shadow-lg card-product h-100  rounded-4 text-center">
+
+        <div className="p-3">
         <img
           src={prod?.image?.imageUrl || Image_default}
           alt={prod?.productName || "Product"}
@@ -44,7 +46,7 @@ const Product = () => {
             {prod?.productType}
           </span>
         </div>
-
+</div>
       </div>
     </div>
   ))}

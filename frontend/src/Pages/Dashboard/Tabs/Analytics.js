@@ -3,7 +3,7 @@ import { Row, Col, Card } from "react-bootstrap";
 import CountUp from "react-countup";
 import { useProduct } from "../../../context/ProductContext";
 import { useEmployee } from "../../../context/EmployeeContext";
-
+import '../../../Styles/ManageUi.css';
 const Analytics = () => {
   const { product } = useProduct();
   const { totalemployee } = useEmployee();
@@ -42,7 +42,7 @@ const Analytics = () => {
       <Row className="gx-3 gy-3">
         {stats.map((item, idx) => (
           <Col key={idx} xs={12} sm={6} lg={4}>
-            <Card className="text-center shadow-sm h-100">
+            <Card className="text-center card-analytics shadow-lg h-100">
               <Card.Body>
                 <Card.Title>{item.title}</Card.Title>
                 <h4 className={`text-${item.color}`}>
