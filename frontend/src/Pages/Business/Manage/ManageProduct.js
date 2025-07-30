@@ -524,25 +524,12 @@ const ManageProduct = () => {
   };
 
   return (
-    <div className="container rounded shadow-sm py-3">
-      <div className="d-flex flex-wrap justify-content-between align-items-center mb-4">
-        <h4 className="fw-bold mb-2 mb-md-0 me-auto">Manage Products</h4>
-
-        <div className="d-flex flex-wrap align-items-center justify-content-center gap-2">
-          <button className="btn btn-sm btn-primary" onClick={openManageModal}>
-            <i className="bi bi-pencil-square me-2"></i> Manage Types
-          </button>
-          <button className="btn btn-sm btn-success" onClick={openAddModal}>
-            <i className="bi bi-plus-circle me-2"></i> Add Product
-          </button>
-        </div>
-      </div>
-
-      <hr />
-
-      {/* Filter Dropdown */}
+    <div className="container py-3">
+      <div className="d-flex flex-wrap justify-content-between align-items-center mb-5">
+        {/* <h4 className="fw-bold mb-2 mb-md-0 me-auto">Manage Products</h4> */}
       <Form.Select
-        className="mb-4 w-auto"
+      size="sm"
+        className=" w-auto"
         value={selectedCategory}
         onChange={(e) => setSelectedCategory(e.target.value)}
       >
@@ -553,6 +540,19 @@ const ManageProduct = () => {
           </option>
         ))}
       </Form.Select>
+        <div className="d-flex flex-wrap align-items-center justify-content-center gap-2">
+          <button className="btn btn-sm btn-primary" onClick={openManageModal}>
+            <i className="bi bi-pencil-square me-2"></i> Manage Types
+          </button>
+          <button className="btn btn-sm btn-success" onClick={openAddModal}>
+            <i className="bi bi-plus-circle me-2"></i> Add Product
+          </button>
+        </div>
+      </div>
+
+
+      {/* Filter Dropdown */}
+
 
       {/* Product Cards */}
       {productList.length === 0 ? (

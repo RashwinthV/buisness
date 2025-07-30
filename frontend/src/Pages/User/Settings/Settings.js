@@ -18,7 +18,7 @@ const SettingsTabs = () => {
       <Tabs
         activeKey={currentKey}
         onSelect={handleTabSelect}
-        className="mb-3"
+        className="mb-3 gap-4 custom-settings-tabs"
       >
         <Tab eventKey="general" title="General" />
         <Tab eventKey="business" title="Business" />

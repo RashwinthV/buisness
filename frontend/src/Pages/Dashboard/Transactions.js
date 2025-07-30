@@ -110,10 +110,10 @@ const Entry = () => {
 
   return (
     <div className="container py-2">
-      <div className="mb-4">
+      <div>
         <BusinessBanner business={selectedBusiness} />
-        <div className="card-body text-center">
-          <div className="text-center mb-4 d-flex gap-3 justify-content-start flex-wrap">
+        <div className="card-body text-center mb-4 mt-4">
+          <div className="text-center d-flex gap-3 justify-content-start flex-wrap">
             <button
               className="btn btn-sm btn-outline-primary"
               onClick={() => {

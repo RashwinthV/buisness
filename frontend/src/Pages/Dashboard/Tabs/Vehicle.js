@@ -17,10 +17,8 @@ const Vehicle = () => {
   return (
     <div className="container">
       
-      <h4 className="mb-2 text-center">Vehicles</h4>
-
-<hr></hr>
-      <div className="row mt-2 g-4">
+    
+      <div className="row g-4">
         {vehicleList.map((vehicle, index) => (
           <div className="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3" key={index}>
             <div className="card manage-cards h-100 shadow-sm border-2 rounded-4 text-center p-3 d-flex flex-column position-relative">

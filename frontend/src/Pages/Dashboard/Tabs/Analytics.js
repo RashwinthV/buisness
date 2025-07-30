@@ -38,7 +38,6 @@ const Analytics = () => {
 
   return (
     <div className="container py-2">
-      <h4 className="mb-4 text-center">Business Analytics</h4>
 
       <Row className="gx-3 gy-3">
         {stats.map((item, idx) => (

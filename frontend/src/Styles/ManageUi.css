@@ -11,3 +11,63 @@ box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
   transform: translateY(-2px); /* Slight lift */
   transition: all 0.3s ease;
 }
+
+/* Dashboard Page Tabs */
+
+.custom-dash-tabs .nav-link.active {
+  background: linear-gradient(45deg, #11998e, #38ef7d) !important;
+  color: #ffffff !important;
+
+}
+
+.custom-dash-tabs .nav-link {
+  color: #11998e;
+  border: 0;
+  outline: 0;
+  transition: color 0.2s ease;  
+}
+
+.custom-dash-tabs .nav-link:hover {
+  color: #2ecc71;
+}
+
+
+/* Manage Page Tabs */
+.custom-manage-tabs .nav-link.active {
+  background: linear-gradient(45deg, #6a11cb, #2575fc) !important;
+  color: #ffffff !important;
+  font-weight: 500;
+}
+
+.custom-manage-tabs .nav-link {
+  color: #6a11cb;
+  border: 0;
+  outline: 0;
+  transition: color 0.2s ease;
+}
+
+.custom-manage-tabs .nav-link:hover {
+  color: #2575fc;
+}
+
+
+/* Settings page Tabs */
+
+.custom-settings-tabs .nav-link.active {
+  background: linear-gradient(45deg, #3a0ca3, #7209b7) !important;
+  color: #ffffff !important;
+
+}
+
+.custom-settings-tabs .nav-link {
+  color: #7209b7;
+  border: 0;
+  outline: 0;
+  transition: color 0.2s ease;
+}
+
+.custom-settings-tabs .nav-link:hover {
+  color: #3a0ca3;
+}
+
+

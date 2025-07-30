@@ -135,25 +135,14 @@ const [selectedPartyType, setSelectedPartyType] = useState("");
   };
 
   return (
-    <div className="container rounded shadow-sm py-3">
-<div className="d-flex flex-wrap justify-content-between align-items-center mb-3">
-  <h4 className="mb-2 mb-md-0 me-auto">Trade Parties</h4>
+    <div className="container py-3">
+<div className="d-flex flex-wrap justify-content-between align-items-center mb-5">
+  {/* <h4 className="mb-2 mb-md-0 me-auto">Trade Parties</h4> */}
 
-  <div className="d-flex flex-wrap align-items-center justify-content-center gap-2">
-    <button className="btn btn-sm btn-primary" onClick={openManageModal}>
-      <i className="bi bi-pencil-square me-2"></i> Manage Party Types
-    </button>
-    <button className="btn btn-sm btn-success" onClick={openAddModal}>
-      <i className="bi bi-plus-circle me-2"></i> Add Trade Party
-    </button>
-  </div>
-</div>
-
-
-<hr></hr>
-<div className="mb-4">
+  
+<div>
   <select
-    className="form-select w-auto"
+    className="form-select form-select-sm w-auto"
     value={selectedPartyType}
     onChange={(e) => setSelectedPartyType(e.target.value)}
   >
@@ -165,6 +154,19 @@ const [selectedPartyType, setSelectedPartyType] = useState("");
     ))}
   </select>
 </div>
+  <div className="d-flex flex-wrap align-items-center justify-content-center gap-2">
+    <button className="btn btn-sm btn-primary" onClick={openManageModal}>
+      <i className="bi bi-pencil-square me-2"></i> Manage Party Types
+    </button>
+    <button className="btn btn-sm btn-success" onClick={openAddModal}>
+      <i className="bi bi-plus-circle me-2"></i> Add Trade Party
+    </button>
+  </div>
+</div>
+
+
+
+
       {partyList.length === 0 ? (
         <p className="text-center text-muted">No trade parties found.</p>
       ) : (

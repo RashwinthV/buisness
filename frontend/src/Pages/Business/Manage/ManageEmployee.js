@@ -155,10 +155,22 @@ const ManageEmployee = () => {
     window.confirm(`Are you sure you want to delete "${product.productName}"?`);
   };
   return (
-    <div className="container rounded shadow-sm py-3">
-      <div className="d-flex flex-wrap justify-content-between align-items-center mb-4">
-        <h4 className="fw-bold mb-2 mb-md-0 me-auto">Manage Employees</h4>
-
+    <div className="container rounded py-3">
+      <div className="d-flex flex-wrap justify-content-between align-items-center mb-5">
+        {/* <h4 className="fw-bold mb-2 mb-md-0 me-auto">Manage Employees</h4> */}
+<Form.Select
+size="sm"
+  className=" w-auto"
+  value={selectedField}
+  onChange={(e) => setSelectedField(e.target.value)}
+>
+  <option value="">All Fields</option>
+  {[...new Set(employeeList.map((emp) => emp.field))].map((field, idx) => (
+    <option key={idx} value={field}>
+      {field}
+    </option>
+  ))}
+</Form.Select>
         <div className="d-flex flex-wrap align-items-center justify-content-center gap-2">
           <button
             className="btn btn-sm btn-primary"
@@ -172,19 +184,8 @@ const ManageEmployee = () => {
           </button>
         </div>
       </div>
-      <hr></hr>
-<Form.Select
-  className="mb-4 w-auto"
-  value={selectedField}
-  onChange={(e) => setSelectedField(e.target.value)}
->
-  <option value="">All Fields</option>
-  {[...new Set(employeeList.map((emp) => emp.field))].map((field, idx) => (
-    <option key={idx} value={field}>
-      {field}
-    </option>
-  ))}
-</Form.Select>
+
+
 
       {/* <div className="row g-4">
         {employeeList.map((emp, index) => (
