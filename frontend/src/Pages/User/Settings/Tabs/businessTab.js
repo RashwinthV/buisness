@@ -257,6 +257,9 @@ import { FaEdit } from "react-icons/fa";
 import { useBusiness } from "../../../../context/BussinessContext";
 import Image_default from "../../../../Assets/Images/Default.png";
 import { useUser } from "../../../../context/userContext";
+import { useNavigate } from "react-router-dom";
+
+
 
 const BusinessTab = ({ businessId }) => {
   const [loading, setLoading] = useState(false);
@@ -307,12 +310,17 @@ const BusinessTab = ({ businessId }) => {
     toast.info("Image upload logic not implemented.");
   };
 
+   const navigate=useNavigate()
+const viewProfile=(businessId)=>{
+  // console.log(businessId);
+navigate(`/viewbusinessprofile/${businessId}`)}
   return (
+    
     <div className="container">
       <h4 className="mt-3 text-primary">Active Businesses</h4>
       <div className="row g-4">
         {activeBusinesses.map((business) => (
-          <div className="col-12 col-md-6 col-lg-4 d-flex" key={business._id}>
+          <div className="col-12 col-md-6 col-lg-4 d-flex" onClick={() => viewProfile(business.businessId)} key={business._id}>
             <BusinessCard
               business={business}
               editLogo={business.businessId === selectedBusinessId}
@@ -328,8 +336,9 @@ const BusinessTab = ({ businessId }) => {
       {inactiveBusinesses.length > 0 ? (
         <div className="row g-4">
           {inactiveBusinesses.map((business) => (
-            <div className="col-12 col-md-6 col-lg-4 d-flex" key={business._id}>
+            <div className="col-12 col-md-6 col-lg-4 d-flex " key={business._id}>
               <BusinessCard
+              
                 business={business}
                 isInactive
                 editLogo={business.businessId === selectedBusinessId}
