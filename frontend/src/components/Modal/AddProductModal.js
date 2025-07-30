@@ -105,7 +105,7 @@ const AddProductModal = ({ show, handleClose }) => {
   };
 
   return (
-    <Modal show={show} onHide={handleClose} size="lg" centered scrollable>
+    <Modal show={show} onHide={handleClose} size="lg" entered scrollable>
       <Modal.Header closeButton>
         <Modal.Title>Add New Product</Modal.Title>
       </Modal.Header>
@@ -186,20 +186,20 @@ const AddProductModal = ({ show, handleClose }) => {
         <h6 className="text-danger">Product Information</h6>
         <div className="row gy-3">
           <div className="col-md-6">
-            <label>Product Name *</label>
+            <label className="form-label form-label-sm">Product Name *</label>
             <input
               type="text"
               name="name"
-              className="form-control"
+              className="form-control form-control-sm"
               value={formData.name}
               onChange={handleChange}
             />
           </div>
 
           <div className="col-md-6">
-            <label>Product Type *</label>
+            <label className="form-label form-label-sm">Product Type *</label>
 <select
-  className="form-select"
+  className="form-select form-select-sm"
   name="type"
   value={formData.type}
   onChange={handleChange}
@@ -214,21 +214,21 @@ const AddProductModal = ({ show, handleClose }) => {
           </div>
 
           <div className="col-md-6">
-            <label>Rate (Optional)</label>
+            <label className="form-label form-label-sm">Rate (Optional)</label>
             <input
               type="number"
               name="rate"
-              className="form-control"
+              className="form-control form-control-sm"
               value={formData.rate}
               onChange={handleChange}
             />
           </div>
 
           <div className="col-md-12">
-            <label>Description *</label>
+            <label className="form-label form-label-sm">Description *</label>
             <textarea
               name="description"
-              className="form-control"
+              className="form-control form-control-sm"
               rows={3}
               value={formData.description}
               onChange={handleChange}
